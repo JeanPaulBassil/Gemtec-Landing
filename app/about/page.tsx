@@ -1,8 +1,6 @@
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Building2, Users2, Globe2, Award, Target } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 
@@ -10,12 +8,18 @@ const milestones = [
   {
     year: "2021",
     title: "Ghana Expansion",
-    description: "Established factory for Air Outlet Grille and dampers in Accra, Ghana",
+    description: "Established factory for Air Outlet Grille and Dampers in Accra, Ghana",
   },
   {
     year: "2023",
     title: "Nigeria Growth",
-    description: "Inaugurated new manufacturing facility in Nigeria",
+    description: "Inaugurated new office in Nigeria",
+  },
+  {
+    year: "2025",
+    title: "The Next Chapter",
+    description: "Innovation continues. Stay tuned for our next breakthrough...",
+    highlight: true
   },
 ]
 
@@ -143,9 +147,9 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="py-24">
+      <section className="py-12">
         <div className="container">
-          <div className="text-center mb-16">
+          <div className="text-center mb-12">
             <span className="text-secondary font-semibold">Our Journey</span>
             <h2 className="text-3xl font-bold tracking-tight mt-2">Key Milestones</h2>
             <p className="mt-4 text-lg text-muted-foreground">Significant moments in our growth and expansion</p>
@@ -155,97 +159,19 @@ export default function AboutPage() {
               {milestones.map((milestone, index) => (
                 <div
                   key={milestone.year}
-                  className="relative pl-8 border-l-2 border-secondary/20 last:border-transparent"
+                  className={`relative pl-8 border-l-2 ${milestone.highlight ? 'border-secondary' : 'border-secondary/20'} last:border-transparent transition-all duration-500 ${milestone.highlight ? 'hover:scale-105 hover:pl-10' : ''}`}
                 >
-                  <div className="absolute left-0 top-0 w-4 h-4 rounded-full bg-secondary/20 -translate-x-[9px] flex items-center justify-center">
-                    <div className="w-2 h-2 rounded-full bg-secondary" />
+                  <div className={`absolute left-0 top-0 w-4 h-4 rounded-full ${milestone.highlight ? 'bg-secondary animate-pulse' : 'bg-secondary/20'} -translate-x-[9px] flex items-center justify-center`}>
+                    <div className={`${milestone.highlight ? 'w-2.5 h-2.5' : 'w-2 h-2'} rounded-full ${milestone.highlight ? 'bg-white' : 'bg-secondary'}`} />
                   </div>
-                  <div className="space-y-2">
-                    <div className="text-secondary font-semibold">{milestone.year}</div>
-                    <h3 className="text-xl font-semibold">{milestone.title}</h3>
-                    <p className="text-muted-foreground">{milestone.description}</p>
+                  <div className={`space-y-2 ${milestone.highlight ? 'bg-gradient-to-r from-secondary/10 to-transparent p-4 rounded-lg' : ''}`}>
+                    <div className={`${milestone.highlight ? 'text-secondary font-bold text-lg' : 'text-secondary font-semibold'}`}>{milestone.year}</div>
+                    <h3 className={`${milestone.highlight ? 'text-2xl font-bold bg-gradient-to-r from-secondary to-primary bg-clip-text text-transparent' : 'text-xl font-semibold'}`}>{milestone.title}</h3>
+                    <p className={`${milestone.highlight ? 'text-base font-medium' : 'text-muted-foreground'}`}>{milestone.description}</p>
                   </div>
                 </div>
               ))}
             </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24 section-accent">
-        <div className="container">
-          <div className="text-center mb-16">
-            <span className="text-secondary font-semibold">Our Work</span>
-            <h2 className="text-3xl font-bold tracking-tight mt-2">Featured Projects & Partnerships</h2>
-            <p className="mt-4 text-lg text-muted-foreground">
-              Delivering excellence through innovation and collaboration
-            </p>
-          </div>
-          <div className="grid gap-8 md:grid-cols-2">
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Strategic Partnerships</CardTitle>
-                <CardDescription>
-                  Collaborating with industry leaders like Kingspan, AFS, Blauberg, and Tecnifan to deliver cutting-edge
-                  HVAC solutions.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <Image
-                    src="/placeholder.svg"
-                    alt="Partner logos"
-                    width={200}
-                    height={100}
-                    className="object-contain w-full"
-                  />
-                  <Image
-                    src="/placeholder.svg"
-                    alt="Partner logos"
-                    width={200}
-                    height={100}
-                    className="object-contain w-full"
-                  />
-                </div>
-                <div className="mt-6">
-                  <Button asChild className="w-full btn-secondary">
-                    <Link href="/projects">View Partnerships</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-            <Card className="card-hover">
-              <CardHeader>
-                <CardTitle>Success Stories</CardTitle>
-                <CardDescription>
-                  From commercial towers to industrial facilities, explore our portfolio of successful HVAC
-                  implementations.
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-2 gap-4">
-                  <Image
-                    src="/placeholder.svg"
-                    alt="Project images"
-                    width={200}
-                    height={100}
-                    className="object-cover w-full rounded-lg"
-                  />
-                  <Image
-                    src="/placeholder.svg"
-                    alt="Project images"
-                    width={200}
-                    height={100}
-                    className="object-cover w-full rounded-lg"
-                  />
-                </div>
-                <div className="mt-6">
-                  <Button asChild className="w-full btn-secondary">
-                    <Link href="/projects">View Projects</Link>
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
           </div>
         </div>
       </section>

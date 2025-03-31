@@ -167,61 +167,10 @@ export default function ProjectsPage() {
         <div className="container relative">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white">
-              Projects & Partnerships
+              Partnerships
             </h1>
-            <p className="mt-6 text-lg text-gray-300">Delivering excellence through collaboration and innovation</p>
+            <p className="mt-6 text-lg text-gray-300">Collaborating with industry leaders for exceptional HVAC solutions</p>
           </div>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-primary font-semibold">Featured Projects</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">Success Stories</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Explore our portfolio of successful HVAC implementations across various sectors
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <FadeInStagger>
-            <div className="grid md:grid-cols-2 gap-8">
-              {featuredProjects.map((project) => (
-                <HoverScale key={project.title}>
-                  <Card className="card-hover">
-                    <CardHeader>
-                      <div className="relative aspect-video mb-6 rounded-lg overflow-hidden">
-                        <Image
-                          src={project.image || "/placeholder.svg"}
-                          alt={project.title}
-                          fill
-                          className="object-cover"
-                        />
-                      </div>
-                      <div className="flex items-center gap-2 mb-2">
-                        <project.icon className="h-5 w-5 text-primary" />
-                        <span className="text-sm font-medium text-primary">{project.category}</span>
-                      </div>
-                      <CardTitle>{project.title}</CardTitle>
-                      <CardDescription>{project.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {project.details.map((detail) => (
-                          <li key={detail} className="text-sm text-muted-foreground flex items-center gap-2">
-                            <ArrowRight className="h-4 w-4 text-primary shrink-0" />
-                            {detail}
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </HoverScale>
-              ))}
-            </div>
-          </FadeInStagger>
         </div>
       </section>
 
@@ -305,52 +254,6 @@ export default function ProjectsPage() {
               ))}
             </div>
           </ScrollReveal>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-primary font-semibold">Testimonials</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">Client Success Stories</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Hear what our clients say about their experience working with GEMTEC
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <FadeInStagger>
-            <div className="grid md:grid-cols-3 gap-8">
-              {testimonials.map((testimonial) => (
-                <HoverScale key={testimonial.author}>
-                  <Card className="card-hover">
-                    <CardHeader>
-                      <CardContent>
-                        <div className="space-y-4">
-                          <p className="text-lg italic text-muted-foreground">"{testimonial.quote}"</p>
-                          <div>
-                            <div className="font-semibold">{testimonial.author}</div>
-                            <div className="text-sm text-muted-foreground">{testimonial.position}</div>
-                            <div className="text-sm text-muted-foreground">{testimonial.company}</div>
-                          </div>
-                        </div>
-                      </CardContent>
-                    </CardHeader>
-                  </Card>
-                </HoverScale>
-              ))}
-            </div>
-          </FadeInStagger>
-
-          <div className="mt-16 text-center">
-            <Button size="lg" asChild className="btn-secondary">
-              <Link href="/quote">
-                Start Your Project
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
         </div>
       </section>
     </>
