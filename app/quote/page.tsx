@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 
 export default function QuotePage() {
   return (
+    <>
       <section className="relative py-24 bg-gradient-to-r from-blue-950 to-blue-900">
         <div className="container relative">
           <div className="max-w-3xl mx-auto text-center">
@@ -19,80 +20,77 @@ export default function QuotePage() {
         </div>
       </section>
 
-      <section
-  className =
-    "py-24" >
-    (
-      <div className="container max-w-3xl">
-        <Card>
-          <CardHeader>
-            <CardTitle>Project Details</CardTitle>
-            <CardDescription>
-              Please provide as much detail as possible to help us understand your requirements.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <form className="space-y-6">
-              <div className="grid gap-4 sm:grid-cols-2">
-                <div className="space-y-2">
-                  <Input placeholder="First name" />
+      <section className="py-24">
+        <div className="container max-w-3xl">
+          <Card>
+            <CardHeader>
+              <CardTitle>Project Details</CardTitle>
+              <CardDescription>
+                Please provide as much detail as possible to help us understand your requirements.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <form className="space-y-6">
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="space-y-2">
+                    <Input placeholder="First name" />
+                  </div>
+                  <div className="space-y-2">
+                    <Input placeholder="Last name" />
+                  </div>
                 </div>
                 <div className="space-y-2">
-                  <Input placeholder="Last name" />
+                  <Input type="email" placeholder="Email" />
                 </div>
-              </div>
-              <div className="space-y-2">
-                <Input type="email" placeholder="Email" />
-              </div>
-              <div className="space-y-2">
-                <Input placeholder="Company name" />
-              </div>
-              <div className="space-y-2">
-                <Input placeholder="Phone number" />
-              </div>
-              <div className="space-y-2">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Product category" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="accessories">Accessories</SelectItem>
-                    <SelectItem value="grilles">Air Outlet Grilles & Dampers</SelectItem>
-                    <SelectItem value="curtains">Air Curtains</SelectItem>
-                    <SelectItem value="fans">Fans</SelectItem>
-                    <SelectItem value="ducts">Flexible Ducts</SelectItem>
-                    <SelectItem value="insulation">Insulation</SelectItem>
-                    <SelectItem value="pir">PIR Panels</SelectItem>
-                    <SelectItem value="attenuators">Sound Attenuators</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Select>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Project type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="commercial">Commercial</SelectItem>
-                    <SelectItem value="industrial">Industrial</SelectItem>
-                    <SelectItem value="residential">Residential</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Textarea placeholder="Project description and requirements" className="min-h-[150px]" />
-              </div>
-              <div className="space-y-2">
-                <Input type="date" placeholder="Desired completion date" />
-              </div>
-              <Button className="w-full btn-secondary">Submit Quote Request</Button>
-            </form>
-          </CardContent>
-        </Card>
-      </div>
-    )
-  </section>
+                <div className="space-y-2">
+                  <Input placeholder="Company name" />
+                </div>
+                <div className="space-y-2">
+                  <Input placeholder="Phone number" />
+                </div>
+                <div className="space-y-2">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Product category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="accessories">Accessories</SelectItem>
+                      <SelectItem value="grilles">Air Outlet Grilles & Dampers</SelectItem>
+                      <SelectItem value="curtains">Air Curtains</SelectItem>
+                      <SelectItem value="fans">Fans</SelectItem>
+                      <SelectItem value="ducts">Flexible Ducts</SelectItem>
+                      <SelectItem value="insulation">Insulation</SelectItem>
+                      <SelectItem value="pir">PIR Panels</SelectItem>
+                      <SelectItem value="attenuators">Sound Attenuators</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Project type" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="commercial">Commercial</SelectItem>
+                      <SelectItem value="industrial">Industrial</SelectItem>
+                      <SelectItem value="residential">Residential</SelectItem>
+                      <SelectItem value="other">Other</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="space-y-2">
+                  <Textarea placeholder="Project description and requirements" className="min-h-[150px]" />
+                </div>
+                <div className="space-y-2">
+                  <Input type="date" placeholder="Desired completion date" />
+                </div>
+                <Button className="w-full btn-secondary">Submit Quote Request</Button>
+              </form>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+    </>
   )
 }
 
