@@ -113,11 +113,12 @@ export default function MissionPage() {
           <div className="relative">
             <div className="max-w-4xl mx-auto">
               <Image
-                src="/placeholder.svg"
-                alt="Organization Chart"
+                src="/Mission Images/worker.png"
+                alt="GEMTEC Organization Team"
                 width={800}
                 height={600}
                 className="rounded-lg border shadow-lg"
+                priority
               />
             </div>
             <div className="mt-12 grid gap-8 md:grid-cols-3">

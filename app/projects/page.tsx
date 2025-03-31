@@ -64,31 +64,51 @@ const featuredProjects = [
 const partners = [
   {
     name: "Kingspan",
-    logo: "/placeholder.svg",
-    description: "Global leader in high-performance insulation and building envelope solutions.",
-    projects: 15,
-    yearsPartnership: 8,
+    logo: "/Projects and partnerships/Kingspan.png",
   },
   {
     name: "AFS",
-    logo: "/placeholder.svg",
-    description: "Innovative air filtration systems and clean air solutions provider.",
-    projects: 12,
-    yearsPartnership: 5,
+    logo: "/Projects and partnerships/AFS logo.jpeg",
   },
   {
     name: "Blauberg",
-    logo: "/placeholder.svg",
-    description: "Premium ventilation equipment manufacturer with German engineering excellence.",
-    projects: 20,
-    yearsPartnership: 6,
+    logo: "/Projects and partnerships/Blauberg Logo.jpeg",
   },
   {
     name: "Tecnifan",
-    logo: "/placeholder.svg",
-    description: "Specialized in high-performance industrial fans and ventilation systems.",
-    projects: 18,
-    yearsPartnership: 7,
+    logo: "/Projects and partnerships/Tecnifan Logo.jpeg",
+  },
+  {
+    name: "Comefri",
+    logo: "/Projects and partnerships/Comefri Logo.png",
+  },
+  {
+    name: "Izocam",
+    logo: "/Projects and partnerships/Izocam Logo.png",
+  },
+  {
+    name: "Sisteven",
+    logo: "/Projects and partnerships/Sisteven Logo.webp",
+  },
+  {
+    name: "S&P",
+    logo: "/Projects and partnerships/S&P Logo.png",
+  },
+  {
+    name: "Ulpatek",
+    logo: "/Projects and partnerships/Ulpatek Logo.webp",
+  },
+  {
+    name: "Vents",
+    logo: "/Projects and partnerships/Vents Logo.jpg",
+  },
+  {
+    name: "Airsum",
+    logo: "/Projects and partnerships/Airsum Logo.jpg",
+  },
+  {
+    name: "Hira Industries",
+    logo: "/Projects and partnerships/Hira Industries logo.jpeg",
   },
 ]
 
@@ -205,52 +225,59 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-accent">
+      <section className="py-24 bg-gradient-to-b from-accent to-accent/50">
         <div className="container">
           <ScrollReveal>
             <div className="text-center mb-16">
-              <span className="text-secondary font-semibold">Our Partners</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">Strategic Partnerships</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Collaborating with industry leaders to deliver exceptional HVAC solutions
+              <span className="text-secondary font-semibold tracking-wider uppercase text-sm">Trusted Partnerships</span>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mt-2">Our Strategic Allies</h2>
+              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
+                Collaborating with industry-leading manufacturers to deliver exceptional HVAC solutions worldwide
               </p>
             </div>
           </ScrollReveal>
 
-          <FadeInStagger>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {partners.map((partner) => (
-                <HoverScale key={partner.name}>
-                  <Card className="card-hover">
-                    <CardHeader>
-                      <div className="h-20 relative mb-4">
-                        <Image
-                          src={partner.logo || "/placeholder.svg"}
-                          alt={partner.name}
-                          fill
-                          className="object-contain"
-                        />
-                      </div>
-                      <CardTitle className="text-center">{partner.name}</CardTitle>
-                    </CardHeader>
-                    <CardContent className="text-center">
-                      <p className="text-sm text-muted-foreground mb-4">{partner.description}</p>
-                      <div className="flex justify-center gap-8 text-sm">
-                        <div>
-                          <div className="font-bold text-primary">{partner.projects}</div>
-                          <div className="text-muted-foreground">Projects</div>
-                        </div>
-                        <div>
-                          <div className="font-bold text-primary">{partner.yearsPartnership}</div>
-                          <div className="text-muted-foreground">Years</div>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </HoverScale>
-              ))}
+          <div className="max-w-7xl mx-auto">
+            <FadeInStagger>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
+                {partners.map((partner) => (
+                  <HoverScale key={partner.name}>
+                    <div className="group relative">
+                      <Card className="relative overflow-hidden border bg-white/5 backdrop-blur-sm transition-all duration-500 h-full shadow-sm hover:shadow-xl hover:border-secondary/50 group-hover:bg-white/10">
+                        <CardHeader className="space-y-0 pb-0 pt-5">
+                          <div className="h-28 relative mb-3 flex items-center justify-center p-5">
+                            <Image
+                              src={partner.logo || "/placeholder.svg"}
+                              alt={partner.name}
+                              fill
+                              className="object-contain p-1 transition-transform duration-500 group-hover:scale-105"
+                              quality={90}
+                            />
+                          </div>
+                        </CardHeader>
+                        <CardContent className="text-center pb-6">
+                          <div className="h-px w-1/3 mx-auto bg-gradient-to-r from-transparent via-secondary/30 to-transparent my-2"></div>
+                          <h3 className="font-medium text-base transition-colors group-hover:text-secondary">{partner.name}</h3>
+                        </CardContent>
+                      </Card>
+                    </div>
+                  </HoverScale>
+                ))}
+              </div>
+            </FadeInStagger>
+            
+            <div className="mt-16 text-center">
+              <p className="text-muted-foreground italic mb-5">
+                "Together with our partners, we deliver exceptional quality and innovation in every project."
+              </p>
+              <Button asChild variant="secondary" className="group transition-all duration-300 hover:shadow-lg">
+                <Link href="/contact" className="flex items-center gap-2">
+                  Become a Partner
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
+              </Button>
             </div>
-          </FadeInStagger>
+          </div>
         </div>
       </section>
 

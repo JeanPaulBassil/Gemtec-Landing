@@ -108,7 +108,13 @@ export default function AboutPage() {
               </div>
             </div>
             <div className="relative aspect-square">
-              <Image src="/placeholder.svg" alt="GEMTEC Facility" fill className="object-cover rounded-lg" />
+              <Image 
+                src="/about images/About us images.png" 
+                alt="GEMTEC Company Overview" 
+                fill 
+                className="object-cover rounded-lg" 
+                priority
+              />
             </div>
           </div>
         </div>
@@ -268,43 +274,71 @@ export default function AboutPage() {
 
       <section className="py-24 bg-blue-950 text-white">
         <div className="container">
-          <div className="grid gap-12 lg:grid-cols-2">
-            <div className="space-y-6">
-              <h2 className="text-3xl font-bold tracking-tight">Global Manufacturing Excellence</h2>
-              <p className="text-lg text-gray-300">
-                Our state-of-the-art manufacturing facilities in Ghana and Nigeria enable us to serve our customers with
-                faster delivery times and localized support. We maintain the highest standards of quality across all our
-                operations.
-              </p>
-              <div className="grid sm:grid-cols-2 gap-6">
-                <Card className="bg-white/10 border-white/20">
-                  <CardHeader>
-                    <Building2 className="h-8 w-8 mb-4 text-secondary" />
-                    <CardTitle className="text-white">Ghana Facility</CardTitle>
-                    <CardDescription className="text-gray-300">
-                      Specialized in Air Outlet Grilles and damper production
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-                <Card className="bg-white/10 border-white/20">
-                  <CardHeader>
-                    <Building2 className="h-8 w-8 mb-4 text-secondary" />
-                    <CardTitle className="text-white">Nigeria Facility</CardTitle>
-                    <CardDescription className="text-gray-300">
-                      Advanced manufacturing and distribution center
-                    </CardDescription>
-                  </CardHeader>
-                </Card>
-              </div>
-            </div>
-            <div className="grid gap-6 grid-cols-2">
-              <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg" alt="Ghana Facility" fill className="object-cover" />
-              </div>
-              <div className="aspect-square relative rounded-lg overflow-hidden">
-                <Image src="/placeholder.svg" alt="Nigeria Facility" fill className="object-cover" />
-              </div>
-            </div>
+          <div className="max-w-4xl mx-auto text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Global Manufacturing Excellence</h2>
+            <p className="text-lg text-gray-300 mt-4">
+              Our state-of-the-art manufacturing facilities in Ghana and Nigeria enable us to serve our customers with
+              faster delivery times and localized support. We maintain the highest standards of quality across all our
+              operations.
+            </p>
+          </div>
+          
+          <div className="grid sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <Card className="bg-white/10 border-white/20 transform transition-all duration-300 hover:translate-y-[-8px] hover:shadow-xl">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center">
+                  <Building2 className="h-8 w-8 text-secondary" />
+                </div>
+                <CardTitle className="text-white text-2xl">Ghana Facility</CardTitle>
+                <CardDescription className="text-gray-300 mt-2">
+                  Specialized in Air Outlet Grilles and damper production
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    Advanced manufacturing technology
+                  </li>
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    Quality control excellence
+                  </li>
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    Established in 2021
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-white/10 border-white/20 transform transition-all duration-300 hover:translate-y-[-8px] hover:shadow-xl">
+              <CardHeader className="text-center">
+                <div className="mx-auto mb-4 w-16 h-16 rounded-full bg-secondary/20 flex items-center justify-center">
+                  <Building2 className="h-8 w-8 text-secondary" />
+                </div>
+                <CardTitle className="text-white text-2xl">Nigeria Facility</CardTitle>
+                <CardDescription className="text-gray-300 mt-2">
+                  Advanced manufacturing and distribution center
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="text-center">
+                <ul className="space-y-2 text-gray-300">
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    State-of-the-art equipment
+                  </li>
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    Strategic market location
+                  </li>
+                  <li className="flex items-center justify-center gap-2">
+                    <span className="w-2 h-2 rounded-full bg-secondary inline-block"></span>
+                    Inaugurated in 2023
+                  </li>
+                </ul>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
