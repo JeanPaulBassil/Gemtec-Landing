@@ -107,7 +107,7 @@ const partners = [
     logo: "/Projects and partnerships/Airsum Logo.jpg",
   },
   {
-    name: "Hira Industries",
+    name: "Hira",
     logo: "/Projects and partnerships/Hira Industries logo.jpeg",
   },
 ]
@@ -242,7 +242,7 @@ export default function ProjectsPage() {
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
                 {partners.map((partner) => (
                   <HoverScale key={partner.name}>
-                    <div className="group relative">
+                    <div className="group relative h-full">
                       <Card className="relative overflow-hidden border bg-white/5 backdrop-blur-sm transition-all duration-500 h-full shadow-sm hover:shadow-xl hover:border-secondary/50 group-hover:bg-white/10">
                         <CardHeader className="space-y-0 pb-0 pt-5">
                           <div className="h-28 relative mb-3 flex items-center justify-center p-5">
@@ -257,7 +257,7 @@ export default function ProjectsPage() {
                         </CardHeader>
                         <CardContent className="text-center pb-6">
                           <div className="h-px w-1/3 mx-auto bg-gradient-to-r from-transparent via-secondary/30 to-transparent my-2"></div>
-                          <h3 className="font-medium text-base transition-colors group-hover:text-secondary">{partner.name}</h3>
+                          <h3 className="font-medium text-base transition-colors group-hover:text-secondary truncate px-2">{partner.name}</h3>
                         </CardContent>
                       </Card>
                     </div>
