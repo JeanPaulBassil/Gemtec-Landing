@@ -135,6 +135,7 @@ const flexibleDucts = {
     {
       name: "Semi Flexible Air Ducts",
       image: "/images/products/flexible-ducts/SemiFlexibleAirDucts.webp",
+      link: "/products/semi-flexible-air-ducts",
       description: "Semi-rigid ducts for specific installation requirements"
     },
     {

@@ -6,168 +6,121 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Check, ArrowRight, Shield, Wind, Gauge, Zap } from "lucide-react"
 import Link from "next/link"
 
-const tpuIndustrialHose = {
-  name: "TPU Industrial Hose",
-  description: "Premium thermoplastic polyurethane industrial hoses designed for superior durability and flexibility in demanding environments. Our TPU hoses provide excellent abrasion resistance and reliable performance across various industrial applications.",
-  category: "Industrial Hoses",
+const semiFlexibleAirDucts = {
+  name: "Semi Flexible Air Ducts",
+  description: "Premium semi-rigid aluminum air ducts designed for superior durability and airflow in HVAC systems. Our semi-flexible ducts provide excellent structural integrity while maintaining the flexibility needed for complex installations.",
+  category: "Air Ducts & Ventilation",
   types: [
     {
-      name: "AFSTPU.MED",
-      description: "Medical grade TPU hose for healthcare and pharmaceutical applications",
-      image: "/images/products/flexible-ducts/AFSTPU.MED.webp",
-      isNew: true,
-      link: "/products/afstpu-med",
+      name: "SEMIAFS",
+      description: "Standard semi-flexible aluminum air duct for general HVAC applications",
+      image: "/images/products/flexible-ducts/Semiafs.webp",
+      link: "/products/semiafs",
+      isNew: false,
       features: [
-        "Medical grade materials",
-        "Sterilization compatible",
-        "FDA compliant",
-        "Flexible and durable"
+        "Durable aluminum construction",
+        "Semi-rigid design for stability",
+        "Excellent air flow characteristics",
+        "Easy installation"
       ]
     },
     {
-      name: "AFSTPU ELASTIC",
-      description: "Highly elastic TPU hose with superior flexibility for dynamic applications",
-      image: "/images/products/flexible-ducts/AFSTPU ELASTIC.webp",
-      isNew: true,
-      link: "/products/afstpu-elastic",
+      name: "SEMIAFS-INOX",
+      description: "Stainless steel semi-flexible air duct for corrosive environments",
+      image: "/images/products/flexible-ducts/Semiafs-Inox.webp",
+      link: "/products/semiafs-inox",
+      isNew: false,
       features: [
-        "Enhanced elasticity",
-        "Excellent rebound properties",
-        "Maintains shape under pressure",
-        "Wide temperature range"
-      ]
-    },
-    {
-      name: "TPVC TRANSPARENT",
-      description: "Crystal clear TPU hose allowing visual monitoring of flow",
-      image: "/images/products/flexible-ducts/TPVC TRANSPARENT.webp",
-      link: "/products/tpvc-transparent",
-      features: [
-        "Transparent construction",
-        "Visual flow monitoring",
-        "High clarity maintained over time",
+        "Corrosion resistant stainless steel",
+        "High temperature applications",
+        "Superior durability in harsh conditions",
         "Chemical resistant"
       ]
     },
     {
-      name: "AFSTPVC",
-      description: "Robust TPU-PVC composite hose for industrial environments",
-      image: "/images/products/flexible-ducts/AFSTPVC.webp",
-      link: "/products/afstpvc",
+      name: "SEMIAFS.C",
+      description: "Semi-flexible aluminum air duct designed for extended lengths",
+      image: "/images/products/flexible-ducts/Semiaf.C.webp",
+      link: "/products/semiafs-c",
+      isNew: false,
       features: [
-        "Composite construction",
-        "Enhanced durability",
-        "Resistant to kinking",
-        "Industrial grade"
+        "Extended length capability",
+        "Consistent diameter throughout",
+        "Reinforced structure",
+        "Optimized for straight runs"
       ]
     },
     {
-      name: "AFSTPU(STANDARD)",
-      description: "Standard TPU hose for general industrial applications",
-      image: "/images/products/flexible-ducts/AFSTPU(STANDARD).webp",
-      link: "/products/afstpu-standard",
+      name: "PHONIC SEMIAFS",
+      description: "Sound-attenuating semi-flexible air duct with thermal insulation",
+      image: "/images/products/flexible-ducts/Phonic Semiafs.webp",
+      link: "/products/phonic-semiafs",
+      isNew: false,
       features: [
-        "Versatile application",
-        "Cost-effective solution",
-        "Good abrasion resistance",
-        "Standard industrial compliance"
-      ]
-    },
-    {
-      name: "AFSTPU(FOODGRADE)",
-      description: "Food-safe TPU hose for food and beverage processing",
-      image: "/images/products/flexible-ducts/AFSTPU(FOODGRADE).webp",
-      link: "/products/afstpu-foodgrade",
-      features: [
-        "Food-grade materials",
-        "Meets FDA requirements",
-        "Easy cleaning and sanitizing",
-        "Taste and odor neutral"
-      ]
-    },
-    {
-      name: "AFSTPU(ANTISTATIC)",
-      description: "Antistatic TPU hose for applications requiring static dissipation",
-      image: "/images/products/flexible-ducts/AFSTPU(ANTISTATIC).webp",
-      link: "/products/afstpu-antistatic",
-      features: [
-        "Static dissipative properties",
-        "Prevents dust attraction",
-        "Safe for volatile environments",
-        "Compliant with ESD standards"
-      ]
-    },
-    {
-      name: "AFSPCA",
-      description: "Advanced composite hose for specialized industrial applications",
-      image: "/images/products/flexible-ducts/AFSPCA.webp",
-      isNew: true,
-      link: "/products/afspca",
-      features: [
-        "Advanced composite materials",
-        "Superior mechanical properties",
-        "Extended service life",
-        "Premium performance"
+        "Sound dampening design",
+        "Thermal insulation layer",
+        "Reduced noise transmission",
+        "Energy efficient"
       ]
     }
   ],
   features: [
-    "Exceptional abrasion resistance for extended service life",
-    "Superior flexibility across wide temperature range (-40°C to +90°C)",
-    "Excellent chemical resistance to oils, fuels, and many solvents",
-    "High tensile strength and tear resistance",
-    "Various wall thicknesses available for different pressure requirements",
-    "Multiple color options for easy identification",
-    "Custom lengths and diameters available",
-    "Low friction inner surface for improved flow characteristics"
+    "Semi-rigid construction maintains shape while allowing directional changes",
+    "Superior structural integrity compared to fully flexible ducts",
+    "Excellent airflow characteristics with minimal pressure drop",
+    "Aluminum and stainless steel options for various environmental needs",
+    "Designed for commercial and industrial HVAC applications",
+    "Mechanically robust with high crush resistance",
+    "Available with acoustic and thermal insulation options",
+    "Variety of diameters and lengths to suit different requirements"
   ],
   applications: [
-    "Material Handling",
-    "Pneumatic Systems",
-    "Food Processing",
-    "Medical Equipment",
-    "Automotive Industry",
-    "Chemical Transfer",
-    "Dust Collection",
-    "Robotics",
-    "Pharmaceutical Processing",
-    "Vacuum Systems"
+    "Commercial HVAC Systems",
+    "Industrial Ventilation",
+    "Kitchen Extraction",
+    "Hospital Air Systems",
+    "Clean Room Environments",
+    "Marine Applications",
+    "Data Center Cooling",
+    "Manufacturing Facilities",
+    "Sound Attenuation Systems",
+    "High Temperature Exhaust"
   ],
   benefits: [
     {
-      title: "Durability",
-      description: "Exceptional resistance to wear, abrasion, and environmental factors",
+      title: "Structural Integrity",
+      description: "Maintains shape and resists crushing while allowing necessary flexibility",
       icon: Shield,
     },
     {
-      title: "Flexibility",
-      description: "Maintains flexibility at both high and low temperatures",
+      title: "Airflow Efficiency",
+      description: "Smooth interior surface minimizes pressure drop and optimizes air movement",
       icon: Wind,
     },
     {
-      title: "Performance",
-      description: "Outstanding flow characteristics with minimal pressure drop",
+      title: "Installation Versatility",
+      description: "Easier to work with than rigid ducting while providing better performance than fully flexible options",
       icon: Gauge,
     },
     {
-      title: "Efficiency",
-      description: "Lightweight construction reduces system load and energy consumption",
+      title: "System Longevity",
+      description: "Durable materials and construction ensure extended service life and reliability",
       icon: Zap,
     }
   ],
   specifications: {
-    material: "Thermoplastic Polyurethane (TPU)",
-    temperatureRange: "-40°C to +90°C",
-    wallThickness: "0.5mm to 2.0mm (depending on model)",
-    innerDiameter: "6mm to 50mm (standard sizes)",
-    colors: "Clear, Black, Blue, Yellow (standard colors)",
-    pressureRating: "Up to 15 bar (depending on diameter and wall thickness)",
-    minBendRadius: "2x to 4x inner diameter",
-    standardLength: "25m, 50m rolls (custom lengths available)"
+    material: "Aluminum, Stainless Steel, or Composite depending on model",
+    temperatureRange: "-30°C to +250°C (varies by type)",
+    wallThickness: "0.1mm to 0.15mm (standard)",
+    diameterRange: "80mm to 500mm (standard sizes)",
+    compressionRatio: "Up to 1:5 depending on model",
+    pressureRating: "Up to 2500 Pa positive pressure",
+    standardLength: "3m and 6m sections (custom lengths available)",
+    fireRating: "Available with various fire-rated options depending on model"
   }
 }
 
-export default function TPUIndustrialHosePage() {
+export default function SemiFlexibleAirDuctsPage() {
   return (
     <>
       <section className="relative py-32 overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
@@ -178,12 +131,12 @@ export default function TPUIndustrialHosePage() {
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <Badge variant="secondary" className="mb-6">
-              {tpuIndustrialHose.category}
+              {semiFlexibleAirDucts.category}
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl/none text-white drop-shadow-sm">
-              {tpuIndustrialHose.name}
+              {semiFlexibleAirDucts.name}
             </h1>
-            <p className="mt-6 text-xl text-blue-100">{tpuIndustrialHose.description}</p>
+            <p className="mt-6 text-xl text-blue-100">{semiFlexibleAirDucts.description}</p>
           </div>
         </div>
       </section>
@@ -191,14 +144,14 @@ export default function TPUIndustrialHosePage() {
       <section className="py-24">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-blue-950">Our TPU Industrial Hose Products</h2>
+            <h2 className="text-3xl font-bold text-blue-950">Our Semi Flexible Air Duct Products</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore our comprehensive range of TPU industrial hoses for diverse applications
+              Explore our comprehensive range of semi-flexible air ducts for diverse applications
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {tpuIndustrialHose.types.map((product, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
+            {semiFlexibleAirDucts.types.map((product, index) => (
               <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 h-full relative">
                 {product.isNew && (
                   <Badge variant="default" className="absolute top-3 left-3 z-10 bg-amber-500 hover:bg-amber-600">
@@ -248,7 +201,7 @@ export default function TPUIndustrialHosePage() {
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-blue-950">Key Features</h2>
                 <ul className="grid gap-3">
-                  {tpuIndustrialHose.features.map((feature, index) => (
+                  {semiFlexibleAirDucts.features.map((feature, index) => (
                     <li key={index} className="flex items-start gap-2">
                       <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
                       <span className="text-gray-700">{feature}</span>
@@ -260,7 +213,7 @@ export default function TPUIndustrialHosePage() {
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-blue-950">Applications</h2>
                 <div className="flex flex-wrap gap-2">
-                  {tpuIndustrialHose.applications.map((application, index) => (
+                  {semiFlexibleAirDucts.applications.map((application, index) => (
                     <Badge key={index} variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200">
                       {application}
                     </Badge>
@@ -272,7 +225,7 @@ export default function TPUIndustrialHosePage() {
             <div className="space-y-6">
               <h2 className="text-2xl font-bold text-blue-950">Technical Specifications</h2>
               <div className="grid gap-4">
-                {Object.entries(tpuIndustrialHose.specifications).map(([key, value], index) => (
+                {Object.entries(semiFlexibleAirDucts.specifications).map(([key, value], index) => (
                   <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-white shadow-sm">
                     <div className="flex-1">
                       <h3 className="font-semibold text-blue-950 capitalize">{key.replace(/([A-Z])/g, ' $1').trim()}</h3>
@@ -291,12 +244,12 @@ export default function TPUIndustrialHosePage() {
           <div className="text-center mb-12">
             <h2 className="text-3xl font-bold text-blue-950">Key Benefits</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Why choose our TPU Industrial Hoses
+              Why choose our Semi Flexible Air Ducts
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 mt-8">
-            {tpuIndustrialHose.benefits.map((benefit, index) => (
+            {semiFlexibleAirDucts.benefits.map((benefit, index) => (
               <Card key={index} className="border-0 shadow-lg overflow-hidden bg-white hover:shadow-xl transition-shadow duration-300">
                 <CardHeader className="pb-2">
                   <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center mb-4">
@@ -318,7 +271,7 @@ export default function TPUIndustrialHosePage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
             <p className="text-lg text-blue-100 mb-8">
-              Contact our expert team today to discuss your TPU Industrial Hose requirements and receive a customized quote for your project.
+              Contact our expert team today to discuss your Semi Flexible Air Duct requirements and receive a customized quote for your project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
