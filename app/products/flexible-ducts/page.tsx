@@ -140,7 +140,8 @@ const flexibleDucts = {
     {
       name: "TPU Industrial Hose",
       image: "/images/products/flexible-ducts/TPUIndustrialHose.webp",
-      description: "Thermoplastic polyurethane hoses for industrial use"
+      link: "/products/tpu-industrial-hose",
+      description: "Premium thermoplastic polyurethane industrial hoses for various industrial applications."
     },
     {
       name: "UL Listed Flexible Air Connector",
@@ -156,18 +157,6 @@ const flexibleDucts = {
     "Anti-microbial options for healthcare environments",
     "Marine-certified variants available",
     "Easy installation and maintenance",
-    "Excellent flexibility for complex routing",
-    "Fire-resistant options for enhanced safety",
-  ],
-  applications: [
-    "Commercial HVAC Systems",
-    "Industrial Ventilation",
-    "Healthcare Facilities",
-    "Marine Applications",
-    "Clean Rooms",
-    "Food Processing",
-    "Pharmaceutical Manufacturing",
-    "Data Centers",
   ],
   benefits: [
     {
@@ -320,78 +309,6 @@ export default function FlexibleDuctsPage() {
                 )}
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-blue-950">Key Features</h2>
-                <ul className="grid gap-3">
-                  {flexibleDucts.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-blue-950">Applications</h2>
-                <div className="flex flex-wrap gap-2">
-                  {flexibleDucts.applications.map((application, index) => (
-                    <Badge key={index} variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200">
-                      {application}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <div className="flex flex-col sm:flex-row gap-4 mt-8">
-                <Button size="lg" className="bg-blue-600 hover:bg-blue-700 text-white">
-                  Request a Quote
-                </Button>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
-                <Image 
-                  src={flexibleDucts.productTypes[0].image} 
-                  alt="Flexible Duct Installation" 
-                  fill 
-                  className="object-contain p-4" 
-                />
-              </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
-                <Image 
-                  src={flexibleDucts.productTypes[1].image} 
-                  alt="Flexible Duct Applications" 
-                  fill 
-                  className="object-contain p-4" 
-                />
-              </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
-                <Image 
-                  src={flexibleDucts.productTypes[2].image} 
-                  alt="Flexible Duct Materials" 
-                  fill 
-                  className="object-contain p-4" 
-                />
-              </div>
-              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
-                <Image 
-                  src={flexibleDucts.productTypes[3].image} 
-                  alt="Flexible Duct Types" 
-                  fill 
-                  className="object-contain p-4" 
-                />
-              </div>
-            </div>
           </div>
         </div>
       </section>
