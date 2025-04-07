@@ -3,71 +3,190 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollReveal, FadeInStagger, HoverScale } from "@/components/ui/animations"
-import { Check, ArrowRight, Wind, Droplets, Gauge, Zap, Building } from "lucide-react"
+import { Check, ArrowRight, Wind, Droplets, Gauge, Zap, Building, Shield } from "lucide-react"
 import Link from "next/link"
 
 const flexibleDucts = {
-  name: "AFS Flexible Ducts",
+  name: "Flexible Air Ducts",
   description:
-    "Our AFS flexible air ducts are acoustically insulated and available in different materials including aluminium, PVC, and stainless steel. They are designed for efficient and flexible air distribution in HVAC systems.",
+    "Our Gemtec flexible air ducts are acoustically insulated and available in different materials including aluminium, PVC, and stainless steel. They are designed for efficient and flexible air distribution in HVAC systems.",
   category: "Flexible Ducts",
-  images: [
+  mainCategories: [
     {
-      src: "/images/products/flexible-ducts/main.jpg",
-      alt: "AFS Flexible Duct - Aluminum and Insulated",
+      title: "Acoustic Air Duct",
+      description: "High-performance acoustic insulated ducts for superior noise reduction.",
+      image: "/images/products/flexible-ducts/AcousticAirDuct.webp",
+      features: [
+        "Superior sound insulation",
+        "Multiple layer construction",
+        "Professional grade materials",
+        "Ideal for noise-sensitive applications"
+      ]
     },
     {
-      src: "/images/products/flexible-ducts/steel.jpg",
-      alt: "Stainless Steel Flexible Duct - Industrial Grade",
+      title: "Air Control Equipment",
+      description: "Comprehensive range of air control components for precise airflow management.",
+      image: "/images/products/flexible-ducts/Air controlEquipments.webp",
+      features: [
+        "Precise flow control",
+        "Multiple configuration options",
+        "Professional installation",
+        "High-quality materials"
+      ]
     },
     {
-      src: "/images/products/flexible-ducts/pvc.jpg",
-      alt: "PVC Flexible Duct - Commercial Installation",
+      title: "Air Disc Valves",
+      description: "Premium air disc valves for efficient air distribution and control.",
+      image: "/images/products/flexible-ducts/AirDiskValves.webp",
+      features: [
+        "Precise air control",
+        "Easy adjustment",
+        "Multiple sizes available",
+        "Professional finish"
+      ]
+    }
+  ],
+  productTypes: [
+    {
+      name: "Air Duct Equipment",
+      image: "/images/products/flexible-ducts/AirDuctEquipments.webp",
+      description: "Essential components and accessories for complete duct system installation"
     },
     {
-      src: "/images/products/flexible-ducts/installation.jpg",
-      alt: "Flexible Duct - HVAC System Installation",
+      name: "Aluminium & PVC Combined Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/Aluminum&PVCCombinedFlexibleAirDucts.webp",
+      description: "Hybrid solution combining durability of aluminum with PVC flexibility"
     },
+    {
+      name: "Aluminium Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/AluminumFlexibleAirDucts.webp",
+      description: "Premium aluminum ducts for superior durability and performance"
+    },
+    {
+      name: "Anti-Microbial Flexible Air Duct",
+      image: "/images/products/flexible-ducts/Anti-MicrobialFlexibleAirDuct.webp",
+      description: "Specialized ducts with antimicrobial properties for healthcare environments"
+    },
+    {
+      name: "Circular Duct Type Silencer",
+      image: "/images/products/flexible-ducts/CircularDuctTypeSilencer.webp",
+      description: "Advanced noise reduction solution for HVAC systems"
+    },
+    {
+      name: "Clip Ducting Industrial Hose",
+      image: "/images/products/flexible-ducts/ClipDuctingIndustrialHose.webp",
+      description: "Heavy-duty industrial hose with clip-lock system"
+    },
+    {
+      name: "Duct Insulation Sleeve",
+      image: "/images/products/flexible-ducts/DuctInsulationSleeve.webp",
+      description: "High-performance insulation sleeves for thermal efficiency"
+    },
+    {
+      name: "Ecosoft Series",
+      image: "/images/products/flexible-ducts/EcosoftSeries.webp",
+      description: "Eco-friendly flexible duct solutions with superior performance"
+    },
+    {
+      name: "Flexible Connector",
+      image: "/images/products/flexible-ducts/FlexibleConnector.webp",
+      description: "Professional grade connectors for secure duct joints"
+    },
+    {
+      name: "Grills",
+      image: "/images/products/flexible-ducts/Grills.webp",
+      description: "Premium air grills for efficient air distribution"
+    },
+    {
+      name: "Hydroponic Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/HydroponicFlexibleAirDucts.webp",
+      description: "Specialized ducts for hydroponic growing environments"
+    },
+    {
+      name: "Marine Certified Flexible Air Duct",
+      image: "/images/products/flexible-ducts/MarineCertifiedFlexibleAirDuct.webp",
+      description: "Certified ducts meeting marine industry standards"
+    },
+    {
+      name: "Montage Elements",
+      image: "/images/products/flexible-ducts/MonatgeElements.webp",
+      description: "Complete mounting and installation components"
+    },
+    {
+      name: "Nonwoven Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/NonvonenFlexibleAirDUcts.webp",
+      description: "Lightweight and durable nonwoven duct solutions"
+    },
+    {
+      name: "PE Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/PeFlexibleAirDucts.webp",
+      description: "Polyethylene ducts for specialized applications"
+    },
+    {
+      name: "Polyester Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/PolyesterFlexibleAirDucts.webp",
+      description: "High-quality polyester ducts for versatile use"
+    },
+    {
+      name: "PVC Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/PVCFlexibleAirDucts.webp",
+      description: "Versatile PVC ducts for standard applications"
+    },
+    {
+      name: "Semi Flexible Air Ducts",
+      image: "/images/products/flexible-ducts/SemiFlexibleAirDucts.webp",
+      description: "Semi-rigid ducts for specific installation requirements"
+    },
+    {
+      name: "TPU Industrial Hose",
+      image: "/images/products/flexible-ducts/TPUIndustrialHose.webp",
+      description: "Thermoplastic polyurethane hoses for industrial use"
+    },
+    {
+      name: "UL Listed Flexible Air Connector",
+      image: "/images/products/flexible-ducts/ULListedFlexibleAirConnector.webp",
+      description: "UL certified connectors for safety compliance"
+    }
   ],
   features: [
-    "Superior acoustic insulation for quiet operation",
-    "Multiple material options: aluminum, PVC, and stainless steel",
-    "Standard diameters from 100mm to 500mm",
-    "Exceptional flexibility for complex installation environments",
-    "Reinforced construction for durability and longevity",
-    "Fire-resistant materials available (class 0, class 1)",
-    "Temperature resistance from -30°C to +140°C (material dependent)",
-    "Low air leakage design for improved system efficiency",
+    "Wide range of materials: Aluminum, PVC, PE, and specialized combinations",
+    "Multiple diameter options to suit various applications",
+    "Superior acoustic and thermal insulation properties",
+    "Anti-microbial options for healthcare environments",
+    "Marine-certified variants available",
+    "Easy installation and maintenance",
+    "Excellent flexibility for complex routing",
+    "Fire-resistant options for enhanced safety",
   ],
   applications: [
     "Commercial HVAC Systems",
     "Industrial Ventilation",
-    "Residential Air Conditioning",
-    "Clean Rooms & Laboratories",
-    "Hospitals & Healthcare Facilities",
-    "Food Processing Plants",
+    "Healthcare Facilities",
+    "Marine Applications",
+    "Clean Rooms",
+    "Food Processing",
     "Pharmaceutical Manufacturing",
     "Data Centers",
   ],
   benefits: [
     {
-      title: "Installation Flexibility",
-      description: "Easily navigates around obstacles and fits into tight spaces where rigid ducts cannot",
+      title: "Versatile Solutions",
+      description: "Wide range of materials and types to meet any application requirement",
       icon: Wind,
     },
     {
-      title: "Acoustic Performance",
-      description: "Reduces noise transmission through HVAC systems for quieter indoor environments",
-      icon: Droplets,
+      title: "Superior Performance",
+      description: "Excellent acoustic and thermal insulation properties",
+      icon: Gauge,
     },
     {
-      title: "Energy Efficiency",
-      description: "Superior insulation reduces energy loss and improves overall system efficiency",
-      icon: Zap,
+      title: "Enhanced Safety",
+      description: "Fire-resistant and anti-microbial options available",
+      icon: Shield,
     },
     {
-      title: "Versatile Application",
-      description: "Multiple material options ensure compatibility with various environmental requirements",
+      title: "Easy Installation",
+      description: "Flexible design allows for quick and efficient installation",
       icon: Building,
     },
   ],
@@ -111,25 +230,77 @@ export default function FlexibleDuctsPage() {
 
       <section className="py-24">
         <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-6">
-              <div className="relative aspect-video rounded-xl overflow-hidden shadow-xl border border-gray-100">
-                <Image
-                  src="/placeholder.svg"
-                  alt={flexibleDucts.images[0].alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                {flexibleDucts.images.slice(1).map((image, index) => (
-                  <div key={index} className="relative aspect-square rounded-xl overflow-hidden shadow-lg border border-gray-100">
-                    <Image src="/placeholder.svg" alt={image.alt} fill className="object-cover" />
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-blue-950">Main Product Categories</h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              Explore our comprehensive range of flexible duct solutions
+            </p>
+          </div>
+          
+          <div className="grid lg:grid-cols-3 gap-8">
+            {flexibleDucts.mainCategories.map((category, index) => (
+              <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="relative h-64">
+                  <Image
+                    src={category.image}
+                    alt={category.title}
+                    fill
+                    className="object-contain p-4"
+                  />
+                </div>
+                <CardHeader>
+                  <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
+                  <CardDescription>{category.description}</CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <ul className="space-y-2">
+                    {category.features.map((feature, idx) => (
+                      <li key={idx} className="flex items-start gap-2">
+                        <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                        <span className="text-gray-600">{feature}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      <section className="py-20 bg-gray-50">
+        <div className="container">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold text-blue-950">Specialized Product Types</h2>
+            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
+              Discover our specialized flexible duct solutions for specific applications
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {flexibleDucts.productTypes.map((product, index) => (
+              <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
+                <div className="relative h-48">
+                  <Image
+                    src={product.image}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-4"
+                  />
+                </div>
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
+                  <p className="text-gray-600">{product.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24">
+        <div className="container">
+          <div className="grid lg:grid-cols-2 gap-12">
             <div className="space-y-8">
               <div className="space-y-4">
                 <h2 className="text-2xl font-bold text-blue-950">Key Features</h2>
@@ -160,6 +331,41 @@ export default function FlexibleDuctsPage() {
                 </Button>
               </div>
             </div>
+
+            <div className="grid grid-cols-2 gap-4">
+              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
+                <Image 
+                  src={flexibleDucts.productTypes[0].image} 
+                  alt="Flexible Duct Installation" 
+                  fill 
+                  className="object-contain p-4" 
+                />
+              </div>
+              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
+                <Image 
+                  src={flexibleDucts.productTypes[1].image} 
+                  alt="Flexible Duct Applications" 
+                  fill 
+                  className="object-contain p-4" 
+                />
+              </div>
+              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
+                <Image 
+                  src={flexibleDucts.productTypes[2].image} 
+                  alt="Flexible Duct Materials" 
+                  fill 
+                  className="object-contain p-4" 
+                />
+              </div>
+              <div className="relative aspect-square rounded-xl overflow-hidden shadow-xl border border-gray-100">
+                <Image 
+                  src={flexibleDucts.productTypes[3].image} 
+                  alt="Flexible Duct Types" 
+                  fill 
+                  className="object-contain p-4" 
+                />
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -187,6 +393,25 @@ export default function FlexibleDuctsPage() {
                 </CardContent>
               </Card>
             ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gradient-to-br from-blue-900 to-blue-950">
+        <div className="container">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
+            <p className="text-lg text-blue-100 mb-8">
+              Contact our expert team today to discuss your flexible duct requirements and receive a customized quote for your project.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
+                Request a Quote
+              </Button>
+              <Button size="lg" variant="outline" className="border-blue-300 text-blue-100 hover:bg-blue-800">
+                Contact Sales Team
+              </Button>
+            </div>
           </div>
         </div>
       </section>
@@ -223,25 +448,6 @@ export default function FlexibleDuctsPage() {
                 </Card>
               </Link>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-gradient-to-br from-blue-900 to-blue-950">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
-            <p className="text-lg text-blue-100 mb-8">
-              Contact our expert team today to discuss your flexible duct requirements and receive a customized quote for your project.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
-                Request a Quote
-              </Button>
-              <Button size="lg" variant="outline" className="border-blue-300 text-blue-100 hover:bg-blue-800">
-                Contact Sales Team
-              </Button>
-            </div>
           </div>
         </div>
       </section>
