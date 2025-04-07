@@ -145,7 +145,8 @@ const flexibleDucts = {
     {
       name: "UL Listed Flexible Air Connector",
       image: "/images/products/flexible-ducts/ULListedFlexibleAirConnector.webp",
-      description: "UL certified connectors for safety compliance"
+      description: "UL certified connectors for safety compliance",
+      link: "/products/ul-listed-flexible-air-connector"
     }
   ],
   features: [
@@ -280,18 +281,43 @@ export default function FlexibleDuctsPage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {flexibleDucts.productTypes.map((product, index) => (
               <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-48">
-                  <Image
-                    src={product.image}
-                    alt={product.name}
-                    fill
-                    className="object-contain p-4"
-                  />
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
-                  <p className="text-gray-600">{product.description}</p>
-                </CardContent>
+                {product.link ? (
+                  <Link href={product.link}>
+                    <div className="relative h-48">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
+                      <p className="text-gray-600">{product.description}</p>
+                      {product.link && (
+                        <div className="flex items-center mt-4 text-blue-600 font-medium">
+                          Learn more
+                          <ArrowRight className="ml-2 h-4 w-4" />
+                        </div>
+                      )}
+                    </CardContent>
+                  </Link>
+                ) : (
+                  <>
+                    <div className="relative h-48">
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                    <CardContent className="p-6">
+                      <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
+                      <p className="text-gray-600">{product.description}</p>
+                    </CardContent>
+                  </>
+                )}
               </Card>
             ))}
           </div>
