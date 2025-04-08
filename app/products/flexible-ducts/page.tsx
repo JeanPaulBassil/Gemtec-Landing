@@ -125,11 +125,13 @@ const flexibleDucts = {
     {
       name: "Polyester Flexible Air Ducts",
       image: "/images/products/flexible-ducts/PolyesterFlexibleAirDucts.webp",
+      link: "/products/polyester-flexible-air-ducts",
       description: "High-quality polyester ducts for versatile use"
     },
     {
       name: "PVC Flexible Air Ducts",
       image: "/images/products/flexible-ducts/PVCFlexibleAirDucts.webp",
+      link: "/products/pvc-flexible-air-ducts",
       description: "Versatile PVC ducts for standard applications"
     },
     {
