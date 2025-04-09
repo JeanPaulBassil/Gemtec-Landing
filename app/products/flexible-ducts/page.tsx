@@ -120,6 +120,7 @@ const flexibleDucts = {
     {
       name: "PE Flexible Air Ducts",
       image: "/images/products/flexible-ducts/PeFlexibleAirDucts.webp",
+      link: "/products/pe-flexible-air-ducts",
       description: "Polyethylene ducts for specialized applications"
     },
     {
