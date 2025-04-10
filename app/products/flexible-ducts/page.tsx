@@ -27,6 +27,7 @@ const flexibleDucts = {
       title: "Air Control Equipment",
       description: "Comprehensive range of air control components for precise airflow management.",
       image: "/images/products/flexible-ducts/Air controlEquipments.webp",
+      link: "/products/air-control-equipment",
       features: [
         "Precise flow control",
         "Multiple configuration options",
@@ -38,6 +39,7 @@ const flexibleDucts = {
       title: "Air Disc Valves",
       description: "Premium air disc valves for efficient air distribution and control.",
       image: "/images/products/flexible-ducts/AirDiskValves.webp",
+      link: "/products/air-disc-valves",
       features: [
         "Precise air control",
         "Easy adjustment",
@@ -50,7 +52,8 @@ const flexibleDucts = {
     {
       name: "Air Duct Equipment",
       image: "/images/products/flexible-ducts/AirDuctEquipments.webp",
-      description: "Essential components and accessories for complete duct system installation"
+      description: "Essential components and accessories for complete duct system installation",
+      link: "/products/air-duct-equipments"
     },
     {
       name: "Aluminium & PVC Combined Flexible Air Ducts",
@@ -241,28 +244,61 @@ export default function FlexibleDuctsPage() {
           <div className="grid lg:grid-cols-3 gap-8">
             {flexibleDucts.mainCategories.map((category, index) => (
               <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                <div className="relative h-64">
-                  <Image
-                    src={category.image}
-                    alt={category.title}
-                    fill
-                    className="object-contain p-4"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
-                  <CardDescription>{category.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {category.features.map((feature, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-                        <span className="text-gray-600">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
+                {category.link ? (
+                  <Link href={category.link}>
+                    <div className="relative h-64">
+                      <Image
+                        src={category.image}
+                        alt={category.title}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
+                      <CardDescription>{category.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {category.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                            <span className="text-gray-600">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      <div className="flex items-center mt-4 text-blue-600 font-medium">
+                        Learn more
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </div>
+                    </CardContent>
+                  </Link>
+                ) : (
+                  <>
+                    <div className="relative h-64">
+                      <Image
+                        src={category.image}
+                        alt={category.title}
+                        fill
+                        className="object-contain p-4"
+                      />
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
+                      <CardDescription>{category.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <ul className="space-y-2">
+                        {category.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start gap-2">
+                            <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                            <span className="text-gray-600">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </CardContent>
+                  </>
+                )}
               </Card>
             ))}
           </div>
