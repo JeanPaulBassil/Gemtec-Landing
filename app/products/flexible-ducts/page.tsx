@@ -13,17 +13,6 @@ const flexibleDucts = {
   category: "Flexible Ducts",
   mainCategories: [
     {
-      title: "Acoustic Air Duct",
-      description: "High-performance acoustic insulated ducts for superior noise reduction.",
-      image: "/images/products/flexible-ducts/AcousticAirDuct.webp",
-      features: [
-        "Superior sound insulation",
-        "Multiple layer construction",
-        "Professional grade materials",
-        "Ideal for noise-sensitive applications"
-      ]
-    },
-    {
       title: "Air Control Equipment",
       description: "Comprehensive range of air control components for precise airflow management.",
       image: "/images/products/flexible-ducts/Air controlEquipments.webp",
@@ -58,22 +47,26 @@ const flexibleDucts = {
     {
       name: "Aluminium & PVC Combined Flexible Air Ducts",
       image: "/images/products/flexible-ducts/Aluminum&PVCCombinedFlexibleAirDucts.webp",
-      description: "Hybrid solution combining durability of aluminum with PVC flexibility"
+      description: "Hybrid solution combining durability of aluminum with PVC flexibility",
+      link: "/products/flexible-ducts/aluminium-pvc-combined"
     },
     {
       name: "Aluminium Flexible Air Ducts",
       image: "/images/products/flexible-ducts/AluminumFlexibleAirDucts.webp",
-      description: "Premium aluminum ducts for superior durability and performance"
+      description: "Premium aluminum ducts for superior durability and performance",
+      link: "/products/flexible-ducts/aluminium-flexible-air-ducts"
     },
     {
       name: "Anti-Microbial Flexible Air Duct",
       image: "/images/products/flexible-ducts/Anti-MicrobialFlexibleAirDuct.webp",
-      description: "Specialized ducts with antimicrobial properties for healthcare environments"
+      description: "Specialized ducts with antimicrobial properties for healthcare environments",
+      link: "/products/flexible-ducts/anti-microbial-flexible-air-duct"
     },
     {
       name: "Circular Duct Type Silencer",
       image: "/images/products/flexible-ducts/CircularDuctTypeSilencer.webp",
-      description: "Advanced noise reduction solution for HVAC systems"
+      description: "Specialized silencers for circular duct systems",
+      link: "/products/flexible-ducts/circular-duct-type-silencer"
     },
     {
       name: "Clip Ducting Industrial Hose",
@@ -205,6 +198,29 @@ const relatedProducts = [
 ]
 
 export default function FlexibleDuctsPage() {
+  // Define types for our products
+  type ProductFeature = string;
+  
+  interface Product {
+    name: string;
+    image: string;
+    description: string;
+    link?: string;
+    features?: ProductFeature[];
+  }
+
+  // Combine mainCategories and productTypes into a single array
+  const allProducts: Product[] = [
+    ...flexibleDucts.mainCategories.map(category => ({
+      name: category.title,
+      image: category.image,
+      description: category.description,
+      link: category.link,
+      features: category.features
+    })),
+    ...flexibleDucts.productTypes
+  ];
+
   return (
     <>
       <section className="relative py-32 overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
@@ -228,87 +244,14 @@ export default function FlexibleDuctsPage() {
       <section className="py-24">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-blue-950">Main Product Categories</h2>
+            <h2 className="text-3xl font-bold text-blue-950">All Product Categories</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore our comprehensive range of flexible duct solutions
-            </p>
-          </div>
-          
-          <div className="grid lg:grid-cols-3 gap-8">
-            {flexibleDucts.mainCategories.map((category, index) => (
-              <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
-                {category.link ? (
-                  <Link href={category.link}>
-                    <div className="relative h-64">
-                      <Image
-                        src={category.image}
-                        alt={category.title}
-                        fill
-                        className="object-contain p-4"
-                      />
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
-                      <CardDescription>{category.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {category.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-                            <span className="text-gray-600">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                      <div className="flex items-center mt-4 text-blue-600 font-medium">
-                        Learn more
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </div>
-                    </CardContent>
-                  </Link>
-                ) : (
-                  <>
-                    <div className="relative h-64">
-                      <Image
-                        src={category.image}
-                        alt={category.title}
-                        fill
-                        className="object-contain p-4"
-                      />
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="text-xl text-blue-950">{category.title}</CardTitle>
-                      <CardDescription>{category.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <ul className="space-y-2">
-                        {category.features.map((feature, idx) => (
-                          <li key={idx} className="flex items-start gap-2">
-                            <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-                            <span className="text-gray-600">{feature}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </>
-                )}
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-gray-50">
-        <div className="container">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-blue-950">Specialized Product Types</h2>
-            <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Discover our specialized flexible duct solutions for specific applications
+              Explore our comprehensive range of flexible duct solutions for all applications
             </p>
           </div>
           
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {flexibleDucts.productTypes.map((product, index) => (
+            {allProducts.map((product, index) => (
               <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300">
                 {product.link ? (
                   <Link href={product.link}>
@@ -323,12 +266,20 @@ export default function FlexibleDuctsPage() {
                     <CardContent className="p-6">
                       <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
                       <p className="text-gray-600">{product.description}</p>
-                      {product.link && (
-                        <div className="flex items-center mt-4 text-blue-600 font-medium">
-                          Learn more
-                          <ArrowRight className="ml-2 h-4 w-4" />
-                        </div>
+                      {product.features && (
+                        <ul className="space-y-2 mt-4">
+                          {product.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                              <span className="text-gray-600">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
                       )}
+                      <div className="flex items-center mt-4 text-blue-600 font-medium">
+                        Learn more
+                        <ArrowRight className="ml-2 h-4 w-4" />
+                      </div>
                     </CardContent>
                   </Link>
                 ) : (
@@ -344,6 +295,16 @@ export default function FlexibleDuctsPage() {
                     <CardContent className="p-6">
                       <h3 className="text-xl font-semibold text-blue-950 mb-2">{product.name}</h3>
                       <p className="text-gray-600">{product.description}</p>
+                      {product.features && (
+                        <ul className="space-y-2 mt-4">
+                          {product.features.map((feature, idx) => (
+                            <li key={idx} className="flex items-start gap-2">
+                              <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
+                              <span className="text-gray-600">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      )}
                     </CardContent>
                   </>
                 )}

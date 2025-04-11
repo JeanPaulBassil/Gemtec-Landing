@@ -103,16 +103,18 @@ export default function PratiGClampsPage() {
             
             <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
-                <ul className="space-y-2 pl-5 list-disc">
-                  <li>Heavy-duty metal construction for maximum strength</li>
-                  <li>Precision-engineered clamping mechanism</li>
-                  <li>Superior grip for secure duct connections</li>
-                  <li>Corrosion-resistant finish for long-term durability</li>
-                  <li>Easy installation with standard tools</li>
-                  <li>Helps create airtight connections to prevent leakage</li>
-                  <li>Compatible with professional HVAC installation standards</li>
-                  <li>Ensures stable, vibration-resistant connections</li>
-                </ul>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse mb-6">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-bold text-gray-700 border" colSpan={2}>GENERAL FEATURES</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+
+                <p className="text-gray-700 mb-4">They are designed to fix ready duct flange profiles to each other.</p>
+                <p className="text-gray-700">They are standard galvanize plated.</p>
               </div>
             </TabsContent>
           </Tabs>

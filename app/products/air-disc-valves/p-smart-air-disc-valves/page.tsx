@@ -103,16 +103,51 @@ export default function PSmartAirDiscValvesPage() {
             
             <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
-                <ul className="space-y-2 pl-5 list-disc">
-                  <li>State-of-the-art P Smart technology for superior performance</li>
-                  <li>Advanced aerodynamic design for optimized airflow</li>
-                  <li>Ultra-quiet operation for noise-sensitive environments</li>
-                  <li>Energy-efficient design helps reduce operational costs</li>
-                  <li>Precision manufacturing for consistent quality</li>
-                  <li>Sleek contemporary appearance for modern installations</li>
-                  <li>Multiple size options for various application requirements</li>
-                  <li>Exceptional balance of performance and aesthetics</li>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse mb-6">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-bold text-gray-700 border" colSpan={2}>GENERAL FEATURES</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">P SMART 100 Ölçü</td>
+                        <td className="py-3 px-4">152 x Ø99 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">P SMART 125 Ölçü</td>
+                        <td className="py-3 px-4">177 x Ø124 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">P SMART 150 Ölçü</td>
+                        <td className="py-3 px-4">202 x Ø149 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">P SMART 200 Ölçü</td>
+                        <td className="py-3 px-4">252 x Ø199 mm</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <ul className="space-y-3 pl-5 list-disc">
+                  <li>Very low pressure loss values are obtained by the CFD analysis and verified by the tests in the laboratory complying with ASHRAE 70 standards.</li>
+                  <li>All parts of P Smart manufactured from ABS plastic which eliminates the problem of corrosion, locking and color changes.</li>
+                  <li>Fully-airtight product with minimum air leakage is key to mold control and represents better indoor air quality.</li>
+                  <li>No deviation in flow rate area, effective diameter equals to nominal diameter and it conserves the flow regime.</li>
+                  <li>Quick mounting (less than a minute), with compact and smart components.</li>
                 </ul>
+
+                <div className="mt-8">
+                  <h3 className="text-xl font-semibold text-blue-800 mb-4">PROPERTIES & ADVANTAGES</h3>
+                  <div className="space-y-4">
+                    <p className="text-gray-700"><span className="font-medium">Mounting in 1 minute:</span> Intellectual design enabling easy and quick mounting on the wall and ceiling.</p>
+                    <p className="text-gray-700"><span className="font-medium">Energy Saver:</span> Optimum aerodynamic design ensuring very low pressure loss for supply and exhaust.</p>
+                    <p className="text-gray-700"><span className="font-medium">Recyclable:</span> It is made from ABS plastic entirely.</p>
+                    <p className="text-gray-700"><span className="font-medium">Aesthetic compatibility with indoor ambience:</span> Resistant to external impacts and having aesthetic appereance.</p>
+                    <p className="text-gray-700">Contributing to have better indoor air quality and highly efficience in use. Integrated design eliminating air.</p>
+                  </div>
+                </div>
               </div>
             </TabsContent>
           </Tabs>

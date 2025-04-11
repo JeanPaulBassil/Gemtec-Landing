@@ -14,7 +14,7 @@ const airControlEquipment = {
     {
       name: "PLASTIC BACK DROUGHT SHUTTER",
       description: "Durable plastic back drought shutters designed to prevent backdraft and maintain proper airflow in ventilation systems.",
-      image: "/air duct/Air control equipments/Plastic back drought shutter.webp",
+      image: "/PLASTIC BLACK DROUGHT SHUTTER.png",
       link: "/products/air-control-equipment/plastic-back-drought-shutter",
       features: [
         "Durable plastic construction",

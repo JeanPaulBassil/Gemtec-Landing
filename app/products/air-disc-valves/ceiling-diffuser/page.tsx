@@ -103,15 +103,37 @@ export default function CeilingDiffuserPage() {
             
             <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse mb-6">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-bold text-gray-700 border" colSpan={2}>GENERAL FEATURES</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 031 Ölçü</td>
+                        <td className="py-3 px-4">141 x Ø100 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 032 Ölçü</td>
+                        <td className="py-3 px-4">166 x Ø124 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 033 Ölçü</td>
+                        <td className="py-3 px-4">188 x Ø150 mm</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
                 <ul className="space-y-2 pl-5 list-disc">
-                  <li>Designed for balanced and efficient air distribution</li>
-                  <li>Clean white finish that integrates seamlessly with ceiling designs</li>
-                  <li>Multi-ring design for optimal airflow pattern control</li>
-                  <li>Durable construction for long-term reliability</li>
-                  <li>Engineered to minimize noise during operation</li>
-                  <li>Easy installation with standard ceiling mounting options</li>
-                  <li>Suitable for a wide range of HVAC applications</li>
-                  <li>Optimized for both cooling and heating air distribution</li>
+                  <li>Economical high performance diffuser</li>
+                  <li>Providing an architecturally pleasing ceiling affect</li>
+                  <li>Excellent design for surface mounting applications</li>
+                  <li>Multilayer cone can divide the air into many layers of swift puffs</li>
+                  <li>Smoothly balances the flow and temperature of the air</li>
+                  <li>Durable Round coupling corner</li>
+                  <li>Mosquito net standart</li>
                 </ul>
               </div>
             </TabsContent>

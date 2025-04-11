@@ -103,16 +103,23 @@ export default function GasketTapePage() {
             
             <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
-                <ul className="space-y-2 pl-5 list-disc">
-                  <li>Superior adhesive strength for long-lasting connections</li>
-                  <li>Creates airtight seals to prevent leakage</li>
-                  <li>Easy to apply with clean, precise application</li>
-                  <li>Durable construction withstands temperature variations</li>
-                  <li>Professional-grade quality for reliable performance</li>
-                  <li>Helps maintain HVAC system efficiency</li>
-                  <li>Compatible with industry-standard installation practices</li>
-                  <li>Cost-effective solution for proper duct sealing</li>
-                </ul>
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse mb-6">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-bold text-gray-700 border" colSpan={2}>GENERAL FEATURES</th>
+                      </tr>
+                    </thead>
+                  </table>
+                </div>
+
+                <p className="text-gray-700">Duct gasket tapes are designed to ensure airtightness between the ducts connected to each other.</p>
+                <p className="text-gray-700 mb-4">Besides, it ensures airtightness against some other factors such as water, dust, smoke, noise, oil, etc.</p>
+                
+                <h3 className="font-medium text-gray-800 mb-2">Standard Sizes:</h3>
+                <p className="text-gray-700 mb-2">thickness (mm) x width (mm)</p>
+                <p className="text-gray-700">5 mm x 15 mm</p>
+                <p className="text-gray-700">5 mm x 25 mm</p>
               </div>
             </TabsContent>
           </Tabs>

@@ -103,15 +103,66 @@ export default function MetalAirDiscValvesPage() {
             
             <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse mb-6">
+                    <thead className="bg-gray-100">
+                      <tr>
+                        <th className="py-3 px-4 text-left font-bold text-gray-700 border" colSpan={2}>GENERAL FEATURES</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 026 Ölçü</td>
+                        <td className="py-3 px-4">138 x Ø97,5 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 026 S Ölçü</td>
+                        <td className="py-3 px-4">138 x Ø97,5 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 027 Ölçü</td>
+                        <td className="py-3 px-4">164 x Ø122,5 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 027 S Ölçü</td>
+                        <td className="py-3 px-4">164 x Ø122,5 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 028 Ölçü</td>
+                        <td className="py-3 px-4">202 x Ø147,5 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 028 S Ölçü</td>
+                        <td className="py-3 px-4">202 x Ø147,5 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 029 Ölçü</td>
+                        <td className="py-3 px-4">211 x Ø157,5 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 029 S Ölçü</td>
+                        <td className="py-3 px-4">211 x Ø157,5 mm</td>
+                      </tr>
+                      <tr className="border-b">
+                        <td className="py-3 px-4 font-medium">CONAIR 030 Ölçü</td>
+                        <td className="py-3 px-4">248 x Ø197,5 mm</td>
+                      </tr>
+                      <tr className="border-b bg-gray-50">
+                        <td className="py-3 px-4 font-medium">CONAIR 030 S Ölçü</td>
+                        <td className="py-3 px-4">248 x Ø197,5 mm</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <p className="text-gray-700">Available diameters are 100 mm, 125 mm, 150 mm, 160 mm & 200 mm</p>
                 <ul className="space-y-2 pl-5 list-disc">
-                  <li>Heavy-duty metal construction for maximum durability</li>
-                  <li>Precision-engineered for consistent airflow control</li>
-                  <li>Superior corrosion resistance for extended service life</li>
-                  <li>Designed for professional HVAC applications</li>
-                  <li>Smooth air delivery with minimal turbulence</li>
-                  <li>Suitable for high-performance ventilation systems</li>
-                  <li>Maintains performance integrity in demanding environments</li>
-                  <li>Available in multiple sizes for various applications</li>
+                  <li>Easy installation on wall or ceiling</li>
+                  <li>Manufactured from sheet steel painted white RAL9010 satin</li>
+                  <li>The valve body is equipped with a cellular plastic gasket to form air tight seal</li>
+                  <li>The air flow is adjusted by rotating the control disc</li>
+                  <li>Simple and effective design for easy application</li>
+                  <li>Supplied with mounting ring</li>
+                  <li>Mounting ring is made of galvanized steel sheet</li>
                 </ul>
               </div>
             </TabsContent>

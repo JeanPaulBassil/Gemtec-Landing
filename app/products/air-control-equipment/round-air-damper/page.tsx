@@ -93,16 +93,12 @@ export default function RoundAirDamperPage() {
               </div>
             </TabsContent>
             
-            <TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
+            image.png<TabsContent value="features" className="bg-white p-6 rounded-lg shadow-sm">
               <div className="space-y-6">
                 <ul className="space-y-2 pl-5 list-disc">
-                  <li>Precise airflow adjustment capabilities</li>
-                  <li>Durable metal construction for longevity</li>
-                  <li>Available in multiple sizes to fit various applications</li>
-                  <li>Suitable for various HVAC applications</li>
-                  <li>Easy integration with existing systems</li>
-                  <li>Smooth operation for optimal performance</li>
-                  <li>Helps maintain proper system balance</li>
+                  <li>It is used to prevent reverse of air flow in circular duct systems.</li>
+                  <li>The case is made of galvanized steel and the blades are made of aluminium.</li>
+                  <li>The available diameters are 102 mm, 127 mm, 152 mm, 160 mm, 203 mm, 254 mm, 315 mm, 356 mm, 406 mm.</li>
                 </ul>
               </div>
             </TabsContent>
