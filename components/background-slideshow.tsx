@@ -8,37 +8,37 @@ import { cn } from "@/lib/utils"
 const slides = [
   {
     id: 1,
-    image: "/carousel images/Carousel Image -1- .jpeg",
+    image: "/Carousel Images/Carousel Image -1- .jpeg",
     title: "Professional HVAC Solutions",
   },
   {
     id: 2,
-    image: "/carousel images/Carousel Image -2- .jpeg",
+    image: "/Carousel Images/Carousel Image -2- .jpeg",
     title: "Industrial Ventilation Systems",
   },
   {
     id: 3,
-    image: "/carousel images/Carousel Image -3-.jpeg",
+    image: "/Carousel Images/Carousel Image -3-.jpeg",
     title: "Commercial Air Distribution",
   },
   {
     id: 4,
-    image: "/carousel images/Carousel Image -4-.jpeg",
+    image: "/Carousel Images/Carousel Image -4-.jpeg",
     title: "Sustainable Climate Control",
   },
   {
     id: 5,
-    image: "/carousel images/Carousel Image -5-.jpeg",
+    image: "/Carousel Images/Carousel Image -5-.jpeg",
     title: "Advanced HVAC Technology",
   },
   {
     id: 6,
-    image: "/carousel images/Carousel Image -6-.jpeg",
+    image: "/Carousel Images/Carousel Image -6-.jpeg",
     title: "Energy-Efficient Solutions",
   },
   {
     id: 7,
-    image: "/carousel images/Carousel Image -7-.jpeg",
+    image: "/Carousel Images/Carousel Image -7-.jpeg",
     title: "Global HVAC Excellence",
   },
 ]
