@@ -5,67 +5,51 @@ import { Badge } from "@/components/ui/badge"
 import { Check, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
-const semiFlexibleAirDucts = {
-  name: "Semi Flexible Air Ducts",
-  description: "Premium semi-rigid aluminum air ducts designed for superior durability and airflow in HVAC systems. Our semi-flexible ducts provide excellent structural integrity while maintaining the flexibility needed for complex installations.",
-  category: "Air Ducts & Ventilation",
+const marineCertifiedDucts = {
+  name: "Marine Certified Flexible Air Duct",
+  description: "Premium marine-grade flexible air ducts designed specifically for maritime applications with superior durability, corrosion resistance, and compliance with marine industry standards.",
+  category: "Flexible Ducts",
   types: [
     {
-      name: "SEMIAFS",
-      description: "Standard semi-flexible aluminum air duct for general HVAC applications",
-      image: "/images/products/flexible-ducts/Semiafs.webp",
-      link: "/products/semiafs",
-      isNew: false,
+      name: "SONOAFS-ALU.F ECOSOFT MARINE",
+      description: "Acoustic insulated marine-grade aluminum flexible air duct with eco-friendly materials",
+      image: "/images/products/flexible-ducts/Sonoafs-Alu.fb ecosoft Marine.webp",
+      link: "/products/sonoafs-alu-fb-ecosoft-marine",
       features: [
-        "Durable aluminum construction",
-        "Semi-rigid design for stability",
-        "Excellent air flow characteristics",
-        "Easy installation"
+        "Acoustic insulation",
+        "Marine certified",
+        "Eco-friendly materials",
+        "Superior durability"
       ]
     },
     {
-      name: "SEMIAFS-INOX",
-      description: "Stainless steel semi-flexible air duct for corrosive environments",
-      image: "/images/products/flexible-ducts/Semiafs-Inox.webp",
-      link: "/products/semiafs-inox",
-      isNew: false,
+      name: "ISOAFS-ALU.F ECOSOFT MARINE",
+      description: "Thermally insulated marine-grade aluminum flexible air duct for marine environments",
+      image: "/images/products/flexible-ducts/Isoafs-alu.f Ecosoft Marine.webp",
+      link: "/products/isoafs-alu-f-ecosoft-marine",
       features: [
-        "Corrosion resistant stainless steel",
-        "High temperature applications",
-        "Superior durability in harsh conditions",
-        "Chemical resistant"
+        "Thermal insulation",
+        "Marine certified",
+        "Eco-friendly construction",
+        "Corrosion resistant"
       ]
     },
     {
-      name: "SEMIAFS.C",
-      description: "Semi-flexible aluminum air duct designed for extended lengths",
-      image: "/images/products/flexible-ducts/Semiaf.C.webp",
-      link: "/products/semiafs-c",
-      isNew: false,
+      name: "ALUAFS.F MARINE",
+      description: "Non-insulated marine-grade aluminum flexible air duct for versatile marine applications",
+      image: "/images/products/flexible-ducts/Aluafs.F Marine.webp",
+      link: "/products/aluafs-f-marine",
       features: [
-        "Extended length capability",
-        "Consistent diameter throughout",
-        "Reinforced structure",
-        "Optimized for straight runs"
-      ]
-    },
-    {
-      name: "PHONIC SEMIAFS",
-      description: "Sound-attenuating semi-flexible air duct with thermal insulation",
-      image: "/images/products/flexible-ducts/Phonic Semiafs.webp",
-      link: "/products/phonic-semiafs",
-      isNew: false,
-      features: [
-        "Sound dampening design",
-        "Thermal insulation layer",
-        "Reduced noise transmission",
-        "Energy efficient"
+        "Lightweight design",
+        "Marine certified",
+        "High flexibility",
+        "Salt-water resistant"
       ]
     }
   ]
 }
 
-export default function SemiFlexibleAirDuctsPage() {
+export default function MarineCertifiedFlexibleAirDuctPage() {
   return (
     <>
       <section className="relative py-32 overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
@@ -76,12 +60,12 @@ export default function SemiFlexibleAirDuctsPage() {
         <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <Badge variant="secondary" className="mb-6">
-              {semiFlexibleAirDucts.category}
+              {marineCertifiedDucts.category}
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl/none text-white drop-shadow-sm">
-              {semiFlexibleAirDucts.name}
+              {marineCertifiedDucts.name}
             </h1>
-            <p className="mt-6 text-xl text-blue-100">{semiFlexibleAirDucts.description}</p>
+            <p className="mt-6 text-xl text-blue-100">{marineCertifiedDucts.description}</p>
           </div>
         </div>
       </section>
@@ -89,20 +73,15 @@ export default function SemiFlexibleAirDuctsPage() {
       <section className="py-24">
         <div className="container">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold text-blue-950">Our Semi Flexible Air Duct Products</h2>
+            <h2 className="text-3xl font-bold text-blue-950">Our Marine Certified Products</h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Explore our comprehensive range of semi-flexible air ducts for diverse applications
+              Explore our comprehensive range of flexible ducts designed specifically for marine applications
             </p>
           </div>
           
-          <div className="grid md:grid-cols-2 lg:grid-cols-2 gap-8">
-            {semiFlexibleAirDucts.types.map((product, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {marineCertifiedDucts.types.map((product, index) => (
               <Card key={index} className="overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-300 h-full relative">
-                {product.isNew && (
-                  <Badge variant="default" className="absolute top-3 left-3 z-10 bg-amber-500 hover:bg-amber-600">
-                    NEW PRODUCT
-                  </Badge>
-                )}
                 <div className="relative h-52">
                   <Image
                     src={product.image}
@@ -144,14 +123,14 @@ export default function SemiFlexibleAirDuctsPage() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
             <p className="text-lg text-blue-100 mb-8">
-              Contact our expert team today to discuss your semi-flexible air duct requirements and receive a customized quote for your project.
+              Contact our expert team today to discuss your marine ventilation requirements and receive a customized quote for your project.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
                 Request a Quote
               </Button>
               <Button size="lg" variant="outline" className="border-blue-300 text-blue-100 hover:bg-blue-800">
-                Contact Sales Team
+                Download Marine Catalog
               </Button>
             </div>
           </div>
