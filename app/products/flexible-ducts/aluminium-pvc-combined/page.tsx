@@ -13,17 +13,19 @@ export default function AluminiumPVCCombinedPage() {
         "Thermal insulation",
         "Combined aluminum and PVC construction",
         "Premium quality materials"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/isoafs-combi"
     },
     {
       name: "COMBIAFS-S",
-      image: "/air duct/Aluminium & PVC Combined Flexible Air Ducts/COMBIAFS-S.webp",
+      image: "/air duct/Aluminium & PVC Combined Flexible Air Ducts/COMBIAFS -S.webp",
       description: "Standard combined aluminum and PVC flexible duct for versatile HVAC applications",
       features: [
         "Standard grade construction",
         "Versatile application",
         "Cost-effective solution"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/combiafs-s"
     },
     {
       name: "COMBIAFS RECTANGULAR",
@@ -33,7 +35,8 @@ export default function AluminiumPVCCombinedPage() {
         "Rectangular profile",
         "Space-efficient design",
         "Easy installation"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/combiafs-rectangular"
     },
     {
       name: "COMBIAFS HEAVY",
@@ -90,17 +93,34 @@ export default function AluminiumPVCCombinedPage() {
               <Card key={product.name} className="overflow-hidden hover:shadow-lg transition-shadow duration-300">
                 <CardHeader className="p-0">
                   <div className="relative aspect-[4/3] w-full bg-white">
-                    <Image
-                      src={product.image}
-                      alt={product.name}
-                      fill
-                      className="object-contain p-6"
-                    />
+                    {product.link ? (
+                      <Link href={product.link} className="block h-full">
+                        <Image
+                          src={product.image}
+                          alt={product.name}
+                          fill
+                          className="object-contain p-6"
+                        />
+                      </Link>
+                    ) : (
+                      <Image
+                        src={product.image}
+                        alt={product.name}
+                        fill
+                        className="object-contain p-6"
+                      />
+                    )}
                   </div>
                 </CardHeader>
                 <CardContent className="p-6">
                   <CardTitle className="text-xl text-blue-900 mb-4">
-                    {product.name}
+                    {product.link ? (
+                      <Link href={product.link} className="hover:text-blue-700 transition-colors">
+                        {product.name}
+                      </Link>
+                    ) : (
+                      product.name
+                    )}
                   </CardTitle>
                   <CardDescription className="text-gray-600 mb-4">
                     {product.description}
@@ -115,6 +135,16 @@ export default function AluminiumPVCCombinedPage() {
                       </li>
                     ))}
                   </ul>
+                  {product.link && (
+                    <div className="mt-4">
+                      <Link href={product.link} className="inline-flex items-center text-blue-600 font-medium hover:text-blue-800">
+                        View Details
+                        <svg className="w-4 h-4 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7"></path>
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}

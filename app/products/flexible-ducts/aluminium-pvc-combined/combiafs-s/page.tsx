@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import Link from "next/link"
 import { ArrowLeft, Check } from "lucide-react"
 
-export default function MetalAirDiscValvesPage() {
+export default function CombiafsS_Page() {
   return (
     <>
       {/* Hero section with gradient background */}
@@ -16,9 +16,9 @@ export default function MetalAirDiscValvesPage() {
         <div className="absolute bottom-0 left-0 -mb-12 -ml-12 h-64 w-64 rounded-full bg-blue-400 opacity-5 blur-3xl"></div>
         
         <div className="container relative z-10">
-          <Link href="/products/air-disc-valves" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 group">
+          <Link href="/products/flexible-ducts/aluminium-pvc-combined" className="inline-flex items-center text-blue-600 hover:text-blue-800 mb-8 group">
             <ArrowLeft className="w-4 h-4 mr-2 transition-transform group-hover:-translate-x-1" />
-            <span>Back to Air Disc Valves</span>
+            <span>Back to Aluminium & PVC Combined Flexible Air Ducts</span>
           </Link>
           
           <div className="grid md:grid-cols-2 gap-12 items-start">
@@ -26,8 +26,8 @@ export default function MetalAirDiscValvesPage() {
               <div className="bg-white rounded-xl p-6 shadow-lg border border-gray-100 transition-transform hover:shadow-xl hover:-translate-y-1 duration-300">
                 <div className="relative aspect-square">
                   <Image
-                    src="/air duct/Air disc valves/METAL AIR DISC VALVES.webp"
-                    alt="METAL AIR DISC VALVES"
+                    src="/air duct/Aluminium & PVC Combined Flexible Air Ducts/COMBIAFS -S.webp"
+                    alt="COMBIAFS-S"
                     fill
                     className="object-contain"
                     sizes="(max-width: 768px) 100vw, 50vw"
@@ -38,13 +38,13 @@ export default function MetalAirDiscValvesPage() {
               
               <div className="flex flex-wrap gap-3 justify-center md:justify-start">
                 <Badge variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 px-3 py-1">
-                  Premium Quality
+                  Standard Grade
                 </Badge>
                 <Badge variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 px-3 py-1">
-                  Durable Metal
+                  Non-Insulated
                 </Badge>
                 <Badge variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-700 border-blue-200 px-3 py-1">
-                  Precise Control
+                  EN 13180 Certified
                 </Badge>
               </div>
               
@@ -78,13 +78,13 @@ export default function MetalAirDiscValvesPage() {
 
             <div className="space-y-8">
               <div>
-                <Badge className="mb-4 bg-blue-600 hover:bg-blue-700">Premium Product</Badge>
+                <Badge className="mb-4 bg-blue-600 hover:bg-blue-700">Standard Product</Badge>
                 <h1 className="text-4xl font-bold text-gray-800 mb-4 leading-tight">
-                  <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">METAL AIR DISC VALVES</span>
+                  <span className="bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent">COMBIAFS-S</span>
                 </h1>
                 <div className="w-20 h-1 bg-blue-600 rounded mb-6"></div>
                 <p className="text-xl text-gray-600 leading-relaxed">
-                  High-quality metal air disc valves designed for precise airflow control in ventilation systems. These valves feature durable metal construction with adjustable settings for optimal air distribution in various environments.
+                  Standard combined aluminum and PVC flexible duct for versatile HVAC applications. Suitable for low and medium pressure ventilation and air conditioning systems.
                 </p>
               </div>
               
@@ -95,25 +95,25 @@ export default function MetalAirDiscValvesPage() {
                     <div className="mt-1 bg-blue-100 rounded-full p-1 text-blue-600">
                       <Check className="w-4 h-4" />
                     </div>
-                    <span className="text-gray-700">Premium metal construction for durability</span>
+                    <span className="text-gray-700">Suitable for low and medium pressure ventilation and air conditioning systems</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="mt-1 bg-blue-100 rounded-full p-1 text-blue-600">
                       <Check className="w-4 h-4" />
                     </div>
-                    <span className="text-gray-700">Precise airflow control and adjustment</span>
+                    <span className="text-gray-700">Non-insulated construction for standard applications</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="mt-1 bg-blue-100 rounded-full p-1 text-blue-600">
                       <Check className="w-4 h-4" />
                     </div>
-                    <span className="text-gray-700">Multiple size options available</span>
+                    <span className="text-gray-700">Black outer face with aesthetic finish</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <div className="mt-1 bg-blue-100 rounded-full p-1 text-blue-600">
                       <Check className="w-4 h-4" />
                     </div>
-                    <span className="text-gray-700">Suitable for commercial and residential applications</span>
+                    <span className="text-gray-700">High elasticity and flexibility for versatile installations</span>
                   </li>
                 </ul>
               </div>
@@ -126,9 +126,12 @@ export default function MetalAirDiscValvesPage() {
       <section className="py-16 bg-white border-t border-b border-gray-100">
         <div className="container">
           <Tabs defaultValue="technical" className="w-full">
-            <TabsList className="grid w-full md:w-fit grid-cols-2 mb-10 bg-blue-50 p-1 rounded-lg">
+            <TabsList className="grid w-full md:w-fit grid-cols-3 mb-10 bg-blue-50 p-1 rounded-lg">
               <TabsTrigger value="technical" className="text-sm md:text-base rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
                 TECHNICAL SPECIFICATIONS
+              </TabsTrigger>
+              <TabsTrigger value="certificates" className="text-sm md:text-base rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
+                CERTIFICATES
               </TabsTrigger>
               <TabsTrigger value="features" className="text-sm md:text-base rounded-md data-[state=active]:bg-white data-[state=active]:text-blue-700 data-[state=active]:shadow-sm">
                 GENERAL FEATURES
@@ -141,31 +144,56 @@ export default function MetalAirDiscValvesPage() {
                 <table className="w-full border-collapse">
                   <tbody>
                     <tr className="border-b hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Material</td>
-                      <td className="py-4 px-4">Metal (powder-coated steel/aluminum)</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Duct Construction</td>
+                      <td className="py-4 px-4">1 ply Aluminium + 1 ply Polyester + 1 ply PVC</td>
                     </tr>
                     <tr className="border-b bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Design</td>
-                      <td className="py-4 px-4">Adjustable disc valve</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Nominal Thickness</td>
+                      <td className="py-4 px-4">110 micron</td>
                     </tr>
                     <tr className="border-b hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Adjustment</td>
-                      <td className="py-4 px-4">Manual rotation for precise control</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Diameter Range(Ø)</td>
+                      <td className="py-4 px-4">82 mm - 508 mm</td>
                     </tr>
                     <tr className="border-b bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Finish</td>
-                      <td className="py-4 px-4">Powder-coated for durability</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Wire Spacing</td>
+                      <td className="py-4 px-4"></td>
                     </tr>
                     <tr className="border-b hover:bg-gray-50 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Application</td>
-                      <td className="py-4 px-4">Supply or extract ventilation</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Operating Temperature Range</td>
+                      <td className="py-4 px-4">-30 °C / +120 °C</td>
                     </tr>
                     <tr className="border-b bg-gray-50 hover:bg-gray-100 transition-colors">
-                      <td className="py-4 px-4 font-medium text-blue-800">Installation</td>
-                      <td className="py-4 px-4">Designed for ceiling or wall mounting</td>
+                      <td className="py-4 px-4 font-medium text-blue-800">Air Velocity</td>
+                      <td className="py-4 px-4">30 m/s (maximum)</td>
+                    </tr>
+                    <tr className="border-b hover:bg-gray-50 transition-colors">
+                      <td className="py-4 px-4 font-medium text-blue-800">Operating Pressure</td>
+                      <td className="py-4 px-4">3000 Pa (maximum)</td>
+                    </tr>
+                    <tr className="border-b bg-gray-50 hover:bg-gray-100 transition-colors">
+                      <td className="py-4 px-4 font-medium text-blue-800">Standard Length</td>
+                      <td className="py-4 px-4">10 M</td>
+                    </tr>
+                    <tr className="border-b hover:bg-gray-50 transition-colors">
+                      <td className="py-4 px-4 font-medium text-blue-800">Packing</td>
+                      <td className="py-4 px-4">Single cardboard box</td>
+                    </tr>
+                    <tr className="border-b bg-gray-50 hover:bg-gray-100 transition-colors">
+                      <td className="py-4 px-4 font-medium text-blue-800">Reaction to Fire</td>
+                      <td className="py-4 px-4">Fire Retardant</td>
                     </tr>
                   </tbody>
                 </table>
+              </div>
+            </TabsContent>
+            
+            <TabsContent value="certificates" className="bg-white p-8 rounded-xl shadow-sm border border-gray-100">
+              <h2 className="text-2xl font-bold text-gray-800 mb-6">Certificates</h2>
+              <div className="space-y-6">
+                <div className="p-4 border rounded-lg bg-gray-50">
+                  <p className="text-gray-700 font-medium">United Kingdom (UK) BS 476, Part 6&Part 7-Class 0 (Exova)</p>
+                </div>
               </div>
             </TabsContent>
             
@@ -177,25 +205,31 @@ export default function MetalAirDiscValvesPage() {
                     <div className="mt-1 bg-blue-100 rounded-full p-1.5 text-blue-600 flex-shrink-0">
                       <Check className="w-4 h-4" />
                     </div>
-                    <p className="text-gray-700">Metal Air Disc Valves are designed to regulate the volume of air allowed to pass through a ventilation duct into a room.</p>
+                    <p className="text-gray-700">It is a non-insulated aluminum & PVC combined flexible air duct specifically produced for low and medium pressure ventilation and air conditioning systems.</p>
                   </li>
                   <li className="flex items-start gap-4">
                     <div className="mt-1 bg-blue-100 rounded-full p-1.5 text-blue-600 flex-shrink-0">
                       <Check className="w-4 h-4" />
                     </div>
-                    <p className="text-gray-700">The elegant design combines functionality with aesthetics, making them suitable for visible installations in any space.</p>
+                    <p className="text-gray-700">It is produced from multi-layer aluminium and polyester, strengthened with high tension hard steel spring wire, covered with a PVC layer.</p>
                   </li>
                   <li className="flex items-start gap-4">
                     <div className="mt-1 bg-blue-100 rounded-full p-1.5 text-blue-600 flex-shrink-0">
                       <Check className="w-4 h-4" />
                     </div>
-                    <p className="text-gray-700">They feature a central adjustable disc that can be rotated to increase or decrease airflow as needed.</p>
+                    <p className="text-gray-700">Its dimensions, tolerances and mechanical resistance are tested, classified & certified according to EN 13180 standard.</p>
                   </li>
                   <li className="flex items-start gap-4">
                     <div className="mt-1 bg-blue-100 rounded-full p-1.5 text-blue-600 flex-shrink-0">
                       <Check className="w-4 h-4" />
                     </div>
-                    <p className="text-gray-700">The metal construction ensures durability and resistance to environmental factors.</p>
+                    <p className="text-gray-700">COMBIAFS-S flexible air ducts are airtight.</p>
+                  </li>
+                  <li className="flex items-start gap-4">
+                    <div className="mt-1 bg-blue-100 rounded-full p-1.5 text-blue-600 flex-shrink-0">
+                      <Check className="w-4 h-4" />
+                    </div>
+                    <p className="text-gray-700">It has high elasticity and flexibility. It can be easily fitted to circular, oval or rectangular connectors.</p>
                   </li>
                 </ul>
               </div>
@@ -215,7 +249,7 @@ export default function MetalAirDiscValvesPage() {
             <div className="relative z-10">
               <h2 className="text-3xl font-bold text-gray-800 mb-4">Need More Information?</h2>
               <p className="text-lg text-gray-600 mb-8 max-w-2xl mx-auto">
-                Contact our technical team for detailed specifications, customized solutions, and expert advice on implementing METAL AIR DISC VALVES in your projects.
+                Contact our technical team for detailed specifications, customized solutions, and expert advice on implementing COMBIAFS-S in your projects.
               </p>
               <div className="flex flex-wrap gap-4 justify-center">
                 <Button size="lg" className="bg-blue-600 hover:bg-blue-700 rounded-full shadow-md px-8 py-6 text-lg">
