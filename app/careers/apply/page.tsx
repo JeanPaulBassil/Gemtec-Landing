@@ -7,11 +7,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { useSearchParams } from "next/navigation"
-import { useState } from "react"
+import { useState, Suspense } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
 import type React from "react" // Added import for React
 
-export default function ApplyPage() {
+// Client component that uses useSearchParams
+function ApplicationForm() {
   const searchParams = useSearchParams()
   const position = searchParams.get("position")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -25,6 +26,132 @@ export default function ApplyPage() {
     // Handle form submission here
   }
 
+  return (
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="position">Position</Label>
+        <Select defaultValue={position || undefined}>
+          <SelectTrigger>
+            <SelectValue placeholder="Select position" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="hvac-design-engineer">HVAC Design Engineer</SelectItem>
+            <SelectItem value="production-supervisor">Production Supervisor</SelectItem>
+            <SelectItem value="sales-engineer">Sales Engineer</SelectItem>
+            <SelectItem value="quality-control-specialist">Quality Control Specialist</SelectItem>
+            <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <div className="space-y-2">
+          <Label htmlFor="firstName">First name</Label>
+          <Input id="firstName" required />
+        </div>
+        <div className="space-y-2">
+          <Label htmlFor="lastName">Last name</Label>
+          <Input id="lastName" required />
+        </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="email">Email</Label>
+        <Input id="email" type="email" required />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="phone">Phone number</Label>
+        <Input id="phone" type="tel" required />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="location">Current location</Label>
+        <Input id="location" required />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="experience">Years of experience</Label>
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Select experience" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="0-2">0-2 years</SelectItem>
+            <SelectItem value="3-5">3-5 years</SelectItem>
+            <SelectItem value="5-10">5-10 years</SelectItem>
+            <SelectItem value="10+">10+ years</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="education">Highest education level</Label>
+        <Select>
+          <SelectTrigger>
+            <SelectValue placeholder="Select education" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="high-school">High School</SelectItem>
+            <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
+            <SelectItem value="masters">Master's Degree</SelectItem>
+            <SelectItem value="phd">Ph.D.</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="resume">Resume/CV</Label>
+        <Input id="resume" type="file" accept=".pdf,.doc,.docx" required />
+        <p className="text-sm text-muted-foreground">
+          Accepted formats: PDF, DOC, DOCX. Maximum file size: 5MB
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="coverLetter">Cover letter</Label>
+        <Textarea
+          id="coverLetter"
+          placeholder="Tell us why you're interested in this position and what makes you a great candidate"
+          className="min-h-[150px]"
+          required
+        />
+      </div>
+
+      <Button type="submit" className="w-full btn-secondary" disabled={isSubmitting}>
+        {isSubmitting ? (
+          <>
+            <LoadingSpinner className="mr-2" />
+            Submitting...
+          </>
+        ) : (
+          "Submit Application"
+        )}
+      </Button>
+    </form>
+  )
+}
+
+// Fallback component while suspense is loading
+function FormSkeleton() {
+  return <div className="p-6 animate-pulse space-y-6 bg-gray-100 rounded-lg">
+    <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="grid gap-4 sm:grid-cols-2">
+      <div className="h-10 bg-gray-200 rounded"></div>
+      <div className="h-10 bg-gray-200 rounded"></div>
+    </div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="h-10 bg-gray-200 rounded"></div>
+    <div className="h-24 bg-gray-200 rounded"></div>
+    <div className="h-12 bg-gray-200 rounded"></div>
+  </div>
+}
+
+export default function ApplyPage() {
   return (
     <>
       <section className="relative py-24 bg-gradient-to-r from-blue-950 to-blue-900">
@@ -48,108 +175,9 @@ export default function ApplyPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="position">Position</Label>
-                  <Select defaultValue={position || undefined}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select position" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="hvac-design-engineer">HVAC Design Engineer</SelectItem>
-                      <SelectItem value="production-supervisor">Production Supervisor</SelectItem>
-                      <SelectItem value="sales-engineer">Sales Engineer</SelectItem>
-                      <SelectItem value="quality-control-specialist">Quality Control Specialist</SelectItem>
-                      <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="grid gap-4 sm:grid-cols-2">
-                  <div className="space-y-2">
-                    <Label htmlFor="firstName">First name</Label>
-                    <Input id="firstName" required />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="lastName">Last name</Label>
-                    <Input id="lastName" required />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input id="email" type="email" required />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">Phone number</Label>
-                  <Input id="phone" type="tel" required />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="location">Current location</Label>
-                  <Input id="location" required />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="experience">Years of experience</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select experience" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="0-2">0-2 years</SelectItem>
-                      <SelectItem value="3-5">3-5 years</SelectItem>
-                      <SelectItem value="5-10">5-10 years</SelectItem>
-                      <SelectItem value="10+">10+ years</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="education">Highest education level</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select education" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="high-school">High School</SelectItem>
-                      <SelectItem value="bachelors">Bachelor's Degree</SelectItem>
-                      <SelectItem value="masters">Master's Degree</SelectItem>
-                      <SelectItem value="phd">Ph.D.</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="resume">Resume/CV</Label>
-                  <Input id="resume" type="file" accept=".pdf,.doc,.docx" required />
-                  <p className="text-sm text-muted-foreground">
-                    Accepted formats: PDF, DOC, DOCX. Maximum file size: 5MB
-                  </p>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="coverLetter">Cover letter</Label>
-                  <Textarea
-                    id="coverLetter"
-                    placeholder="Tell us why you're interested in this position and what makes you a great candidate"
-                    className="min-h-[150px]"
-                    required
-                  />
-                </div>
-
-                <Button type="submit" className="w-full btn-secondary" disabled={isSubmitting}>
-                  {isSubmitting ? (
-                    <>
-                      <LoadingSpinner className="mr-2" />
-                      Submitting...
-                    </>
-                  ) : (
-                    "Submit Application"
-                  )}
-                </Button>
-              </form>
+              <Suspense fallback={<FormSkeleton />}>
+                <ApplicationForm />
+              </Suspense>
             </CardContent>
           </Card>
         </div>
