@@ -136,6 +136,17 @@ export default function AluminiumFlexibleAirDuctsPage() {
       ]
     },
     {
+      name: "ALUAFS.F MARINE",
+      image: "/air duct/Aluminium Flexible Air Ducts/ALUAFS.F MARINE.webp",
+      description: "Marine-grade aluminum flexible duct for maritime and coastal applications",
+      features: [
+        "Corrosion resistant",
+        "Marine certified",
+        "High performance in harsh environments"
+      ],
+      link: "/products/aluafs-f-marine"
+    },
+    {
       name: "ALUAFS.F FORTE",
       image: "/air duct/Aluminium Flexible Air Ducts/ALUAFS.F FORTE.webp",
       description: "Heavy-duty non-insulated aluminum flexible duct",
@@ -205,6 +216,16 @@ export default function AluminiumFlexibleAirDuctsPage() {
                       </li>
                     ))}
                   </ul>
+                  {product.link && (
+                    <div className="mt-4">
+                      <Link href={product.link} className="inline-flex items-center text-blue-600 hover:text-blue-800">
+                        View Details
+                        <svg className="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                      </Link>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             ))}
