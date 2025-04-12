@@ -228,10 +228,10 @@ export default function Header() {
               </div>
               <MobileNavItem href="/contact">Contact</MobileNavItem>
               <div className="space-y-4 mt-4">
-                <Button asChild variant="outline" className="w-full">
+                <Button asChild variant="outline" className="w-full" onClick={() => setIsOpen(false)}>
                   <Link href="/quote">Get a Quote</Link>
                 </Button>
-                <Button asChild className="w-full">
+                <Button asChild className="w-full" onClick={() => setIsOpen(false)}>
                   <Link href="/products">Explore Products</Link>
                 </Button>
               </div>
