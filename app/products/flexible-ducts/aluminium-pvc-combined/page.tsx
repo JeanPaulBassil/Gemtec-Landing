@@ -46,7 +46,8 @@ export default function AluminiumPVCCombinedPage() {
         "Heavy-duty construction",
         "Industrial grade",
         "Enhanced durability"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/combiafs-heavy"
     },
     {
       name: "COMBIAFS FORTE",
@@ -56,7 +57,8 @@ export default function AluminiumPVCCombinedPage() {
         "Reinforced construction",
         "High performance",
         "Superior strength"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/combiafs-forte"
     },
     {
       name: "COMBIAFS",
@@ -66,7 +68,8 @@ export default function AluminiumPVCCombinedPage() {
         "General purpose",
         "Reliable performance",
         "Standard specifications"
-      ]
+      ],
+      link: "/products/flexible-ducts/aluminium-pvc-combined/combiafs"
     }
   ]
 
