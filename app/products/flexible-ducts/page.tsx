@@ -35,7 +35,31 @@ const flexibleDucts = {
         "Multiple sizes available",
         "Professional finish"
       ]
-    }
+    },
+    {
+      title: "Aluminium Flexible Air Ducts",
+      description:
+        "High-quality aluminum ducts for superior performance and durability.",
+      image: "/images/products/flexible-ducts/Alumsemi.webp",
+      features: [
+        "High temperature resistance",
+        "Excellent durability",
+        "Superior ventilation performance",
+      ],
+      link: "/products/aluminium-flexible-air-ducts",
+    },
+    {
+      title: "Anti-Microbial Flexible Air Duct",
+      description:
+        "Specialized ducts with anti-microbial properties for clean air environments.",
+      image: "/images/products/flexible-ducts/Semiafs-Antimicrobial.webp",
+      features: [
+        "Prevents microbial growth",
+        "Ideal for healthcare facilities",
+        "Maintains air quality",
+      ],
+      link: "/products/anti-microbial-flexible-air-duct",
+    },
   ],
   productTypes: [
     {
@@ -91,39 +115,44 @@ const flexibleDucts = {
     {
       name: "Grills",
       image: "/images/products/flexible-ducts/Grills.webp",
-      description: "Premium air grills for efficient air distribution"
+      description: "Premium air grills for efficient air distribution",
+      link: "/products/grills"
     },
     {
       name: "Hydroponic Flexible Air Ducts",
       image: "/images/products/flexible-ducts/HydroponicFlexibleAirDucts.webp",
-      description: "Specialized ducts for hydroponic growing environments"
+      description: "Specialized ducts for hydroponic growing environments",
+      link: "/products/hydroponic-flexible-air-ducts"
     },
     {
       name: "Marine Certified Flexible Air Duct",
       image: "/images/products/flexible-ducts/MarineCertifiedFlexibleAirDuct.webp",
-      description: "Certified ducts meeting marine industry standards"
+      description: "Certified ducts meeting marine industry standards",
+      link: "/products/marine-certified-flexible-air-duct"
     },
     {
       name: "Montage Elements",
       image: "/images/products/flexible-ducts/MonatgeElements.webp",
-      description: "Complete mounting and installation components"
+      link: "/products/montage-elements",
+      description: "Installation accessories for flexible duct systems"
     },
     {
       name: "Nonwoven Flexible Air Ducts",
       image: "/images/products/flexible-ducts/NonvonenFlexibleAirDUcts.webp",
-      description: "Lightweight and durable nonwoven duct solutions"
+      link: "/products/nonwoven-flexible-air-ducts",
+      description: "Specialized acoustically insulated flexible air ducts"
     },
     {
       name: "PE Flexible Air Ducts",
-      image: "/images/products/flexible-ducts/PeFlexibleAirDucts.webp",
+      image: "/images/products/flexible-ducts/Peafs.webp",
       link: "/products/pe-flexible-air-ducts",
       description: "Polyethylene ducts for specialized applications"
     },
     {
       name: "Polyester Flexible Air Ducts",
-      image: "/images/products/flexible-ducts/PolyesterFlexibleAirDucts.webp",
+      image: "/images/products/flexible-ducts/ISOAFS-POLY-ECOSOFT.webp",
       link: "/products/polyester-flexible-air-ducts",
-      description: "High-quality polyester ducts for versatile use"
+      description: "Premium polyester ducts offering excellent flexibility and durability"
     },
     {
       name: "PVC Flexible Air Ducts",
