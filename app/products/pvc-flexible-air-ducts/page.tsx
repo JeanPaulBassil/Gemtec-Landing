@@ -2,8 +2,7 @@ import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Check, ArrowRight, Shield, Wind, Gauge, Zap } from "lucide-react"
+import { Check, ArrowRight } from "lucide-react"
 import Link from "next/link"
 
 const pvcFlexibleAirDucts = {
@@ -83,50 +82,6 @@ const pvcFlexibleAirDucts = {
         "Moisture protection"
       ]
     }
-  ],
-  features: [
-    "High-quality PVC and vinyl construction for superior durability",
-    "Excellent flexibility for complex installation requirements",
-    "Wide range of diameters to suit various applications",
-    "Options with thermal and acoustic insulation",
-    "Available in standard and heavy-duty variants",
-    "Chemical and moisture resistant properties",
-    "Easy to install and maintain",
-    "Suitable for both commercial and industrial environments"
-  ],
-  applications: [
-    "HVAC Systems",
-    "Industrial Ventilation",
-    "Dust Extraction",
-    "Fume Removal",
-    "Air Conditioning",
-    "Commercial Buildings",
-    "Manufacturing Facilities",
-    "Warehouses",
-    "Clean Rooms",
-    "Food Processing"
-  ],
-  benefits: [
-    {
-      title: "Material Versatility",
-      description: "Multiple PVC and vinyl options to match specific environmental requirements",
-      icon: Shield,
-    },
-    {
-      title: "Installation Ease",
-      description: "Flexible design allows for quick and efficient installation in complex spaces",
-      icon: Wind,
-    },
-    {
-      title: "Cost Efficiency",
-      description: "Durable construction provides excellent value with minimal maintenance needs",
-      icon: Gauge,
-    },
-    {
-      title: "Performance Reliability",
-      description: "Consistent airflow and pressure handling across different applications",
-      icon: Zap,
-    }
   ]
 }
 
@@ -199,54 +154,6 @@ export default function PVCFlexibleAirDuctsPage() {
         </div>
       </section>
 
-      <section className="py-20 bg-gray-50">
-        <div className="container">
-          <div className="grid lg:grid-cols-2 gap-12">
-            <div className="space-y-8">
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-blue-950">Key Features</h2>
-                <ul className="grid gap-3">
-                  {pvcFlexibleAirDucts.features.map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2">
-                      <Check className="h-5 w-5 text-blue-600 mt-0.5 shrink-0" />
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold text-blue-950">Applications</h2>
-                <div className="flex flex-wrap gap-2">
-                  {pvcFlexibleAirDucts.applications.map((application, index) => (
-                    <Badge key={index} variant="outline" className="bg-blue-50 hover:bg-blue-100 text-blue-800 border-blue-200">
-                      {application}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <h2 className="text-2xl font-bold text-blue-950">Key Benefits</h2>
-              <div className="grid gap-4">
-                {pvcFlexibleAirDucts.benefits.map((benefit, index) => (
-                  <div key={index} className="flex items-start gap-4 p-4 rounded-lg bg-white shadow-sm">
-                    <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center shrink-0">
-                      <benefit.icon className="h-5 w-5 text-blue-700" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="font-semibold text-blue-950">{benefit.title}</h3>
-                      <p className="text-gray-600 mt-1">{benefit.description}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
       <section className="py-20 bg-gradient-to-br from-blue-900 to-blue-950">
         <div className="container">
           <div className="max-w-3xl mx-auto text-center">
@@ -257,9 +164,6 @@ export default function PVCFlexibleAirDuctsPage() {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
                 Request a Quote
-              </Button>
-              <Button size="lg" variant="outline" className="border-blue-300 text-blue-100 hover:bg-blue-800">
-                Download Catalog
               </Button>
             </div>
           </div>
