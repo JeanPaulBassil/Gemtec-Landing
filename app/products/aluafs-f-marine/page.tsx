@@ -11,7 +11,7 @@ export default function AluafsMarinePage() {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
         <div className="relative aspect-square w-full bg-white rounded-lg overflow-hidden shadow-md">
           <Image
-            src="/air duct/Aluminium Flexible Air Ducts/ALUAFS.F MARINE.webp"
+            src="/images/products/flexible-ducts/Aluafs.F Marine.webp"
             alt="ALUAFS.F MARINE"
             fill
             className="object-contain p-4"
@@ -26,11 +26,6 @@ export default function AluafsMarinePage() {
             Premium non-insulated aluminum flexible air duct specifically engineered for marine environments, 
             offering superior corrosion resistance, high mechanical strength, and reliability in harsh saltwater conditions.
           </p>
-          <div className="flex items-center gap-3 mb-8">
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              Share Product
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -140,59 +135,6 @@ export default function AluafsMarinePage() {
           </div>
         </TabsContent>
       </Tabs>
-
-      <div className="mb-12">
-        <h2 className="text-2xl font-bold text-blue-900 mb-6">Properties & Advantages</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">Corrosion Resistance</h3>
-            <p className="text-gray-600">
-              Exceptional resistance to saltwater corrosion and oxidation, maintaining structural integrity and appearance even after prolonged exposure to maritime environments.
-            </p>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">High Performance</h3>
-            <p className="text-gray-600">
-              Engineered for optimal airflow in marine ventilation systems with minimal pressure drop. Maintains performance integrity in high-humidity and variable temperature conditions.
-            </p>
-          </div>
-          <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
-            <div className="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <svg className="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 6l3 1m0 0l-3 9a5.002 5.002 0 006.001 0M6 7l3 9M6 7l6-2m6 2l3-1m-3 1l-3 9a5.002 5.002 0 006.001 0M18 7l3 9m-3-9l-6-2m0-2v2m0 16V5m0 16H9m3 0h3" />
-              </svg>
-            </div>
-            <h3 className="text-lg font-semibold text-blue-800 mb-2">Regulatory Compliance</h3>
-            <p className="text-gray-600">
-              Fully compliant with maritime regulations and classification societies' requirements for ventilation systems on ships and offshore platforms, simplifying approval processes.
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="bg-gray-50 p-8 rounded-lg">
-        <div className="text-center mb-8">
-          <h2 className="text-2xl font-bold text-blue-900 mb-4">Need More Information?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
-            Contact our technical team for detailed specifications, customized solutions, or to request a quote for your marine HVAC project.
-          </p>
-        </div>
-        <div className="flex justify-center">
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-            Request Information
-          </Button>
-        </div>
-      </div>
     </div>
   )
 } 

@@ -45,22 +45,6 @@ const peFlexibleDucts = {
         "Professional grade"
       ]
     }
-  ],
-  features: [
-    "High-quality PE construction",
-    "Various insulation options",
-    "Professional-grade materials",
-    "Certified manufacturing",
-    "Multiple size options",
-    "Easy installation"
-  ],
-  applications: [
-    "HVAC Systems",
-    "Ventilation",
-    "Air Conditioning",
-    "Industrial Applications",
-    "Commercial Buildings",
-    "Residential Projects"
   ]
 }
 
@@ -103,73 +87,6 @@ export default function PeFlexibleDuctsPage() {
                 </CardContent>
               </Card>
             ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12 bg-gray-50">
-        <div className="container">
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h2 className="text-2xl font-bold text-blue-900 mb-6">Key Features</h2>
-              <ul className="space-y-4">
-                {peFlexibleDucts.features.map((feature) => (
-                  <li key={feature} className="flex items-start">
-                    <svg
-                      className="h-6 w-6 text-blue-500 mr-2 flex-shrink-0"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>{feature}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div>
-              <h2 className="text-2xl font-bold text-blue-900 mb-6">Applications</h2>
-              <ul className="space-y-4">
-                {peFlexibleDucts.applications.map((application) => (
-                  <li key={application} className="flex items-start">
-                    <svg
-                      className="h-6 w-6 text-blue-500 mr-2 flex-shrink-0"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M5 13l4 4L19 7"
-                      />
-                    </svg>
-                    <span>{application}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="py-12">
-        <div className="container">
-          <div className="bg-blue-50 rounded-lg p-8 text-center">
-            <h2 className="text-2xl font-bold text-blue-900 mb-4">Get Started with PE Flexible Air Ducts</h2>
-            <p className="text-blue-700 mb-6">Contact our expert team to find the perfect solution for your needs</p>
-            <div className="flex flex-wrap gap-4 justify-center">
-              <Button size="lg" className="bg-blue-600 hover:bg-blue-700">Request a Quote</Button>
-              <Button size="lg" variant="outline" className="border-blue-600 text-blue-600 hover:bg-blue-50">Download Catalog</Button>
-            </div>
           </div>
         </div>
       </section>

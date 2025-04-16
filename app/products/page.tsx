@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
-import { ArrowUpRight, Fan, Gauge, Wind, Box, Waves, Shield, Layout, Speaker } from "lucide-react"
+import { ArrowUpRight, Fan, Gauge, Wind, Box, Waves, Shield, Layout, Speaker, Link as LinkIcon } from "lucide-react"
 import Link from "next/link"
 import { HoverScale } from "@/components/ui/animations"
 
@@ -36,6 +36,13 @@ const products = [
     icon: Waves,
     slug: "flexible-ducts",
     details: ["Aluminium", "PVC", "Stainless steel", "Acoustically insulated"],
+  },
+  {
+    title: "Flexible Connector",
+    description: "High-quality connectors for reliable connections between ducts and equipment.",
+    icon: LinkIcon,
+    slug: "flexible-connector",
+    details: ["PU Connectors", "Silicone Connectors", "Neoprene Connectors", "PVC Connectors"],
   },
   {
     title: "Insulation",

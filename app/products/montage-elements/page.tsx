@@ -80,16 +80,6 @@ export default function MontageElementsPage() {
             ))}
           </div>
         </div>
-
-        {/* Call To Action */}
-        <div className="bg-blue-50 rounded-lg p-8 text-center">
-          <h2 className="text-2xl font-bold text-blue-900 mb-4">Get Started Today</h2>
-          <p className="text-blue-700 mb-6">Contact our expert team for detailed information or to request a quote.</p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">Request a Quote</Button>
-            <Button size="lg" variant="outline" className="border-blue-700 text-blue-700 hover:bg-blue-50">Download Catalog</Button>
-          </div>
-        </div>
       </div>
     </div>
   )

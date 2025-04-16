@@ -138,25 +138,6 @@ export default function SemiFlexibleAirDuctsPage() {
           </div>
         </div>
       </section>
-
-      <section className="py-20 bg-gradient-to-br from-blue-900 to-blue-950">
-        <div className="container">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-3xl font-bold text-white mb-6">Ready to Get Started?</h2>
-            <p className="text-lg text-blue-100 mb-8">
-              Contact our expert team today to discuss your semi-flexible air duct requirements and receive a customized quote for your project.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button size="lg" className="bg-white hover:bg-gray-100 text-blue-900">
-                Request a Quote
-              </Button>
-              <Button size="lg" variant="outline" className="border-blue-300 text-blue-100 hover:bg-blue-800">
-                Contact Sales Team
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
     </>
   )
 } 

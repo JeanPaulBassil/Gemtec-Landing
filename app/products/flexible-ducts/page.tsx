@@ -110,7 +110,8 @@ const flexibleDucts = {
     {
       name: "Flexible Connector",
       image: "/images/products/flexible-ducts/FlexibleConnector.webp",
-      description: "Professional grade connectors for secure duct joints"
+      description: "Professional grade connectors for secure duct joints",
+      link: "/products/flexible-connector"
     },
     {
       name: "Grills",

@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Facebook, Linkedin, Mail, Printer, Twitter } from "lucide-react"
 
 export default function IsoafsAluFEcosoftMarinePage() {
   return (
@@ -36,29 +35,6 @@ export default function IsoafsAluFEcosoftMarinePage() {
                 <li>Insulated with formaldehyde free glass wool</li>
                 <li>M0+M1 certified according to France national reaction to fire standard</li>
               </ul>
-            </div>
-
-            <div className="flex flex-wrap gap-3">
-              <Button size="lg" variant="outline" className="gap-2">
-                <Mail className="h-4 w-4" />
-                Email
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Facebook className="h-4 w-4" />
-                Share
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Twitter className="h-4 w-4" />
-                Tweet
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Linkedin className="h-4 w-4" />
-                Share
-              </Button>
-              <Button size="lg" variant="outline" className="gap-2">
-                <Printer className="h-4 w-4" />
-                Print
-              </Button>
             </div>
           </div>
         </div>

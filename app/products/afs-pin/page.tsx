@@ -28,14 +28,6 @@ export default function AfsPinPage() {
           <p className="text-gray-600 mb-6">
             AFS self-adhesive pins are designed for fitting insulation materials to smooth surfaces without using any additional tools.
           </p>
-          <div className="flex gap-4">
-            <Button size="lg">
-              <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
-              </svg>
-              Share
-            </Button>
-          </div>
         </div>
       </div>
 
@@ -121,14 +113,6 @@ export default function AfsPinPage() {
           </div>
         </TabsContent>
       </Tabs>
-
-      <section className="mt-12">
-        <div className="bg-blue-50 rounded-lg p-8">
-          <h2 className="text-2xl font-bold text-blue-900 mb-4">Need More Information?</h2>
-          <p className="text-blue-800 mb-6">Contact our technical team for detailed specifications and customized solutions</p>
-          <Button size="lg" className="bg-blue-600 hover:bg-blue-700">Request Information</Button>
-        </div>
-      </section>
     </div>
   )
 } 

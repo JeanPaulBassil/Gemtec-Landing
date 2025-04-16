@@ -3,7 +3,6 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { Share2 } from "lucide-react"
 
 export default function DoorTransferGrillsPage() {
   return (
@@ -23,13 +22,6 @@ export default function DoorTransferGrillsPage() {
             <div>
               <h1 className="text-4xl font-bold tracking-tight text-blue-950">DOOR TRANSFER GRILLS</h1>
               <p className="mt-2 text-xl text-gray-600">Door Transfer Grills.</p>
-            </div>
-            
-            <div className="flex flex-wrap gap-2 mt-8">
-              <Button size="sm" variant="outline" className="rounded-full">
-                <Share2 className="h-4 w-4 mr-2" />
-                Share
-              </Button>
             </div>
           </div>
         </div>
@@ -125,20 +117,6 @@ export default function DoorTransferGrillsPage() {
             </Card>
           </TabsContent>
         </Tabs>
-      </section>
-      
-      <section className="container py-12">
-        <div className="bg-blue-50 rounded-lg p-8">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-2xl font-bold text-blue-950 mb-4">Need More Information?</h2>
-            <p className="text-gray-600 mb-6">
-              Contact our technical team for detailed specifications and installation guidelines for Door Transfer Grills.
-            </p>
-            <Button size="lg" className="bg-blue-600 hover:bg-blue-700">
-              Request Information
-            </Button>
-          </div>
-        </div>
       </section>
     </>
   )
