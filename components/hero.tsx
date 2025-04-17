@@ -32,11 +32,11 @@ export default function Hero() {
             </p>
           </FadeIn>
           <FadeIn delay={0.5}>
-            <div className="mt-6 sm:mt-10 flex flex-wrap items-center justify-start gap-4">
+            <div className="mt-6 sm:mt-10 flex flex-col sm:flex-row items-center justify-start gap-4">
               <Link href="/products" className="w-full sm:w-auto">
                 <Button
                   size="lg"
-                  className="btn-secondary gap-2 min-w-[160px] max-w-[200px] w-full"
+                  className="btn-secondary gap-2 w-full sm:min-w-[160px] sm:max-w-[200px]"
                 >
                   Explore Our Products
                   <ArrowRight className="h-4 w-4" />
@@ -46,7 +46,7 @@ export default function Hero() {
                 <Button
                   size="lg"
                   variant="outline"
-                  className="btn-outline min-w-[120px] max-w-[160px] w-full"
+                  className="btn-outline w-full sm:min-w-[120px] sm:max-w-[160px]"
                 >
                   Get a Quote
                 </Button>

@@ -84,7 +84,7 @@ export default function QuotePage() {
                 <div className="space-y-2">
                   <Input type="date" placeholder="Desired completion date" />
                 </div>
-                <Button className="w-full btn-secondary">Submit Quote Request</Button>
+                <Button type="submit" className="w-full btn-secondary">Submit Quote Request</Button>
               </form>
             </CardContent>
           </Card>

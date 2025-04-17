@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import React, { useState, useCallback } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import {
@@ -14,16 +14,19 @@ import {
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Menu } from "lucide-react"
-import type React from "react" // Added import for React
 
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
+
+  const handleNavClick = useCallback(() => {
+    setIsOpen(false)
+  }, [])
 
   const MobileNavItem = ({ href, children }: { href: string; children: React.ReactNode }) => (
     <Link
       href={href}
       className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
-      onClick={() => setIsOpen(false)}
+      onClick={handleNavClick}
     >
       {children}
     </Link>
@@ -214,12 +217,16 @@ export default function Header() {
               </div>
               <MobileNavItem href="/contact">Contact</MobileNavItem>
               <div className="space-y-4 mt-4">
-                <Button asChild variant="outline" className="w-full" onClick={() => setIsOpen(false)}>
-                  <Link href="/quote">Get a Quote</Link>
-                </Button>
-                <Button asChild className="w-full" onClick={() => setIsOpen(false)}>
-                  <Link href="/products">Explore Products</Link>
-                </Button>
+                <div>
+                  <Link href="/quote" onClick={handleNavClick} className="w-full">
+                    <Button className="w-full" variant="outline">Get a Quote</Button>
+                  </Link>
+                </div>
+                <div>
+                  <Link href="/products" onClick={handleNavClick} className="w-full">
+                    <Button className="w-full">Explore Products</Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </SheetContent>
