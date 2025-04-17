@@ -42,13 +42,15 @@ export default function Hero() {
                   <ArrowRight className="h-4 w-4" />
                 </Button>
               </Link>
-              <Button
-                size="lg"
-                variant="outline"
-                className="btn-outline min-w-[120px] max-w-[160px]"
-              >
-                Get a Quote
-              </Button>
+              <Link href="/quote" className="w-full sm:w-auto">
+                <Button
+                  size="lg"
+                  variant="outline"
+                  className="btn-outline min-w-[120px] max-w-[160px] w-full"
+                >
+                  Get a Quote
+                </Button>
+              </Link>
             </div>
           </FadeIn>
         </div>

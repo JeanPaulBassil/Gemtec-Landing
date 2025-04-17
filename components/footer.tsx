@@ -37,11 +37,6 @@ export default function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/certifications" className="text-sm text-gray-400 hover:text-secondary">
-                    Certifications
-                  </Link>
-                </li>
-                <li>
                   <Link href="/careers" className="text-sm text-gray-400 hover:text-secondary">
                     Careers
                   </Link>
@@ -96,7 +91,7 @@ export default function Footer() {
             <p className="md:mt-1">Developed by Jean-Paul Bassil</p>
           </div>
           <div className="flex space-x-4">
-            <Link href="#" className="text-gray-400 hover:text-secondary">
+            <Link href="https://www.facebook.com/share/18XbN4CA7T/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-secondary">
               <Facebook className="h-5 w-5" />
             </Link>
             <Link href="#" className="text-gray-400 hover:text-secondary">

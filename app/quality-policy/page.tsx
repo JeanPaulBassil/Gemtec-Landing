@@ -222,10 +222,7 @@ export default function QualityPolicyPage() {
                 Discover how our quality policy translates into superior products and services
               </CardDescription>
             </CardHeader>
-            <CardContent className="flex justify-center gap-4">
-              <Button asChild className="btn-secondary">
-                <Link href="/certifications">View Certifications</Link>
-              </Button>
+            <CardContent className="flex justify-center">
               <Button asChild variant="outline">
                 <Link href="/contact">Contact Us</Link>
               </Button>
