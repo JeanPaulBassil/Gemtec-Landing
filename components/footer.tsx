@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
+import { Facebook, Instagram } from "lucide-react"
 import Image from "next/image"
 
 export default function Footer() {
@@ -94,14 +94,8 @@ export default function Footer() {
             <Link href="https://www.facebook.com/share/18XbN4CA7T/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-secondary">
               <Facebook className="h-5 w-5" />
             </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
+            <Link href="https://www.instagram.com/gemtec_group?igsh=MXFtM242ZXc3Z2tvZg==" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-secondary">
               <Instagram className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
-              <Twitter className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
-              <Linkedin className="h-5 w-5" />
             </Link>
           </div>
         </div>
