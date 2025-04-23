@@ -469,8 +469,8 @@ export default function ProductsPage() {
                         <ChevronRight className="ml-1 h-4 w-4" />
                       </Button>
                     </Link>
-                  </div>
-                  
+                    </div>
+                    
                   {category.children.length > 0 ? (
                     <>
                       {category.children.map((subcat) => {
@@ -488,7 +488,7 @@ export default function ProductsPage() {
                               {subcatProducts.map((product) => (
                                 <ProductCard key={product.id} product={product} />
                               ))}
-                            </div>
+                      </div>
                             
                             <Separator className="mt-10 mb-10" />
                           </div>
@@ -502,8 +502,8 @@ export default function ProductsPage() {
                       ))}
                     </div>
                   )}
-                </div>
-              ))}
+                      </div>
+            ))}
             </div>
           </div>
         </div>
