@@ -11,7 +11,7 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 export const metadata: Metadata = {
   title: "GEMTEC - HVAC Solutions Provider",
   description: "Leading provider of certified HVAC products and solutions",
-    generator: 'v0.dev'
+  generator: 'v0.dev'
 }
 
 export default function RootLayout({
@@ -22,9 +22,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
+        <div id="portal-root" />
         <div className="flex min-h-screen flex-col">
           <Header />
-          {children}
+          <main>
+            {children}
+          </main>
           <Footer />
           <WhatsAppButton />
         </div>
