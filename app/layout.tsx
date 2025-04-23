@@ -5,6 +5,7 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import type React from "react" // Import React
 import { WhatsAppButton } from "@/components/whatsapp-button"
+import { QueryProvider } from "@/lib/providers/query-provider"
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -22,12 +23,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          {children}
-          <Footer />
-          <WhatsAppButton />
-        </div>
+        <QueryProvider>
+          <div className="flex min-h-screen flex-col">
+            <Header />
+            {children}
+            <Footer />
+            <WhatsAppButton />
+          </div>
+        </QueryProvider>
       </body>
     </html>
   )
