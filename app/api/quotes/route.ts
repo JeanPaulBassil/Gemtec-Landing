@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 // Your backend API URL (should match what the CMS is using)
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3000/api';
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001/api';
 
 // Handle preflight requests for CORS
 export async function OPTIONS() {
@@ -27,7 +27,9 @@ export async function POST(request: Request) {
     
     // Check if we can connect to the backend before proceeding
     try {
-      await axios.get(`${API_URL}`, { timeout: 2000 });
+      // We need to connect to the correct endpoint
+      // API_URL already includes /api, so we just need to add /quotes
+      await axios.get(`${API_URL}/quotes`, { timeout: 2000 });
     } catch (connectionError: unknown) {
       console.error('Cannot connect to backend API:', connectionError instanceof Error ? connectionError.message : String(connectionError));
       // Since we can't connect to the backend, let's save the request to localStorage instead
