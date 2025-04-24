@@ -6,7 +6,6 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { QuoteSelect } from "@/components/quote-select"
-import axios from "axios";
 
 export default function QuotePage() {
   const [formData, setFormData] = useState({
@@ -52,9 +51,6 @@ export default function QuotePage() {
         status: 'new'
       };
 
-      // Submit to API
-      await axios.post('/api/quotes', apiData);
-      
       // Reset form
       setFormData({
         firstName: '',
