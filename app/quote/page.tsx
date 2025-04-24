@@ -34,42 +34,117 @@ export default function QuotePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
+    
     setIsSubmitting(true);
     setSubmissionStatus('idle');
     setErrorMessage('');
 
+    console.log('Form submission started');
+
+    // Basic client-side validation
+    if (!formData.firstName.trim()) {
+      setErrorMessage('First name is required');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.lastName.trim()) {
+      setErrorMessage('Last name is required');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.email.trim()) {
+      setErrorMessage('Email is required');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
+    if (!formData.projectDetails.trim()) {
+      setErrorMessage('Project details are required');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
       // Format the data for the backend API
       const apiData = {
-        name: `${formData.firstName} ${formData.lastName}`.trim(),
+        firstName: formData.firstName,
+        lastName: formData.lastName,
         email: formData.email,
-        company: formData.company,
-        phone: formData.phone,
-        productInterest: [formData.productCategory],
-        projectDetails: formData.projectDetails,
-        timeline: formData.timeline,
-        status: 'new'
+        companyName: formData.company || 'Not specified',
+        phoneNumber: formData.phone || 'Not specified',
+        productCategory: formData.productCategory || 'Not specified',
+        productType: formData.projectType || 'Not specified',
+        description: formData.projectDetails
       };
 
-      // Reset form
-      setFormData({
-        firstName: '',
-        lastName: '',
-        email: '',
-        company: '',
-        phone: '',
-        productCategory: '',
-        projectType: '',
-        projectDetails: '',
-        timeline: ''
-      });
+      console.log('Sending data to API:', apiData);
+
+      // Create a direct XMLHttpRequest to ensure network visibility
+      const xhr = new XMLHttpRequest();
+      xhr.open('POST', '/api/quotes', true);
+      xhr.setRequestHeader('Content-Type', 'application/json');
       
-      setSubmissionStatus('success');
+      xhr.onload = function() {
+        console.log('XHR status:', xhr.status);
+        console.log('XHR response:', xhr.responseText);
+        
+        try {
+          const result = JSON.parse(xhr.responseText);
+          
+          if (xhr.status >= 200 && xhr.status < 300) {
+            // Success
+            console.log('API response received:', result);
+            
+            // Reset form
+            setFormData({
+              firstName: '',
+              lastName: '',
+              email: '',
+              company: '',
+              phone: '',
+              productCategory: '',
+              projectType: '',
+              projectDetails: '',
+              timeline: ''
+            });
+            
+            setSubmissionStatus('success');
+          } else {
+            // Error
+            throw new Error(result.error || 'Failed to submit quote');
+          }
+        } catch (parseError) {
+          console.error('Error parsing response:', parseError);
+          setSubmissionStatus('error');
+          setErrorMessage('Failed to parse server response');
+        } finally {
+          setIsSubmitting(false);
+        }
+      };
+      
+      xhr.onerror = function() {
+        console.error('XHR error');
+        setSubmissionStatus('error');
+        setErrorMessage('Network error occurred while submitting the form');
+        setIsSubmitting(false);
+      };
+      
+      xhr.send(JSON.stringify(apiData));
     } catch (error) {
       console.error('Error submitting quote:', error);
       setSubmissionStatus('error');
-      setErrorMessage('There was an error submitting your quote request. Please try again.');
-    } finally {
+      setErrorMessage(
+        error instanceof Error 
+          ? error.message 
+          : 'There was an error submitting your quote request. Please try again.'
+      );
       setIsSubmitting(false);
     }
   };
@@ -225,12 +300,61 @@ export default function QuotePage() {
                     />
                   </div>
                   <Button 
-                    className="w-full btn-secondary" 
+                    className="w-full btn-secondary font-bold text-lg py-6" 
                     type="submit"
                     disabled={isSubmitting}
+                    onClick={(e) => {
+                      console.log("Submit button clicked");
+                      // The form's onSubmit will handle the actual submission
+                    }}
                   >
-                    {isSubmitting ? 'Submitting...' : 'Submit Quote Request'}
+                    {isSubmitting ? (
+                      <div className="flex items-center justify-center">
+                        <div className="animate-spin h-5 w-5 border-t-2 border-b-2 border-white rounded-full mr-3"></div>
+                        <span>Submitting...</span>
+                      </div>
+                    ) : 'Submit Quote Request'}
                   </Button>
+
+                  {process.env.NODE_ENV === 'development' && (
+                    <Button 
+                      className="w-full mt-2" 
+                      type="button"
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const testData = {
+                            firstName: 'Test',
+                            lastName: 'User',
+                            email: 'test@example.com',
+                            companyName: 'Test Company',
+                            phoneNumber: '1234567890',
+                            productCategory: 'accessories',
+                            productType: 'commercial',
+                            description: 'This is a test submission'
+                          };
+                          
+                          console.log('Debug: Sending test submission');
+                          const response = await fetch('/api/quotes', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(testData),
+                          });
+                          
+                          const result = await response.json();
+                          console.log('Debug: Test response received:', result);
+                          alert('Test submission result: ' + (result.success ? 'Success' : 'Failed'));
+                        } catch (error) {
+                          console.error('Debug: Test error:', error);
+                          alert('Test error: ' + (error instanceof Error ? error.message : String(error)));
+                        }
+                      }}
+                    >
+                      Debug Test Submission
+                    </Button>
+                  )}
                 </form>
               </CardContent>
             </Card>
