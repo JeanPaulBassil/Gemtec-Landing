@@ -7,23 +7,164 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Label } from "@/components/ui/label"
 import { useSearchParams } from "next/navigation"
-import { useState, Suspense } from "react"
+import { useState, useEffect, Suspense } from "react"
 import { LoadingSpinner } from "@/components/ui/loading-spinner"
-import type React from "react" // Added import for React
+import type React from "react"
+import { ApplicationService, ApplicationFormData } from "@/services/application-service"
+import { useToast } from "@/components/ui/use-toast"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 
 // Client component that uses useSearchParams
 function ApplicationForm() {
   const searchParams = useSearchParams()
-  const position = searchParams.get("position")
+  const positionParam = searchParams.get("position")
   const [isSubmitting, setIsSubmitting] = useState(false)
+  const [positions, setPositions] = useState<{ id: string; title: string; department: string }[]>([])
+  const [selectedPosition, setSelectedPosition] = useState<string>(positionParam || "")
+  const [resumeFile, setResumeFile] = useState<File | null>(null)
+  const [formData, setFormData] = useState<ApplicationFormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phoneNumber: "",
+    currentLocation: "",
+    yearsOfExperience: "",
+    highestEducation: "",
+    coverLetter: "",
+    positionId: "",
+  })
+  const [error, setError] = useState<string | null>(null)
+  const [success, setSuccess] = useState(false)
+  const { toast } = useToast()
 
+  // Load positions when component mounts
+  useEffect(() => {
+    const loadPositions = async () => {
+      try {
+        const positions = await ApplicationService.getPositions()
+        setPositions(positions)
+        
+        // If we have a position from URL, find and select it
+        if (positionParam) {
+          const position = positions.find(
+            pos => pos.id === positionParam || pos.title.toLowerCase().replace(/\s+/g, '-') === positionParam
+          )
+          if (position) {
+            setSelectedPosition(position.id)
+            setFormData(prev => ({ ...prev, positionId: position.id }))
+          }
+        }
+      } catch (error) {
+        console.error("Error loading positions:", error)
+      }
+    }
+    
+    loadPositions()
+  }, [positionParam])
+
+  // Handle input changes
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { id, value } = e.target
+    setFormData(prev => ({ ...prev, [id]: value }))
+  }
+  
+  // Handle select changes
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({ ...prev, [name]: value }))
+  }
+  
+  // Handle file input change
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      const file = e.target.files[0]
+      
+      // Check file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please upload a file smaller than 5MB",
+          variant: "destructive"
+        })
+        return
+      }
+      
+      setResumeFile(file)
+    }
+  }
+
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     setIsSubmitting(true)
-    // Simulate form submission
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsSubmitting(false)
-    // Handle form submission here
+    setError(null)
+    
+    if (!resumeFile) {
+      setError("Please upload your resume")
+      setIsSubmitting(false)
+      return
+    }
+    
+    try {
+      // Submit application
+      await ApplicationService.submitApplication(formData, resumeFile)
+      
+      // Show success message
+      setSuccess(true)
+      window.scrollTo(0, 0)
+      
+      // Reset form
+      setFormData({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phoneNumber: "",
+        currentLocation: "",
+        yearsOfExperience: "",
+        highestEducation: "",
+        coverLetter: "",
+        positionId: "",
+      })
+      setResumeFile(null)
+      
+      // Show toast notification
+      toast({
+        title: "Application Submitted",
+        description: "Thank you for your application. We'll be in touch soon!",
+      })
+    } catch (error) {
+      console.error("Error submitting application:", error)
+      setError("An error occurred while submitting your application. Please try again.")
+      toast({
+        title: "Submission Failed",
+        description: "There was a problem submitting your application. Please try again.",
+        variant: "destructive"
+      })
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  // Show success message if application was submitted
+  if (success) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="text-green-600">Application Submitted!</CardTitle>
+          <CardDescription>
+            Thank you for applying to GEMTEC. We have received your application and will review it shortly.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <p className="mb-4">We'll be in touch with you via email regarding the next steps in the hiring process.</p>
+          <Button onClick={() => {
+            setSuccess(false)
+            window.location.href = "/careers"
+          }}>
+            Return to Careers
+          </Button>
+        </CardContent>
+      </Card>
+    )
   }
 
   return (
@@ -35,19 +176,29 @@ function ApplicationForm() {
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {error && (
+          <Alert variant="destructive" className="mb-6">
+            <AlertTitle>Error</AlertTitle>
+            <AlertDescription>{error}</AlertDescription>
+          </Alert>
+        )}
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="position">Position</Label>
-            <Select defaultValue={position || undefined}>
+            <Label htmlFor="positionId">Position</Label>
+            <Select 
+              value={formData.positionId} 
+              onValueChange={(value) => handleSelectChange("positionId", value)}
+              required
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select position" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="hvac-design-engineer">HVAC Design Engineer</SelectItem>
-                <SelectItem value="production-supervisor">Production Supervisor</SelectItem>
-                <SelectItem value="sales-engineer">Sales Engineer</SelectItem>
-                <SelectItem value="quality-control-specialist">Quality Control Specialist</SelectItem>
-                <SelectItem value="marketing-manager">Marketing Manager</SelectItem>
+                {positions.map(position => (
+                  <SelectItem key={position.id} value={position.id}>
+                    {position.title}
+                  </SelectItem>
+                ))}
               </SelectContent>
             </Select>
           </div>
@@ -55,32 +206,63 @@ function ApplicationForm() {
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="firstName">First name</Label>
-              <Input id="firstName" required />
+              <Input 
+                id="firstName" 
+                value={formData.firstName} 
+                onChange={handleInputChange} 
+                required 
+              />
             </div>
             <div className="space-y-2">
               <Label htmlFor="lastName">Last name</Label>
-              <Input id="lastName" required />
+              <Input 
+                id="lastName" 
+                value={formData.lastName} 
+                onChange={handleInputChange} 
+                required 
+              />
             </div>
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" required />
+            <Input 
+              id="email" 
+              type="email" 
+              value={formData.email} 
+              onChange={handleInputChange} 
+              required 
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone number</Label>
-            <Input id="phone" type="tel" required />
+            <Label htmlFor="phoneNumber">Phone number</Label>
+            <Input 
+              id="phoneNumber" 
+              type="tel" 
+              value={formData.phoneNumber} 
+              onChange={handleInputChange} 
+              required 
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="location">Current location</Label>
-            <Input id="location" required />
+            <Label htmlFor="currentLocation">Current location</Label>
+            <Input 
+              id="currentLocation" 
+              value={formData.currentLocation} 
+              onChange={handleInputChange} 
+              required 
+            />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="experience">Years of experience</Label>
-            <Select>
+            <Label htmlFor="yearsOfExperience">Years of experience</Label>
+            <Select 
+              value={formData.yearsOfExperience} 
+              onValueChange={(value) => handleSelectChange("yearsOfExperience", value)}
+              required
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select experience" />
               </SelectTrigger>
@@ -94,8 +276,12 @@ function ApplicationForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="education">Highest education level</Label>
-            <Select>
+            <Label htmlFor="highestEducation">Highest education level</Label>
+            <Select 
+              value={formData.highestEducation} 
+              onValueChange={(value) => handleSelectChange("highestEducation", value)}
+              required
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select education" />
               </SelectTrigger>
@@ -110,7 +296,13 @@ function ApplicationForm() {
 
           <div className="space-y-2">
             <Label htmlFor="resume">Resume/CV</Label>
-            <Input id="resume" type="file" accept=".pdf,.doc,.docx" required />
+            <Input 
+              id="resume" 
+              type="file" 
+              accept=".pdf,.doc,.docx" 
+              onChange={handleFileChange}
+              required 
+            />
             <p className="text-sm text-muted-foreground">
               Accepted formats: PDF, DOC, DOCX. Maximum file size: 5MB
             </p>
@@ -122,6 +314,8 @@ function ApplicationForm() {
               id="coverLetter"
               placeholder="Tell us why you're interested in this position and what makes you a great candidate"
               className="min-h-[150px]"
+              value={formData.coverLetter}
+              onChange={handleInputChange}
               required
             />
           </div>
