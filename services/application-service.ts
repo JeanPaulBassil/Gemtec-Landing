@@ -1,4 +1,5 @@
 import { api } from '@/lib/api-client';
+import { JobOffering } from '@/services/job-offerings-service';
 
 export interface ApplicationFormData {
   firstName: string;
@@ -90,8 +91,26 @@ export const ApplicationService = {
    */
   async getPositions(): Promise<{ id: string; title: string; department: string }[]> {
     try {
-      const response = await api.get('/positions');
-      return response.data;
+      const response = await api.get('/job-offerings');
+      
+      // Extract and transform job offerings into position format
+      let jobOfferings = [];
+      
+      // Handle potential payload wrapper
+      if (response.data.payload && Array.isArray(response.data.payload)) {
+        jobOfferings = response.data.payload;
+      } else if (Array.isArray(response.data)) {
+        jobOfferings = response.data;
+      } else if (response.data.data && Array.isArray(response.data.data)) {
+        jobOfferings = response.data.data;
+      }
+      
+      // Map to the expected position format
+      return jobOfferings.map((job: JobOffering) => ({
+        id: job.id,
+        title: job.title,
+        department: job.department
+      }));
     } catch (error) {
       console.error('Error fetching positions:', error);
       throw error;

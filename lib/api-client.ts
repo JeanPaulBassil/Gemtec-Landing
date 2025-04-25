@@ -2,7 +2,6 @@ import axios from 'axios';
 
 // Base API URL
 const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3200/api';
-console.log('Using backend URL:', BACKEND_URL);
 
 // Create axios instance for backend API
 const api = axios.create({
@@ -10,24 +9,13 @@ const api = axios.create({
   headers: {
     'Content-Type': 'application/json',
     'Accept': 'application/json',
-    'X-Requested-With': 'XMLHttpRequest',
   },
   timeout: 30000, // 30 seconds
   withCredentials: false, // Important for CORS
 });
 
-// Enable CORS for all requests
-const setAxiosDefaults = () => {
-  // Add specific CORS headers to the default headers for all requests
-  api.defaults.headers.common['Access-Control-Allow-Origin'] = '*';
-  api.defaults.headers.common['Access-Control-Allow-Methods'] = 'GET, POST, PUT, DELETE, OPTIONS';
-  api.defaults.headers.common['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept';
-};
-
-// Set defaults on client side only
-if (typeof window !== 'undefined') {
-  setAxiosDefaults();
-}
+// Remove client-side CORS header settings as they don't work
+// CORS headers must be set by the server
 
 // Add request interceptor
 api.interceptors.request.use(config => {
