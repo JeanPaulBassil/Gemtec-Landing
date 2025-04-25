@@ -37,6 +37,14 @@ export async function POST(request: Request) {
         const errorText = await response.text();
         console.error(`Backend error: ${response.status} ${errorText}`);
         
+        // Log more details about the error
+        console.error('Backend error details:', {
+          status: response.status,
+          body: errorText,
+          url: `${BACKEND_URL}/contact`,
+          data: body
+        });
+        
         // If backend fails, still return success to the user but log the error
         console.error('Backend error but returning success to user');
         return NextResponse.json(
@@ -55,6 +63,13 @@ export async function POST(request: Request) {
       );
     } catch (backendError) {
       console.error('Cannot connect to backend:', backendError);
+      
+      // Log more details about the connection error
+      console.error('Backend connection error details:', {
+        error: backendError,
+        url: `${BACKEND_URL}/contact`,
+        data: body
+      });
       
       // If backend is unreachable, still return success to the user but log the error
       console.warn('Backend connection failed but returning success to user');
