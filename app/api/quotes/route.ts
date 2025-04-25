@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import axios from 'axios';
 
 // Your backend API URL (should match what the CMS is using)
-const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:3200/api';
 
 // Handle preflight requests for CORS
 export async function OPTIONS() {
