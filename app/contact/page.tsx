@@ -4,11 +4,12 @@ import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
-import { MapPin, Phone, Mail, Clock, Building, ChevronRight, Send, User, AtSign, MessageSquare } from "lucide-react"
+import { MapPin, Phone, Mail, Clock, Building, ChevronRight, Send, User, AtSign, MessageSquare, AlertCircle } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "@/components/ui/use-toast"
 import { ContactService } from "@/services/contact-service"
+import { Alert, AlertDescription } from "@/components/ui/alert"
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -18,21 +19,71 @@ export default function ContactPage() {
     subject: '',
     message: ''
   });
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const validateField = (name: string, value: string): string => {
+    switch (name) {
+      case 'firstName':
+      case 'lastName':
+        if (value.length < 2) return 'Must be at least 2 characters';
+        if (value.length > 50) return 'Cannot exceed 50 characters';
+        break;
+      case 'email':
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return 'Must be a valid email address';
+        break;
+      case 'subject':
+        if (value.length < 5) return 'Must be at least 5 characters';
+        if (value.length > 100) return 'Cannot exceed 100 characters';
+        break;
+      case 'message':
+        if (value.length < 10) return 'Must be at least 10 characters';
+        if (value.length > 1000) return 'Cannot exceed 1000 characters';
+        break;
+    }
+    return '';
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
+    
+    // Validate on change, but don't show errors immediately until they've tried to submit once
+    const error = validateField(name, value);
+    if (error && errors[name]) {
+      setErrors(prev => ({ ...prev, [name]: error }));
+    } else if (!error && errors[name]) {
+      const newErrors = { ...errors };
+      delete newErrors[name];
+      setErrors(newErrors);
+    }
+  };
+
+  const validateForm = (): boolean => {
+    const newErrors: Record<string, string> = {};
+    let isValid = true;
+
+    // Check each field
+    Object.entries(formData).forEach(([name, value]) => {
+      const error = validateField(name, value);
+      if (error) {
+        newErrors[name] = error;
+        isValid = false;
+      }
+    });
+
+    setErrors(newErrors);
+    return isValid;
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     
-    // Validate form
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.subject || !formData.message) {
+    // Full validation on submit
+    if (!validateForm()) {
       toast({
-        title: "Error",
-        description: "Please fill in all fields",
+        title: "Validation Error",
+        description: "Please fix the errors in the form before submitting",
         variant: "destructive"
       });
       return;
@@ -63,6 +114,7 @@ export default function ContactPage() {
         subject: '',
         message: ''
       });
+      setErrors({});
     } catch (error: any) {
       console.error('Error submitting contact form:', error);
       
@@ -82,6 +134,18 @@ export default function ContactPage() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const renderFieldError = (field: string) => {
+    if (errors[field]) {
+      return (
+        <div className="text-red-500 text-xs flex items-center mt-1">
+          <AlertCircle className="h-3 w-3 mr-1" />
+          {errors[field]}
+        </div>
+      );
+    }
+    return null;
   };
 
   return (
@@ -118,40 +182,52 @@ export default function ContactPage() {
                 </p>
               </div>
               
+              <Alert variant="default" className="bg-blue-50 border-blue-100 text-blue-800">
+                <AlertDescription>
+                  All fields are required. Please ensure your message is between 10-1000 characters.
+                </AlertDescription>
+              </Alert>
+              
               <form className="space-y-8 p-8 bg-white rounded-2xl shadow-xl border border-gray-100" onSubmit={handleSubmit}>
                 <div className="grid gap-6 sm:grid-cols-2">
                   <div className="space-y-2 relative">
-                    <label className="text-sm font-medium text-gray-700">First Name</label>
+                    <label className="text-sm font-medium text-gray-700">First Name (2-50 characters)</label>
                     <div className="relative">
                       <Input 
                         name="firstName"
                         value={formData.firstName}
                         onChange={handleChange}
                         placeholder="John" 
-                        className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                        className={`pl-10 h-12 ${errors.firstName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500'}`}
                         required
+                        minLength={2}
+                        maxLength={50}
                       />
                       <User className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                     </div>
+                    {renderFieldError('firstName')}
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium text-gray-700">Last Name</label>
+                    <label className="text-sm font-medium text-gray-700">Last Name (2-50 characters)</label>
                     <div className="relative">
                       <Input 
                         name="lastName"
                         value={formData.lastName}
                         onChange={handleChange}
                         placeholder="Doe" 
-                        className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                        className={`pl-10 h-12 ${errors.lastName ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500'}`}
                         required
+                        minLength={2}
+                        maxLength={50}
                       />
                       <User className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                     </div>
+                    {renderFieldError('lastName')}
                   </div>
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Email</label>
+                  <label className="text-sm font-medium text-gray-700">Email Address</label>
                   <div className="relative">
                     <Input 
                       name="email"
@@ -159,38 +235,50 @@ export default function ContactPage() {
                       onChange={handleChange}
                       type="email" 
                       placeholder="john.doe@example.com" 
-                      className="pl-10 h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                      className={`pl-10 h-12 ${errors.email ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500'}`}
                       required
                     />
                     <AtSign className="absolute left-3 top-3.5 h-5 w-5 text-gray-400" />
                   </div>
+                  {renderFieldError('email')}
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Subject</label>
+                  <label className="text-sm font-medium text-gray-700">Subject (5-100 characters)</label>
                   <Input 
                     name="subject"
                     value={formData.subject}
                     onChange={handleChange}
                     placeholder="How can we help you?" 
-                    className="h-12 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                    className={`h-12 ${errors.subject ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500'}`}
                     required
+                    minLength={5}
+                    maxLength={100}
                   />
+                  {renderFieldError('subject')}
                 </div>
                 
                 <div className="space-y-2">
-                  <label className="text-sm font-medium text-gray-700">Message</label>
+                  <label className="text-sm font-medium text-gray-700">Message (10-1000 characters)</label>
                   <div className="relative">
                     <Textarea 
                       name="message"
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Please provide details about your inquiry..." 
-                      className="min-h-[180px] pt-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500"
+                      className={`min-h-[180px] pt-10 ${errors.message ? 'border-red-500 focus:border-red-500 focus:ring-red-500' : 'border-gray-200 focus:border-blue-500 focus:ring-blue-500'}`}
                       required
+                      minLength={10}
+                      maxLength={1000}
                     />
                     <MessageSquare className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                    {formData.message.length > 0 && (
+                      <div className={`absolute right-3 bottom-3 text-xs ${formData.message.length > 1000 || formData.message.length < 10 ? 'text-red-500' : 'text-gray-500'}`}>
+                        {formData.message.length}/1000
+                      </div>
+                    )}
                   </div>
+                  {renderFieldError('message')}
                 </div>
                 
                 <Button 
