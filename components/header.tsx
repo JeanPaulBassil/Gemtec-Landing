@@ -196,7 +196,7 @@ export default function Header() {
             alt="GEMTEC GROUP"
             width={450}
             height={187}
-            className="h-24 w-auto max-w-none"
+            className="h-28 w-auto max-w-none"
             priority
           />
         </Link>
