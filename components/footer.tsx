@@ -1,7 +1,7 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Facebook, Instagram, Linkedin, Twitter } from "lucide-react"
+import { Facebook, Instagram } from "lucide-react"
 import Image from "next/image"
 
 export default function Footer() {
@@ -90,23 +90,17 @@ export default function Footer() {
             </div>
           </div>
         </div>
-        <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 mb-20">
           <div className="text-sm text-gray-400 space-y-1 md:space-y-0">
             <p>© {new Date().getFullYear()} GEMTEC. All rights reserved.</p>
             <p className="md:mt-1">Developed by Jean-Paul Bassil</p>
           </div>
-          <div className="flex space-x-4">
+          <div className="flex space-x-8">
             <Link href="#" className="text-gray-400 hover:text-secondary">
               <Facebook className="h-5 w-5" />
             </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
+            <Link href="https://www.instagram.com/gemtec_group" className="text-gray-400 hover:text-secondary">
               <Instagram className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
-              <Twitter className="h-5 w-5" />
-            </Link>
-            <Link href="#" className="text-gray-400 hover:text-secondary">
-              <Linkedin className="h-5 w-5" />
             </Link>
           </div>
         </div>

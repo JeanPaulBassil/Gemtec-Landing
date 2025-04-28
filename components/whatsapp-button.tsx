@@ -14,7 +14,7 @@ export function WhatsAppButton() {
     >
       <Button size="lg" className="rounded-full bg-green-500 hover:bg-green-600 shadow-lg h-14 w-14" asChild>
         <a
-          href="https://wa.me/+96171380377"
+          href="https://wa.me/+96101380377"
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Contact us on WhatsApp"
