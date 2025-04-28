@@ -1,7 +1,7 @@
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Building2, Factory, School, Building } from "lucide-react"
+import { ArrowRight, Building2, Factory, School, Building, MapPin, Package } from "lucide-react"
 import { ScrollReveal, FadeInStagger, HoverScale } from "@/components/ui/animations"
 import Link from "next/link"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
@@ -160,72 +160,123 @@ const projectStats = [
   },
 ]
 
+// This will be replaced with data from your CMS
+const projects = [
+  {
+    id: 1,
+    title: "Modern Office Complex",
+    photo: "/projects/office-complex.jpg",
+    itemsSupplied: [
+      "HVAC Systems",
+      "Electrical Equipment",
+      "Plumbing Systems",
+      "Fire Safety Equipment"
+    ],
+    location: "Beirut, Lebanon",
+    brands: ["Mitsubishi", "Schneider Electric", "Grundfos", "Tyco"]
+  },
+  {
+    id: 2,
+    title: "Luxury Hotel Renovation",
+    photo: "/projects/hotel-renovation.jpg",
+    itemsSupplied: [
+      "Smart Building Systems",
+      "Energy Management Solutions",
+      "Security Systems",
+      "Water Treatment Systems"
+    ],
+    location: "Accra, Ghana",
+    brands: ["Siemens", "Honeywell", "Johnson Controls", "ABB"]
+  }
+]
+
 export default function ProjectsPage() {
   return (
     <>
-      <section className="relative py-24 bg-gradient-to-r from-blue-950 to-blue-900">
-        <div className="container relative">
+      <section className="relative py-32 overflow-hidden bg-gradient-to-br from-blue-950 via-blue-900 to-blue-800">
+        <div className="absolute inset-0 opacity-20 bg-grid-white/5"></div>
+        <div className="absolute right-0 -mt-32 -mr-32 h-96 w-96 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
+        <div className="absolute left-0 mt-32 ml-8 h-64 w-64 rounded-full bg-cyan-400 opacity-10 blur-3xl"></div>
+        
+        <div className="container relative z-10">
           <div className="max-w-3xl mx-auto text-center">
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white">
-              Partnerships
+            <div className="inline-block mb-6 px-6 py-2 bg-blue-900/50 border border-blue-800 rounded-full text-blue-100">
+              <span className="font-medium text-sm tracking-wide">Our Portfolio</span>
+            </div>
+            <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-6xl/none text-white drop-shadow-sm">
+              Featured Projects
             </h1>
-            <p className="mt-6 text-lg text-gray-300">Collaborating with industry leaders for exceptional HVAC solutions</p>
+            <p className="mt-6 text-xl text-blue-100">
+              Discover our successful projects and the innovative solutions we've implemented
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="py-24 bg-gradient-to-b from-accent to-accent/50">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-secondary font-semibold tracking-wider uppercase text-sm">Trusted Partnerships</span>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mt-2">Our Strategic Allies</h2>
-              <p className="mt-4 text-lg text-muted-foreground max-w-2xl mx-auto">
-                Collaborating with industry-leading manufacturers to deliver exceptional HVAC solutions worldwide
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="max-w-7xl mx-auto">
-            <FadeInStagger>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
-                {partners.map((partner) => (
-                  <HoverScale key={partner.name}>
-                    <div className="group relative h-full">
-                      <Card className="relative overflow-hidden border bg-white/5 backdrop-blur-sm transition-all duration-500 h-full shadow-sm hover:shadow-xl hover:border-secondary/50 group-hover:bg-white/10">
-                        <CardHeader className="space-y-0 pb-0 pt-5">
-                          <div className="h-28 relative mb-3 flex items-center justify-center p-5">
-                            <Image
-                              src={partner.logo || "/placeholder.svg"}
-                              alt={partner.name}
-                              fill
-                              className="object-contain p-1 transition-transform duration-500 group-hover:scale-105"
-                              quality={90}
-                            />
-                          </div>
-                        </CardHeader>
-                        <CardContent className="text-center pb-6">
-                          <div className="h-px w-1/3 mx-auto bg-gradient-to-r from-transparent via-secondary/30 to-transparent my-2"></div>
-                          <h3 className="font-medium text-base transition-colors group-hover:text-secondary truncate px-2">{partner.name}</h3>
-                        </CardContent>
-                      </Card>
+      <section className="py-24 bg-gradient-to-b from-blue-50/50 to-transparent">
+        <div className="container max-w-7xl">
+          <div className="grid gap-10 md:grid-cols-1 lg:grid-cols-2">
+            {projects.map((project) => (
+              <Card key={project.id} className="flex flex-col overflow-hidden shadow-xl rounded-xl border-0">
+                <div className="relative h-64 w-full">
+                  <Image
+                    src={project.photo}
+                    alt={project.title}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                
+                <CardHeader className="bg-gradient-to-r from-blue-700 to-blue-800 text-white p-6">
+                  <CardTitle className="text-2xl">{project.title}</CardTitle>
+                  <CardDescription className="text-blue-100">
+                    <div className="flex items-center gap-2 mt-2">
+                      <MapPin className="w-4 h-4" />
+                      <span>{project.location}</span>
                     </div>
-                  </HoverScale>
-                ))}
-              </div>
-            </FadeInStagger>
-            
-            <div className="mt-16 text-center">
-              <p className="text-muted-foreground italic mb-5">
-                "Together with our partners, we deliver exceptional quality and innovation in every project."
-              </p>
-              <Button asChild variant="secondary" className="group transition-all duration-300 hover:shadow-lg">
-                <Link href="/contact" className="flex items-center gap-2">
-                  Become a Partner
-                  <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-            </div>
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent className="p-6 space-y-6 bg-white">
+                  <div className="space-y-4">
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                        <Package className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-sm text-blue-950">Items Supplied</h3>
+                        <ul className="mt-2 space-y-1">
+                          {project.itemsSupplied.map((item, index) => (
+                            <li key={index} className="text-sm text-muted-foreground">
+                              {item}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-4">
+                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
+                        <Building2 className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div>
+                        <h3 className="font-medium text-sm text-blue-950">Brands Supplied</h3>
+                        <div className="mt-2 flex flex-wrap gap-2">
+                          {project.brands.map((brand, index) => (
+                            <span
+                              key={index}
+                              className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
+                            >
+                              {brand}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
       </section>

@@ -24,6 +24,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { AspectRatio } from "@/components/ui/aspect-ratio"
 import { Separator } from "@/components/ui/separator"
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
 // Define types for our data model
 interface ProductImage {
@@ -357,39 +358,39 @@ function CategoryFilter({ categories }: { categories: Category[] }) {
         </h3>
       </div>
       <div className="p-2">
-        <ul className="space-y-1">
+        <Accordion type="multiple" className="w-full">
           {categories.map((category) => (
-            <li key={category.id}>
-              <Link 
-                href={`#${category.slug}`}
-                className="flex items-center justify-between p-2 rounded-md hover:bg-blue-50 transition-colors"
-              >
-                <span className="text-sm font-medium">{category.name}</span>
-                {category.children.length > 0 && (
-                  <Badge variant="outline" className="text-xs">
-                    {category.children.length}
-                  </Badge>
-                )}
-              </Link>
-              
+            <AccordionItem key={category.id} value={category.id} className="border-none">
+              <AccordionTrigger className="py-2 hover:no-underline">
+                <div className="flex items-center justify-between w-full pr-4">
+                  <span className="text-sm font-medium">{category.name}</span>
+                  {category.children.length > 0 && (
+                    <Badge variant="outline" className="text-xs">
+                      {category.children.length}
+                    </Badge>
+                  )}
+                </div>
+              </AccordionTrigger>
               {category.children.length > 0 && (
-                <ul className="pl-4 pt-1 pb-2 space-y-1">
-                  {category.children.map((child) => (
-                    <li key={child.id}>
-                      <Link 
-                        href={`#${child.slug}`}
-                        className="flex items-center p-1.5 rounded hover:bg-blue-50 transition-colors"
-                      >
-                        <ChevronRight className="h-3 w-3 text-zinc-400 mr-1" />
-                        <span className="text-xs">{child.name}</span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+                <AccordionContent>
+                  <ul className="pl-4 pt-1 pb-2 space-y-1">
+                    {category.children.map((child) => (
+                      <li key={child.id}>
+                        <Link 
+                          href={`#${child.slug}`}
+                          className="flex items-center p-1.5 rounded hover:bg-blue-50 transition-colors"
+                        >
+                          <ChevronRight className="h-3 w-3 text-zinc-400 mr-1" />
+                          <span className="text-xs">{child.name}</span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </AccordionContent>
               )}
-            </li>
+            </AccordionItem>
           ))}
-        </ul>
+        </Accordion>
       </div>
     </div>
   )

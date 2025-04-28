@@ -81,6 +81,19 @@ export default function Header() {
                     href="/projects"
                     className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
                   >
+                    <div className="text-sm font-medium leading-none">Projects</div>
+                    <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+                      See our completed and ongoing projects.
+                    </p>
+                  </Link>
+                </NavigationMenuLink>
+              </li>
+              <li>
+                <NavigationMenuLink asChild>
+                  <Link
+                    href="/partnerships"
+                    className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground"
+                  >
                     <div className="text-sm font-medium leading-none">Partnerships</div>
                     <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
                       Explore our strategic partnerships with industry leaders
@@ -223,7 +236,8 @@ export default function Header() {
                   <MobileNavItem href="/about">About Us</MobileNavItem>
                   <MobileNavItem href="/mission">Mission</MobileNavItem>
                   <MobileNavItem href="/locations">Office Locations</MobileNavItem>
-                  <MobileNavItem href="/projects">Partnerships</MobileNavItem>
+                  <MobileNavItem href="/projects">Projects</MobileNavItem>
+                  <MobileNavItem href="/partnerships">Partnerships</MobileNavItem>
                   <MobileNavItem href="/certifications">Certifications</MobileNavItem>
                   <MobileNavItem href="/quality-policy">Quality Policy</MobileNavItem>
                 </div>

@@ -1,8 +1,9 @@
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Building2, Users2, Globe2, Award, Target } from "lucide-react"
+import { Building2, Users2, Globe2, Award, Target, ArrowRight } from "lucide-react"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
+import Link from "next/link"
 
 const milestones = [
   {
@@ -73,6 +74,12 @@ const stats = [
   },
 ]
 
+const navigation = [
+  { name: 'About Us', href: '/about' },
+  { name: 'Projects', href: '/projects' },
+  { name: 'Contact', href: '/contact' },
+]
+
 export default function AboutPage() {
   return (
     <>
@@ -83,6 +90,19 @@ export default function AboutPage() {
               About GEMTEC
             </h1>
             <p className="mt-6 text-lg text-gray-300">A legacy of innovation and excellence in HVAC solutions</p>
+          </div>
+          <div className="mt-8 flex justify-center">
+            <nav className="flex space-x-4">
+              {navigation.map((item) => (
+                <Link
+                  key={item.name}
+                  href={item.href}
+                  className="text-white hover:text-blue-200 transition-colors"
+                >
+                  {item.name}
+                </Link>
+              ))}
+            </nav>
           </div>
         </div>
       </section>
@@ -271,6 +291,32 @@ export default function AboutPage() {
                 </ul>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-24">
+        <div className="container">
+          <div className="max-w-4xl mx-auto">
+            <div className="text-center mb-12">
+              <span className="text-secondary font-semibold">Quality Policy</span>
+              <h2 className="text-3xl font-bold tracking-tight mt-2">Our Commitment to Excellence</h2>
+              <p className="mt-4 text-lg text-muted-foreground">
+                At GEMTEC, we are committed to delivering the highest quality HVAC solutions to our customers.
+              </p>
+            </div>
+            <div className="space-y-6 text-lg text-muted-foreground">
+              <p>
+                Our quality policy is based on the following principles:
+              </p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Continuous improvement in all aspects of our operations</li>
+                <li>Adherence to international standards and best practices</li>
+                <li>Regular training and development of our team</li>
+                <li>Rigorous quality control processes</li>
+                <li>Customer satisfaction as our top priority</li>
+              </ul>
+            </div>
           </div>
         </div>
       </section>
