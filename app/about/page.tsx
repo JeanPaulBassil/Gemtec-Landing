@@ -97,6 +97,12 @@ export default function AboutPage() {
               <h2 className="text-3xl font-bold tracking-tight">Company Overview</h2>
               <div className="space-y-4 text-lg text-muted-foreground">
                 <p>
+                  GEMTEC is a leading company with a strong reputation in the HVAC industry, specializing in supplying and delivering certified products and customized solutions.
+                </p>
+                <p>
+                  Established in 1995 under the name "Gulf Electro-Mechanical Technologies Company" and headquartered in Beirut, Lebanon, GEMTEC has a long history of success in the regional markets, particularly in the Arabian Gulf and the UAE, spanning over 15 years.
+                </p>
+                <p>
                   GEMTEC has established itself as a leading provider of certified HVAC products and solutions. Our
                   journey began with a vision to revolutionize the HVAC industry through innovation and excellence.
                 </p>
