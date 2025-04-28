@@ -96,7 +96,7 @@ export default function Footer() {
             <p className="md:mt-1">Developed by Jean-Paul Bassil</p>
           </div>
           <div className="flex space-x-8">
-            <Link href="#" className="text-gray-400 hover:text-secondary">
+            <Link href="https://www.facebook.com/gemtec.ltd" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-secondary">
               <Facebook className="h-5 w-5" />
             </Link>
             <Link href="https://www.instagram.com/gemtec_group" className="text-gray-400 hover:text-secondary">
