@@ -5,6 +5,7 @@ import { ArrowRight, Building2, Factory, School, Building, MapPin, Package } fro
 import { ScrollReveal, FadeInStagger, HoverScale } from "@/components/ui/animations"
 import Link from "next/link"
 import { AnimatedCounter } from "@/components/ui/animated-counter"
+import ProjectList from "@/components/project-list"
 
 const featuredProjects = [
   {
@@ -160,36 +161,6 @@ const projectStats = [
   },
 ]
 
-// This will be replaced with data from your CMS
-const projects = [
-  {
-    id: 1,
-    title: "Modern Office Complex",
-    photo: "/projects/office-complex.jpg",
-    itemsSupplied: [
-      "HVAC Systems",
-      "Electrical Equipment",
-      "Plumbing Systems",
-      "Fire Safety Equipment"
-    ],
-    location: "Beirut, Lebanon",
-    brands: ["Mitsubishi", "Schneider Electric", "Grundfos", "Tyco"]
-  },
-  {
-    id: 2,
-    title: "Luxury Hotel Renovation",
-    photo: "/projects/hotel-renovation.jpg",
-    itemsSupplied: [
-      "Smart Building Systems",
-      "Energy Management Solutions",
-      "Security Systems",
-      "Water Treatment Systems"
-    ],
-    location: "Accra, Ghana",
-    brands: ["Siemens", "Honeywell", "Johnson Controls", "ABB"]
-  }
-]
-
 export default function ProjectsPage() {
   return (
     <>
@@ -215,65 +186,32 @@ export default function ProjectsPage() {
 
       <section className="py-24 bg-gradient-to-b from-blue-50/50 to-transparent">
         <div className="container max-w-7xl">
-          <div className="grid gap-10 md:grid-cols-1 lg:grid-cols-2">
-            {projects.map((project) => (
-              <Card key={project.id} className="flex flex-col overflow-hidden shadow-xl rounded-xl border-0">
-                <div className="relative h-64 w-full">
-                  <Image
-                    src={project.photo}
-                    alt={project.title}
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-                
-                <CardHeader className="bg-gradient-to-r from-blue-700 to-blue-800 text-white p-6">
-                  <CardTitle className="text-2xl">{project.title}</CardTitle>
-                  <CardDescription className="text-blue-100">
-                    <div className="flex items-center gap-2 mt-2">
-                      <MapPin className="w-4 h-4" />
-                      <span>{project.location}</span>
-                    </div>
-                  </CardDescription>
-                </CardHeader>
+          <ProjectList />
+        </div>
+      </section>
 
-                <CardContent className="p-6 space-y-6 bg-white">
-                  <div className="space-y-4">
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                        <Package className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-sm text-blue-950">Items Supplied</h3>
-                        <ul className="mt-2 space-y-1">
-                          {project.itemsSupplied.map((item, index) => (
-                            <li key={index} className="text-sm text-muted-foreground">
-                              {item}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-4">
-                      <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0">
-                        <Building2 className="w-4 h-4 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-medium text-sm text-blue-950">Brands Supplied</h3>
-                        <div className="mt-2 flex flex-wrap gap-2">
-                          {project.brands.map((brand, index) => (
-                            <span
-                              key={index}
-                              className="px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-sm"
-                            >
-                              {brand}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container max-w-7xl">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {projectStats.map((stat, index) => (
+              <Card key={index} className="bg-white border-0 shadow-lg">
+                <CardContent className="p-8 text-center">
+                  <div className="flex items-center justify-center">
+                    {stat.prefix && (
+                      <span className="text-gray-400 text-lg">{stat.prefix}</span>
+                    )}
+                    <span className="text-4xl font-bold text-blue-600">
+                      <AnimatedCounter
+                        end={stat.value}
+                        prefix=""
+                        suffix=""
+                      />
+                    </span>
+                    {stat.suffix && (
+                      <span className="text-gray-400 text-lg">{stat.suffix}</span>
+                    )}
                   </div>
+                  <p className="mt-2 text-gray-600">{stat.label}</p>
                 </CardContent>
               </Card>
             ))}
@@ -281,33 +219,36 @@ export default function ProjectsPage() {
         </div>
       </section>
 
-      <section className="py-24 bg-accent">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-secondary font-semibold">Our Impact</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">By the Numbers</h2>
-              <p className="mt-4 text-lg text-muted-foreground">Delivering excellence through measurable results</p>
-            </div>
-          </ScrollReveal>
-
-          <ScrollReveal>
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-              {projectStats.map((stat) => (
-                <Card key={stat.label} className="text-center card-hover">
-                  <CardHeader>
-                    <CardTitle className="text-4xl font-bold">
-                      <AnimatedCounter end={stat.value} suffix={stat.suffix} prefix={stat.prefix} />
-                    </CardTitle>
-                    <CardDescription>{stat.label}</CardDescription>
-                  </CardHeader>
-                </Card>
-              ))}
-            </div>
-          </ScrollReveal>
+      <section className="py-20 bg-blue-900 text-white">
+        <div className="container max-w-7xl">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-bold">Client Testimonials</h2>
+            <p className="mt-4 text-blue-100">Hear what our clients say about working with us</p>
+          </div>
+          
+          <div className="grid md:grid-cols-3 gap-8">
+            {testimonials.map((testimonial, index) => (
+              <Card key={index} className="bg-blue-800/50 border-blue-700 text-white h-full">
+                <CardContent className="p-8">
+                  <div className="mb-6 text-yellow-300">
+                    {[...Array(5)].map((_, i) => (
+                      <span key={i} className="inline-block mr-1">★</span>
+                    ))}
+                  </div>
+                  <p className="italic mb-6">"{testimonial.quote}"</p>
+                  <div>
+                    <p className="font-semibold">{testimonial.author}</p>
+                    <p className="text-sm text-blue-200">
+                      {testimonial.position}, {testimonial.company}
+                    </p>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </section>
     </>
-  )
+  );
 }
 
