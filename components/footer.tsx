@@ -2,7 +2,6 @@ import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Facebook, Instagram } from "lucide-react"
-import Image from "next/image"
 
 export default function Footer() {
   return (
@@ -10,13 +9,7 @@ export default function Footer() {
       <div className="container">
         <div className="flex flex-col md:flex-row mb-8">
           <div className="mb-8 md:mb-0 md:mr-12">
-            <Image
-              src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Screenshot%20Feb%2010%202025%20Remove%20Background-rkTp8SxyCxNUDz5svIyaKJH9SsDFze.png"
-              alt="GEMTEC GROUP"
-              width={150}
-              height={75}
-              className="mb-6 h-10 w-auto"
-            />
+            <h1 className="text-3xl font-bold tracking-wider mb-6">GEMTEC</h1>
             <p className="max-w-xs text-sm text-gray-400">
               GEMTEC is a leading provider of certified HVAC products and solutions, with a focus on innovation,
               quality, and customer satisfaction.
