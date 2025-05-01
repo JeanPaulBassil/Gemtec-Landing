@@ -61,7 +61,7 @@ export default function Footer() {
         <div className="border-t border-gray-800 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 mb-20">
           <div className="text-sm text-gray-400 space-y-1 md:space-y-0">
             <p>© {new Date().getFullYear()} GEMTEC. All rights reserved.</p>
-            <p className="md:mt-1">Developed by Jean-Paul Bassil</p>
+            <p className="md:mt-1">Developed by Jean-Paul Bassil, Charbel Bassil and Etienne Tabchoury</p>
           </div>
           <div className="flex space-x-8">
             <Link href="https://www.facebook.com/gemtec.ltd" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:text-secondary">
