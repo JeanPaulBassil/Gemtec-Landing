@@ -50,7 +50,7 @@ export default function CareersPage() {
               Build your career with a company that's shaping the future of HVAC technology
             </p>
             <FadeIn delay={0.5}>
-              <div className="mt-10 flex items-center gap-x-6">
+              <div className="mt-10 flex items-center justify-center gap-x-6">
                 <Button size="lg" asChild className="btn-secondary gap-2">
                   <Link href="/careers/positions">
                     View All Positions
