@@ -9,7 +9,7 @@ import { format } from "date-fns";
 
 export default function NewsArticlePage() {
   const params = useParams();
-  const id = params.id as string;
+  const slug = params.slug as string;
   
   const [article, setArticle] = useState<News | null>(null);
   const [loading, setLoading] = useState(true);
@@ -22,7 +22,7 @@ export default function NewsArticlePage() {
         setLoading(true);
         setError(null);
         
-        const data = await NewsService.getNewsById(id);
+        const data = await NewsService.getNewsBySlug(slug);
         setArticle(data);
       } catch (err) {
         setError(err instanceof Error ? err : new Error('Failed to fetch article'));
@@ -32,10 +32,10 @@ export default function NewsArticlePage() {
       }
     };
     
-    if (id) {
+    if (slug) {
       fetchArticle();
     }
-  }, [id]);
+  }, [slug]);
   
   // Format date for display
   const formatDate = (dateString?: string) => {
