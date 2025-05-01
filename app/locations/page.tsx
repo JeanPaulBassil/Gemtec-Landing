@@ -43,7 +43,7 @@ const offices = [
   },
   {
     country: "Nigeria",
-    title: "Factory and Showroom",
+    title: "Office",
     address: "Plot 3 Billings way, Ikeja Lagos, Victoria Island",
     email: "info@gemtec-int.com",
     mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3963.8201673150487!2d3.3595249864131963!3d6.544490023441618!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b8d79a9a0e15f%3A0xb031a63cac4f2d54!2sIkeja%2C%20Lagos%2C%20Nigeria!5e0!3m2!1sen!2sus!4v1719596250551!5m2!1sen!2sus",

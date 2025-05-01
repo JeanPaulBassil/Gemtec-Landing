@@ -139,26 +139,29 @@ const testimonials = [
 
 const projectStats = [
   {
-    value: 200,
-    suffix: "+",
-    label: "Completed Projects",
+    value: 150,
+    label: "Projects Completed",
+    prefix: "",
+    suffix: "+"
   },
   {
-    value: 95,
-    suffix: "%",
-    label: "Client Satisfaction",
+    value: 12,
+    label: "Partner Brands",
+    prefix: "",
+    suffix: "+"
   },
   {
-    value: 15,
-    suffix: "+",
-    label: "Industry Awards",
+    value: 5,
+    label: "Countries",
+    prefix: "",
+    suffix: "+"
   },
   {
-    value: 50,
-    suffix: "M+",
-    prefix: "$",
-    label: "Project Value Delivered",
-  },
+    value: 10,
+    label: "Years Experience",
+    prefix: "",
+    suffix: "+"
+  }
 ]
 
 export default function ProjectsPage() {
