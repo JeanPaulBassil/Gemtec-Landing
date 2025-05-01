@@ -1,5 +1,4 @@
 import { api } from '@/lib/api-client';
-import { JobOffering } from '@/services/job-offerings-service';
 
 export interface ApplicationFormData {
   firstName: string;
@@ -27,10 +26,6 @@ export interface ApplicationResponse {
   positionId: string;
   createdAt: string;
   updatedAt: string;
-  resume?: {
-    id: string;
-    fileUrl: string;
-  };
   position?: {
     id: string;
     title: string;
@@ -42,46 +37,50 @@ export interface ApplicationResponse {
  */
 export const ApplicationService = {
   /**
-   * Submit a job application with resume
+   * Submit a job application
    * @param formData Application form data
-   * @param resumeFile Resume file
    * @returns Promise with application data
    */
   async submitApplication(
     formData: ApplicationFormData,
-    resumeFile: File
   ): Promise<ApplicationResponse> {
     try {
-      // First, we need to upload the resume file
-      const formDataForFile = new FormData();
-      formDataForFile.append('file', resumeFile);
-      
-      // Upload the file first
-      const fileUploadResponse = await api.post('/uploads/resume', formDataForFile, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      });
-      
-      const fileUrl = fileUploadResponse.data.fileUrl;
-      
-      // Prepare the application data with the resume file URL
+      // Prepare the application data
       const applicationData = {
-        ...formData,
-        // Convert years of experience to a number
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phoneNumber: formData.phoneNumber,
+        currentLocation: formData.currentLocation,
         yearsOfExperience: parseYearsOfExperience(formData.yearsOfExperience),
-        resume: {
-          fileUrl,
-        },
+        highestEducation: formData.highestEducation,
+        coverLetter: formData.coverLetter,
+        positionId: formData.positionId,
       };
       
       // Submit the application
       const response = await api.post('/applications', applicationData);
       
+      if (!response.data) {
+        throw new Error('Invalid response from application submission');
+      }
+
       return response.data;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error submitting application:', error);
-      throw error;
+
+      // Handle specific error cases
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+
+      // Handle network errors
+      if (error.message.includes('Network Error')) {
+        throw new Error('Unable to connect to the server. Please check your internet connection.');
+      }
+
+      // Handle other errors
+      throw new Error(error.message || 'An error occurred while submitting your application');
     }
   },
   
@@ -93,6 +92,10 @@ export const ApplicationService = {
     try {
       const response = await api.get('/job-offerings');
       
+      if (!response.data) {
+        throw new Error('Invalid response from server');
+      }
+
       // Extract and transform job offerings into position format
       let jobOfferings = [];
       
@@ -103,17 +106,31 @@ export const ApplicationService = {
         jobOfferings = response.data;
       } else if (response.data.data && Array.isArray(response.data.data)) {
         jobOfferings = response.data.data;
+      } else {
+        throw new Error('Invalid response format');
       }
       
       // Map to the expected position format
-      return jobOfferings.map((job: JobOffering) => ({
+      return jobOfferings.map((job: any) => ({
         id: job.id,
         title: job.title,
         department: job.department
       }));
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error fetching positions:', error);
-      throw error;
+
+      // Handle specific error cases
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+
+      // Handle network errors
+      if (error.message.includes('Network Error')) {
+        throw new Error('Unable to connect to the server. Please check your internet connection.');
+      }
+
+      // Handle other errors
+      throw new Error(error.message || 'An error occurred while fetching positions');
     }
   },
 };

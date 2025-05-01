@@ -36,6 +36,7 @@ function ApplicationForm() {
   const [error, setError] = useState<string | null>(null)
   const [success, setSuccess] = useState(false)
   const { toast } = useToast()
+  const [uploadProgress, setUploadProgress] = useState(0)
 
   // Load positions when component mounts
   useEffect(() => {
@@ -97,16 +98,17 @@ function ApplicationForm() {
     e.preventDefault()
     setIsSubmitting(true)
     setError(null)
-    
-    if (!resumeFile) {
-      setError("Please upload your resume")
-      setIsSubmitting(false)
-      return
-    }
+    setUploadProgress(0)
     
     try {
+      // Show upload progress
+      setUploadProgress(10)
+
       // Submit application
-      await ApplicationService.submitApplication(formData, resumeFile)
+      await ApplicationService.submitApplication(formData)
+      
+      // Upload complete
+      setUploadProgress(100)
       
       // Show success message
       setSuccess(true)
@@ -125,18 +127,28 @@ function ApplicationForm() {
         positionId: "",
       })
       setResumeFile(null)
+      setUploadProgress(0)
       
       // Show toast notification
       toast({
         title: "Application Submitted",
         description: "Thank you for your application. We'll be in touch soon!",
       })
-    } catch (error) {
-      console.error("Error submitting application:", error)
-      setError("An error occurred while submitting your application. Please try again.")
+    } catch (err: any) {
+      console.error("Error submitting application:", err)
+      let errorMessage = "An error occurred while submitting your application. Please try again."
+      
+      if (err.response?.data?.message) {
+        errorMessage = err.response.data.message
+      } else if (err.message) {
+        errorMessage = err.message
+      }
+      
+      setError(errorMessage)
+      setUploadProgress(0)
       toast({
         title: "Submission Failed",
-        description: "There was a problem submitting your application. Please try again.",
+        description: errorMessage,
         variant: "destructive"
       })
     } finally {
@@ -295,17 +307,36 @@ function ApplicationForm() {
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="resume">Resume/CV</Label>
-            <Input 
-              id="resume" 
-              type="file" 
-              accept=".pdf,.doc,.docx" 
+            <Label htmlFor="resume">Resume (Optional)</Label>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                onClick={() => document.getElementById('resume')?.click()}
+              >
+                {resumeFile ? 'Change File' : 'Upload Resume'}
+              </Button>
+              {resumeFile && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => setResumeFile(null)}
+                >
+                  Remove
+                </Button>
+              )}
+            </div>
+            <Input
+              id="resume"
+              type="file"
+              accept=".pdf,.doc,.docx"
+              className="hidden"
               onChange={handleFileChange}
-              required 
             />
-            <p className="text-sm text-muted-foreground">
-              Accepted formats: PDF, DOC, DOCX. Maximum file size: 5MB
-            </p>
+            {resumeFile && (
+              <p className="text-sm text-muted-foreground">
+                Selected file: {resumeFile.name}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">

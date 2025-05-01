@@ -7,8 +7,9 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { QuoteSelect } from "@/components/quote-select"
 import { Tooltip } from "@/components/ui/tooltip"
-import { DropdownMenu, DropdownItem } from "@/components/ui/dropdown-menu"
+import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
+import { Label } from "@/components/ui/label"
 
 export default function QuotePage() {
   const [formData, setFormData] = useState({
@@ -38,15 +39,13 @@ export default function QuotePage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    e.stopPropagation(); // Prevent event bubbling
+    e.stopPropagation();
     
     setIsSubmitting(true);
     setSubmissionStatus('idle');
     setErrorMessage('');
 
-    console.log('Form submission started');
-
-    // Basic client-side validation
+    // Enhanced validation
     if (!formData.firstName.trim()) {
       setErrorMessage('First name is required');
       setSubmissionStatus('error');
@@ -68,6 +67,13 @@ export default function QuotePage() {
       return;
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      setErrorMessage('Please enter a valid email address');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
     if (!formData.projectDetails.trim()) {
       setErrorMessage('Project details are required');
       setSubmissionStatus('error');
@@ -75,8 +81,14 @@ export default function QuotePage() {
       return;
     }
 
+    if (formData.projectDetails.trim().length < 50) {
+      setErrorMessage('Please provide more detailed project information (minimum 50 characters)');
+      setSubmissionStatus('error');
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      // Format the data for the backend API
       const apiData = {
         firstName: formData.firstName,
         lastName: formData.lastName,
@@ -85,62 +97,46 @@ export default function QuotePage() {
         phoneNumber: formData.phone || 'Not specified',
         productCategory: formData.productCategory || 'Not specified',
         productType: formData.projectType || 'Not specified',
-        description: formData.projectDetails
+        description: formData.projectDetails,
+        timeline: formData.timeline || 'Not specified'
       };
 
-      console.log('Sending data to API:', apiData);
+      console.log('Sending quote request:', apiData);
 
-      // Create a direct XMLHttpRequest to ensure network visibility
-      const xhr = new XMLHttpRequest();
-      xhr.open('POST', '/api/quotes', true);
-      xhr.setRequestHeader('Content-Type', 'application/json');
+      const response = await fetch('http://localhost:3000/api/quotes', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(apiData),
+      });
+
+      console.log('Response status:', response.status);
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        console.error('Error response:', errorData);
+        throw new Error(errorData.message || 'Failed to submit quote request');
+      }
+
+      const responseData = await response.json();
+      console.log('Success response:', responseData);
+
+      // Reset form
+      setFormData({
+        firstName: '',
+        lastName: '',
+        email: '',
+        company: '',
+        phone: '',
+        productCategory: '',
+        projectType: '',
+        projectDetails: '',
+        timeline: ''
+      });
       
-      xhr.onload = function() {
-        console.log('XHR status:', xhr.status);
-        console.log('XHR response:', xhr.responseText);
-        
-        try {
-          const result = JSON.parse(xhr.responseText);
-          
-          if (xhr.status >= 200 && xhr.status < 300) {
-            // Success
-            console.log('API response received:', result);
-            
-            // Reset form
-            setFormData({
-              firstName: '',
-              lastName: '',
-              email: '',
-              company: '',
-              phone: '',
-              productCategory: '',
-              projectType: '',
-              projectDetails: '',
-              timeline: ''
-            });
-            
-            setSubmissionStatus('success');
-          } else {
-            // Error
-            throw new Error(result.error || 'Failed to submit quote');
-          }
-        } catch (parseError) {
-          console.error('Error parsing response:', parseError);
-          setSubmissionStatus('error');
-          setErrorMessage('Failed to parse server response');
-        } finally {
-          setIsSubmitting(false);
-        }
-      };
-      
-      xhr.onerror = function() {
-        console.error('XHR error');
-        setSubmissionStatus('error');
-        setErrorMessage('Network error occurred while submitting the form');
-        setIsSubmitting(false);
-      };
-      
-      xhr.send(JSON.stringify(apiData));
+      setSubmissionStatus('success');
     } catch (error) {
       console.error('Error submitting quote:', error);
       setSubmissionStatus('error');
@@ -149,6 +145,7 @@ export default function QuotePage() {
           ? error.message 
           : 'There was an error submitting your quote request. Please try again.'
       );
+    } finally {
       setIsSubmitting(false);
     }
   };
@@ -224,7 +221,9 @@ export default function QuotePage() {
                   )}
                   <div className="grid gap-4 sm:grid-cols-2">
                     <div className="space-y-2">
+                      <Label htmlFor="firstName">First Name *</Label>
                       <Input 
+                        id="firstName"
                         placeholder="First name" 
                         name="firstName"
                         value={formData.firstName}
@@ -233,7 +232,9 @@ export default function QuotePage() {
                       />
                     </div>
                     <div className="space-y-2">
+                      <Label htmlFor="lastName">Last Name *</Label>
                       <Input 
+                        id="lastName"
                         placeholder="Last name" 
                         name="lastName"
                         value={formData.lastName}
@@ -243,7 +244,9 @@ export default function QuotePage() {
                     </div>
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="email">Email *</Label>
                     <Input 
+                      id="email"
                       type="email" 
                       placeholder="Email" 
                       name="email"
@@ -253,7 +256,9 @@ export default function QuotePage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="company">Company Name</Label>
                     <Input 
+                      id="company"
                       placeholder="Company name" 
                       name="company"
                       value={formData.company}
@@ -261,7 +266,10 @@ export default function QuotePage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="phone">Phone Number</Label>
                     <Input 
+                      id="phone"
+                      type="tel"
                       placeholder="Phone number" 
                       name="phone"
                       value={formData.phone}
@@ -269,6 +277,7 @@ export default function QuotePage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="productCategory">Product Category</Label>
                     <QuoteSelect
                       placeholder="Product category"
                       value={formData.productCategory}
@@ -277,6 +286,7 @@ export default function QuotePage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="projectType">Project Type</Label>
                     <QuoteSelect
                       placeholder="Project type"
                       value={formData.projectType}
@@ -285,17 +295,22 @@ export default function QuotePage() {
                     />
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="projectDetails">Project Description *</Label>
                     <Textarea 
-                      placeholder="Project description and requirements" 
+                      id="projectDetails"
+                      placeholder="Please provide detailed information about your project requirements, specifications, and any other relevant details (minimum 50 characters)" 
                       className="min-h-[150px]"
                       name="projectDetails"
                       value={formData.projectDetails}
                       onChange={handleChange}
                       required
                     />
+                    <p className="text-sm text-gray-500">Minimum 50 characters required</p>
                   </div>
                   <div className="space-y-2">
+                    <Label htmlFor="timeline">Desired Completion Date</Label>
                     <Input 
+                      id="timeline"
                       type="date" 
                       placeholder="Desired completion date"
                       name="timeline"
@@ -307,10 +322,6 @@ export default function QuotePage() {
                     className="w-full btn-secondary font-bold text-lg py-6" 
                     type="submit"
                     disabled={isSubmitting}
-                    onClick={(e) => {
-                      console.log("Submit button clicked");
-                      // The form's onSubmit will handle the actual submission
-                    }}
                   >
                     {isSubmitting ? (
                       <div className="flex items-center justify-center">
