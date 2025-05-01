@@ -4,45 +4,6 @@ import { ArrowRight, Briefcase, GraduationCap, Clock, Globe2, Heart, Laptop } fr
 import { ScrollReveal, FadeInStagger, HoverScale, FadeIn } from "@/components/ui/animations"
 import Link from "next/link"
 
-const openings = [
-  {
-    title: "HVAC Design Engineer",
-    location: "Beirut, Lebanon",
-    type: "Full-time",
-    description: "Design and develop HVAC systems for commercial and industrial applications.",
-    requirements: [
-      "Bachelor's degree in Mechanical Engineering",
-      "3+ years of HVAC design experience",
-      "Proficiency in AutoCAD and HVAC design software",
-      "Strong analytical and problem-solving skills",
-    ],
-  },
-  {
-    title: "Production Supervisor",
-    location: "Accra, Ghana",
-    type: "Full-time",
-    description: "Oversee manufacturing operations and ensure quality standards in our production facility.",
-    requirements: [
-      "Bachelor's degree in Engineering or related field",
-      "5+ years of manufacturing experience",
-      "Strong leadership and communication skills",
-      "Experience with lean manufacturing principles",
-    ],
-  },
-  {
-    title: "Sales Engineer",
-    location: "Lagos, Nigeria",
-    type: "Full-time",
-    description: "Drive sales growth and provide technical support to clients in the region.",
-    requirements: [
-      "Bachelor's degree in Engineering",
-      "2+ years of sales experience in HVAC industry",
-      "Strong technical knowledge of HVAC systems",
-      "Excellent communication and negotiation skills",
-    ],
-  },
-]
-
 const benefits = [
   {
     icon: Heart,
@@ -134,58 +95,6 @@ export default function CareersPage() {
               ))}
             </div>
           </FadeInStagger>
-        </div>
-      </section>
-
-      <section className="py-24 bg-accent">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-secondary font-semibold">Open Positions</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">Current Opportunities</h2>
-              <p className="mt-4 text-lg text-muted-foreground">
-                Explore our current job openings and find your next career opportunity
-              </p>
-            </div>
-          </ScrollReveal>
-
-          <div className="grid gap-6">
-            {openings.map((job) => (
-              <HoverScale key={job.title}>
-                <Card className="card-hover">
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-1">
-                        <CardTitle>{job.title}</CardTitle>
-                        <CardDescription>
-                          {job.location} • {job.type}
-                        </CardDescription>
-                      </div>
-                      <Button className="btn-secondary">
-                        Apply Now
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-4">
-                      <p className="text-muted-foreground">{job.description}</p>
-                      <div>
-                        <h4 className="font-semibold mb-2">Requirements:</h4>
-                        <ul className="list-disc list-inside space-y-1">
-                          {job.requirements.map((req) => (
-                            <li key={req} className="text-sm text-muted-foreground">
-                              {req}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </HoverScale>
-            ))}
-          </div>
         </div>
       </section>
 
