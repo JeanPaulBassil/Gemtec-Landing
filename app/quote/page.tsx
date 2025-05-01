@@ -103,7 +103,7 @@ export default function QuotePage() {
 
       console.log('Sending quote request:', apiData);
 
-      const response = await fetch('http://localhost:3000/api/quotes', {
+      const response = await fetch('/api/quotes', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -117,7 +117,7 @@ export default function QuotePage() {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Error response:', errorData);
-        throw new Error(errorData.message || 'Failed to submit quote request');
+        throw new Error(errorData.error || 'Failed to submit quote request');
       }
 
       const responseData = await response.json();

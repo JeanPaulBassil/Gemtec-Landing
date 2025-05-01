@@ -83,7 +83,8 @@ export async function POST(request: Request) {
       phoneNumber: String(quoteData.phoneNumber || ''),
       productCategory: String(quoteData.productCategory || ''),
       productType: String(quoteData.productType || ''),
-      description: String(quoteData.description || '')
+      description: String(quoteData.description || ''),
+      isSeen: false
     };
     
     // Make a direct request to the same backend API that the CMS uses
