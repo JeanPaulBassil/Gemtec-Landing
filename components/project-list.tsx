@@ -4,56 +4,52 @@ import { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { MapPin, Package } from 'lucide-react';
+import { MapPin, Package, Search } from 'lucide-react';
 import { ScrollReveal } from './ui/animations';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
 import { Project, useProjects } from '@/hooks/use-projects';
 
 export default function ProjectList() {
   const [searchQuery, setSearchQuery] = useState('');
   const { projects, loading, error } = useProjects({ search: searchQuery });
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center py-20">
-        <h3 className="text-xl font-semibold mb-2 text-red-600">Error loading projects</h3>
-        <p className="text-muted-foreground">Please try again later</p>
-      </div>
-    );
-  }
-
-  if (!projects || projects.length === 0) {
-    return (
-      <div className="text-center py-20">
-        <h3 className="text-xl font-semibold mb-2">No projects found</h3>
-        <p className="text-muted-foreground">Try adjusting your search</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className="space-y-8">
-      <div className="flex justify-center">
-        <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-          <Input
-            className="pl-9"
-            placeholder="Search projects..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+  const renderContent = () => {
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center py-20">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
         </div>
-      </div>
+      );
+    }
 
+    if (error) {
+      return (
+        <div className="text-center py-20">
+          <h3 className="text-xl font-semibold mb-2 text-red-600">Error loading projects</h3>
+          <p className="text-muted-foreground">Please try again later</p>
+        </div>
+      );
+    }
+
+    if (!projects || projects.length === 0) {
+      return (
+        <div className="text-center py-20">
+          <h3 className="text-xl font-semibold mb-2">No projects found</h3>
+          <p className="text-muted-foreground">Try adjusting your search criteria</p>
+          {searchQuery && (
+            <Button 
+              variant="outline" 
+              className="mt-4"
+              onClick={() => setSearchQuery('')}
+            >
+              Clear Search
+            </Button>
+          )}
+        </div>
+      );
+    }
+
+    return (
       <div className="grid gap-10 md:grid-cols-1 lg:grid-cols-2">
         {projects.map((project: Project) => (
           <ScrollReveal key={project.id}>
@@ -105,6 +101,24 @@ export default function ProjectList() {
           </ScrollReveal>
         ))}
       </div>
+    );
+  };
+
+  return (
+    <div className="space-y-8">
+      <div className="flex justify-center">
+        <div className="relative w-full max-w-md">
+          <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+          <Input
+            className="pl-9"
+            placeholder="Search projects..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+      </div>
+
+      {renderContent()}
     </div>
   );
 } 

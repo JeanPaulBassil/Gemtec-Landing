@@ -113,30 +113,6 @@ const partners = [
   },
 ]
 
-const testimonials = [
-  {
-    quote:
-      "GEMTEC's expertise and professional approach made our complex HVAC upgrade project seamless and successful.",
-    author: "Ahmed Hassan",
-    position: "Facility Manager",
-    company: "Dubai Commercial Tower",
-  },
-  {
-    quote:
-      "The energy efficiency improvements we've seen since implementing GEMTEC's solutions have exceeded our expectations.",
-    author: "Grace Mensah",
-    position: "Operations Director",
-    company: "Ghana Manufacturing Co.",
-  },
-  {
-    quote:
-      "Their attention to detail and commitment to quality made them the perfect partner for our campus development project.",
-    author: "Dr. Sarah Khoury",
-    position: "Campus Development Head",
-    company: "Lebanese University",
-  },
-]
-
 const projectStats = [
   {
     value: 150,
@@ -215,36 +191,6 @@ export default function ProjectsPage() {
                     )}
                   </div>
                   <p className="mt-2 text-gray-600">{stat.label}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="py-20 bg-blue-900 text-white">
-        <div className="container max-w-7xl">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold">Client Testimonials</h2>
-            <p className="mt-4 text-blue-100">Hear what our clients say about working with us</p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="bg-blue-800/50 border-blue-700 text-white h-full">
-                <CardContent className="p-8">
-                  <div className="mb-6 text-yellow-300">
-                    {[...Array(5)].map((_, i) => (
-                      <span key={i} className="inline-block mr-1">★</span>
-                    ))}
-                  </div>
-                  <p className="italic mb-6">"{testimonial.quote}"</p>
-                  <div>
-                    <p className="font-semibold">{testimonial.author}</p>
-                    <p className="text-sm text-blue-200">
-                      {testimonial.position}, {testimonial.company}
-                    </p>
-                  </div>
                 </CardContent>
               </Card>
             ))}

@@ -6,6 +6,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { QuoteSelect } from "@/components/quote-select"
+import { Tooltip } from "@/components/ui/tooltip"
+import { DropdownMenu, DropdownItem } from "@/components/ui/dropdown-menu"
+import { useRouter } from "next/navigation"
 
 export default function QuotePage() {
   const [formData, setFormData] = useState({
@@ -22,6 +25,7 @@ export default function QuotePage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionStatus, setSubmissionStatus] = useState<'idle' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
+  const router = useRouter();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -315,46 +319,6 @@ export default function QuotePage() {
                       </div>
                     ) : 'Submit Quote Request'}
                   </Button>
-
-                  {process.env.NODE_ENV === 'development' && (
-                    <Button 
-                      className="w-full mt-2" 
-                      type="button"
-                      variant="outline"
-                      onClick={async () => {
-                        try {
-                          const testData = {
-                            firstName: 'Test',
-                            lastName: 'User',
-                            email: 'test@example.com',
-                            companyName: 'Test Company',
-                            phoneNumber: '1234567890',
-                            productCategory: 'accessories',
-                            productType: 'commercial',
-                            description: 'This is a test submission'
-                          };
-                          
-                          console.log('Debug: Sending test submission');
-                          const response = await fetch('/api/quotes', {
-                            method: 'POST',
-                            headers: {
-                              'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(testData),
-                          });
-                          
-                          const result = await response.json();
-                          console.log('Debug: Test response received:', result);
-                          alert('Test submission result: ' + (result.success ? 'Success' : 'Failed'));
-                        } catch (error) {
-                          console.error('Debug: Test error:', error);
-                          alert('Test error: ' + (error instanceof Error ? error.message : String(error)));
-                        }
-                      }}
-                    >
-                      Debug Test Submission
-                    </Button>
-                  )}
                 </form>
               </CardContent>
             </Card>

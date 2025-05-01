@@ -15,7 +15,7 @@ export default function Footer() {
               quality, and customer satisfaction.
             </p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8 flex-1">
             <div>
               <h3 className="text-lg font-semibold mb-4">Company</h3>
               <ul className="space-y-2">
@@ -42,31 +42,6 @@ export default function Footer() {
                 <li>
                   <Link href="/contact" className="text-sm text-gray-400 hover:text-secondary">
                     Contact
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-4">Products</h3>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="/products" className="text-sm text-gray-400 hover:text-secondary">
-                    Air Distribution
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products" className="text-sm text-gray-400 hover:text-secondary">
-                    Ventilation
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/products" className="text-sm text-gray-400 hover:text-secondary">
-                    Air Handling Units
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/quote" className="text-sm text-gray-400 hover:text-secondary">
-                    Request a Quote
                   </Link>
                 </li>
               </ul>

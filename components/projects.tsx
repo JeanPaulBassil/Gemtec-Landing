@@ -132,10 +132,10 @@ export default function Projects() {
           <div className="text-center mb-16">
             <span className="text-blue-600 font-semibold tracking-wide uppercase bg-blue-50 px-4 py-1.5 rounded-full text-sm">Trusted Partners</span>
             <h2 className="text-4xl font-bold tracking-tight mt-4 bg-clip-text text-transparent bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900">
-              Projects & Partnerships
+              Partnerships
             </h2>
             <p className="mt-4 text-lg text-gray-600 max-w-2xl mx-auto">
-              Successfully executed projects across various regions, partnering with leading global brands.
+              Collaborating with leading global brands to deliver excellence in HVAC solutions.
             </p>
           </div>
         </ScrollReveal>
