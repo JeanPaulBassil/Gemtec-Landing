@@ -18,8 +18,8 @@ const offices = [
   {
     country: "Lebanon",
     title: "Branch Office",
-    address: "Mar Mkhayel",
-    phone: ["+9611 380 377"],
+    address: "Nahr Street, Main Road",
+    phone: ["+961 1 565993"],
     email: "info@gemtec-int.com",
     mapEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3313.817082508558!2d35.52821147608726!3d33.89522077333724!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x151f16e4f165bfd3%3A0x5df97cf0129f56e8!2sMar%20Mikhael%2C%20Beirut%2C%20Lebanon!5e0!3m2!1sen!2sus!4v1719596126453!5m2!1sen!2sus",
     workingHours: {
