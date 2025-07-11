@@ -57,11 +57,13 @@ export default function PositionsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Locations</SelectItem>
-                    {locations.filter(loc => loc !== 'all').map(location => (
-                      <SelectItem key={location} value={location}>
-                        {location.charAt(0).toUpperCase() + location.slice(1)}
-                      </SelectItem>
-                    ))}
+                    {locations
+                      .filter(loc => loc !== 'all' && loc && loc.trim() !== '')
+                      .map(location => (
+                        <SelectItem key={location} value={location}>
+                          {location.charAt(0).toUpperCase() + location.slice(1)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
                 <Select value={selectedDepartment} onValueChange={setSelectedDepartment}>
@@ -70,11 +72,13 @@ export default function PositionsPage() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Departments</SelectItem>
-                    {departments.filter(dept => dept !== 'all').map(department => (
-                      <SelectItem key={department} value={department}>
-                        {department.charAt(0).toUpperCase() + department.slice(1)}
-                      </SelectItem>
-                    ))}
+                    {departments
+                      .filter(dept => dept !== 'all' && dept && dept.trim() !== '')
+                      .map(department => (
+                        <SelectItem key={department} value={department}>
+                          {department.charAt(0).toUpperCase() + department.slice(1)}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>
@@ -119,16 +123,22 @@ export default function PositionsPage() {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-4">
-                          <div>
-                            <h4 className="font-semibold mb-2">Requirements:</h4>
-                            <ul className="list-disc list-inside space-y-1">
-                              {position.requirements.map((req) => (
-                                <li key={req.id} className="text-sm text-muted-foreground">
-                                  {req.title}
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                          {position.requirements && (
+                            <div>
+                              <h4 className="font-semibold mb-2">Requirements:</h4>
+                              <div className="text-sm text-muted-foreground whitespace-pre-wrap">
+                                {position.requirements}
+                              </div>
+                            </div>
+                          )}
+                          {position.description && (
+                            <div>
+                              <h4 className="font-semibold mb-2">Description:</h4>
+                              <div className="text-sm text-muted-foreground">
+                                {position.description}
+                              </div>
+                            </div>
+                          )}
                         </div>
                       </CardContent>
                     </Card>

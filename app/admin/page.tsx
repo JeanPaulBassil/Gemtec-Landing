@@ -12,7 +12,8 @@ import {
   TrendingUp,
   Clock,
   CheckCircle,
-  AlertCircle
+  AlertCircle,
+  Briefcase
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
@@ -25,6 +26,12 @@ interface DashboardStats {
   totalProducts: number;
   activeProducts: number;
   totalProjects: number;
+  totalPositions: number;
+  activePositions: number;
+  totalApplications: number;
+  pendingApplications: number;
+  totalNews: number;
+  publishedNews: number;
 }
 
 interface RecentActivity {
@@ -45,6 +52,12 @@ export default function AdminDashboard() {
     totalProducts: 0,
     activeProducts: 0,
     totalProjects: 0,
+    totalPositions: 0,
+    activePositions: 0,
+    totalApplications: 0,
+    pendingApplications: 0,
+    totalNews: 0,
+    publishedNews: 0,
   });
   
   const [recentActivity, setRecentActivity] = useState<RecentActivity[]>([]);
@@ -68,6 +81,9 @@ export default function AdminDashboard() {
         quotesResult,
         productsResult,
         projectsResult,
+        positionsResult,
+        applicationsResult,
+        newsResult,
         recentContactsResult,
         recentQuotesResult,
       ] = await Promise.all([
@@ -83,6 +99,15 @@ export default function AdminDashboard() {
         supabase
           .from('projects')
           .select('id', { count: 'exact' }),
+        supabase
+          .from('job_offerings')
+          .select('id, is_active', { count: 'exact' }),
+        supabase
+          .from('job_applications')
+          .select('id, status', { count: 'exact' }),
+        supabase
+          .from('news_articles')
+          .select('id, is_published', { count: 'exact' }),
         supabase
           .from('contact_messages')
           .select('id, name, email, subject, created_at, is_read')
@@ -100,6 +125,9 @@ export default function AdminDashboard() {
       const quotes = quotesResult.data || [];
       const products = productsResult.data || [];
       const projects = projectsResult.data || [];
+      const positions = positionsResult.data || [];
+      const applications = applicationsResult.data || [];
+      const news = newsResult.data || [];
 
       setStats({
         totalContacts: contactsResult.count || 0,
@@ -109,6 +137,12 @@ export default function AdminDashboard() {
         totalProducts: productsResult.count || 0,
         activeProducts: products.filter((p: any) => p.is_active).length,
         totalProjects: projectsResult.count || 0,
+        totalPositions: positionsResult.count || 0,
+        activePositions: positions.filter((p: any) => p.is_active).length,
+        totalApplications: applicationsResult.count || 0,
+        pendingApplications: applications.filter((a: any) => a.status === 'submitted').length,
+        totalNews: newsResult.count || 0,
+        publishedNews: news.filter((n: any) => n.is_published).length,
       });
 
       // Process recent activity
@@ -214,10 +248,10 @@ export default function AdminDashboard() {
       </div>
 
       {/* Stats Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Contacts</CardTitle>
+            <CardTitle className="text-sm font-medium">Contact Messages</CardTitle>
             <MessageSquare className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
@@ -263,6 +297,45 @@ export default function AdminDashboard() {
             <div className="text-2xl font-bold">{stats.totalProjects}</div>
             <p className="text-xs text-muted-foreground">
               Total projects
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Job Positions</CardTitle>
+            <Briefcase className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.totalPositions}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.activePositions} active
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Applications</CardTitle>
+            <Users className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.totalApplications}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.pendingApplications} pending
+            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">News Articles</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stats.totalNews}</div>
+            <p className="text-xs text-muted-foreground">
+              {stats.publishedNews} published
             </p>
           </CardContent>
         </Card>
@@ -341,6 +414,33 @@ export default function AdminDashboard() {
             <CardContent className="p-6 text-center">
               <FolderOpen className="h-8 w-8 mx-auto mb-2 text-orange-600" />
               <p className="font-medium">Manage Projects</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/admin/positions">
+          <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <CardContent className="p-6 text-center">
+              <Briefcase className="h-8 w-8 mx-auto mb-2 text-indigo-600" />
+              <p className="font-medium">Manage Positions</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/admin/applications">
+          <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <CardContent className="p-6 text-center">
+              <Users className="h-8 w-8 mx-auto mb-2 text-pink-600" />
+              <p className="font-medium">View Applications</p>
+            </CardContent>
+          </Card>
+        </Link>
+
+        <Link href="/admin/news">
+          <Card className="cursor-pointer hover:shadow-md transition-shadow">
+            <CardContent className="p-6 text-center">
+              <FileText className="h-8 w-8 mx-auto mb-2 text-indigo-600" />
+              <p className="font-medium">Manage News</p>
             </CardContent>
           </Card>
         </Link>

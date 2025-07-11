@@ -19,7 +19,9 @@ import {
   Menu,
   Bell,
   Search,
-  Tag
+  Tag,
+  Briefcase,
+  Newspaper
 } from "lucide-react";
 import { getCurrentUser, signOut } from "@/lib/auth";
 import type { AuthUser } from "@/lib/auth";
@@ -31,6 +33,9 @@ const navigation = [
   { name: 'Projects', href: '/admin/projects', icon: FolderOpen },
   { name: 'Contact Messages', href: '/admin/contacts', icon: MessageSquare },
   { name: 'Quote Requests', href: '/admin/quotes', icon: FileText },
+  { name: 'Job Positions', href: '/admin/positions', icon: Briefcase },
+  { name: 'Applications', href: '/admin/applications', icon: Users },
+  { name: 'News', href: '/admin/news', icon: Newspaper },
 ];
 
 export default function AdminLayout({

@@ -104,8 +104,8 @@ function ApplicationForm() {
       // Show upload progress
       setUploadProgress(10)
 
-      // Submit application
-      await ApplicationService.submitApplication(formData)
+      // Submit application with resume file
+      await ApplicationService.submitApplication(formData, resumeFile)
       
       // Upload complete
       setUploadProgress(100)

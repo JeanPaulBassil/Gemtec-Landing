@@ -2,6 +2,7 @@ import { jobOfferingsApi } from '@/lib/api';
 import { createClient } from '@/lib/supabase/client';
 
 const supabase = createClient();
+const RESUME_BUCKET = "applications";
 
 export interface ApplicationFormData {
   firstName: string;
@@ -42,12 +43,43 @@ export const ApplicationService = {
   /**
    * Submit a job application to Supabase
    * @param formData Application form data
+   * @param resumeFile Optional resume file to upload
    * @returns Promise with application data
    */
   async submitApplication(
     formData: ApplicationFormData,
+    resumeFile?: File | null,
   ): Promise<ApplicationResponse> {
     try {
+      let resumeUrl: string | null = null;
+
+      // Upload resume file if provided
+      if (resumeFile) {
+        const fileName = `resumes/${Date.now()}-${resumeFile.name}`;
+        
+        const { data: uploadData, error: uploadError } = await supabase.storage
+          .from(RESUME_BUCKET)
+          .upload(fileName, resumeFile, {
+            cacheControl: '3600',
+            upsert: false
+          });
+
+        if (uploadError) {
+          console.error('Error uploading resume:', uploadError);
+          if (uploadError.message.includes('bucket')) {
+            throw new Error('Storage bucket not configured. Please create an "applications" bucket in your Supabase dashboard.');
+          }
+          throw new Error('Failed to upload resume file. Please try again.');
+        }
+
+        // Get the public URL for the uploaded file
+        const { data: urlData } = supabase.storage
+          .from(RESUME_BUCKET)
+          .getPublicUrl(fileName);
+
+        resumeUrl = urlData.publicUrl;
+      }
+
       // Prepare the application data for Supabase
       const applicationData = {
         first_name: formData.firstName,
@@ -58,8 +90,9 @@ export const ApplicationService = {
         years_of_experience: parseYearsOfExperience(formData.yearsOfExperience),
         highest_education: formData.highestEducation,
         cover_letter: formData.coverLetter,
-        position_id: formData.positionId,
-        status: 'submitted',
+        job_offering_id: formData.positionId,
+        resume_url: resumeUrl,
+        status: 'submitted' as const,
       };
       
       // Submit the application to Supabase
@@ -68,7 +101,7 @@ export const ApplicationService = {
         .insert(applicationData)
         .select(`
           *,
-          job_offerings (
+          job_offering:job_offerings (
             id,
             title
           )
@@ -90,17 +123,17 @@ export const ApplicationService = {
         firstName: data.first_name,
         lastName: data.last_name,
         email: data.email,
-        phoneNumber: data.phone_number,
-        currentLocation: data.current_location,
-        yearsOfExperience: data.years_of_experience,
-        highestEducation: data.highest_education,
-        coverLetter: data.cover_letter,
-        positionId: data.position_id,
+        phoneNumber: data.phone_number || '',
+        currentLocation: data.current_location || '',
+        yearsOfExperience: data.years_of_experience || 0,
+        highestEducation: data.highest_education || '',
+        coverLetter: data.cover_letter || '',
+        positionId: data.job_offering_id,
         createdAt: data.created_at,
         updatedAt: data.updated_at,
-        position: data.job_offerings ? {
-          id: data.job_offerings.id,
-          title: data.job_offerings.title,
+        position: data.job_offering ? {
+          id: data.job_offering.id,
+          title: data.job_offering.title,
         } : undefined,
       };
     } catch (error: any) {
