@@ -1,4 +1,4 @@
-import { api } from '@/lib/api-client';
+import { jobOfferingsApi } from '@/lib/api';
 
 // Types for job offerings
 export interface Requirement {
@@ -10,39 +10,42 @@ export interface Requirement {
 export interface JobOffering {
   id: string;
   title: string;
-  cityName: string;
-  countryName: string;
-  positionType: string;
-  department: string;
-  requirements: Requirement[];
-  createdAt: string;
-  updatedAt: string;
+  description: string | null;
+  location: string | null;
+  employment_type: 'full-time' | 'part-time' | 'contract' | null;
+  salary_range: string | null;
+  requirements: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  // Legacy fields for backward compatibility
+  cityName?: string;
+  countryName?: string;
+  positionType?: string;
+  department?: string;
 }
 
 /**
- * Service to handle job offerings data
+ * Service to handle job offerings data from Supabase
  */
 export const JobOfferingsService = {
   /**
-   * Get all job offerings
+   * Get all job offerings from Supabase
    * @returns Promise with job offerings data
    */
   async getJobOfferings(): Promise<JobOffering[]> {
     try {
-      const response = await api.get('/job-offerings');
-
+      const data = await jobOfferingsApi.getJobOfferings();
       
-      // Handle potential payload wrapper
-      let data: JobOffering[] = [];
-      if (response.data.payload && Array.isArray(response.data.payload)) {
-        data = response.data.payload;
-      } else if (Array.isArray(response.data)) {
-        data = response.data;
-      } else if (response.data.data && Array.isArray(response.data.data)) {
-        data = response.data.data;
-      }
-      
-      return data;
+      // Transform data for backward compatibility
+      return data.map(job => ({
+        ...job,
+        // Map new fields to legacy field names for existing components
+        cityName: job.location?.split(',')[0]?.trim() || '',
+        countryName: job.location?.split(',')[1]?.trim() || '',
+        positionType: job.employment_type || '',
+        department: 'General', // Default department
+      }));
     } catch (error) {
       console.error('Error fetching job offerings:', error);
       return [];
@@ -50,23 +53,26 @@ export const JobOfferingsService = {
   },
   
   /**
-   * Get a single job offering by ID
+   * Get a single job offering by ID from Supabase
    * @param id Job offering ID
    * @returns Promise with job offering data
    */
   async getJobOffering(id: string): Promise<JobOffering | null> {
     try {
-      const response = await api.get(`/job-offerings/${id}`);
+      const data = await jobOfferingsApi.getJobOffering(id);
       
-      // Handle potential payload wrapper
-      let data: JobOffering;
-      if (response.data.payload) {
-        data = response.data.payload;
-      } else {
-        data = response.data;
+      if (!data) {
+        return null;
       }
-      
-      return data;
+
+      // Transform data for backward compatibility
+      return {
+        ...data,
+        cityName: data.location?.split(',')[0]?.trim() || '',
+        countryName: data.location?.split(',')[1]?.trim() || '',
+        positionType: data.employment_type || '',
+        department: 'General', // Default department
+      };
     } catch (error) {
       console.error(`Error fetching job offering with ID ${id}:`, error);
       return null;

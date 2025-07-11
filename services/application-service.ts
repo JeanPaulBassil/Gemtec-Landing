@@ -1,4 +1,7 @@
-import { api } from '@/lib/api-client';
+import { jobOfferingsApi } from '@/lib/api';
+import { createClient } from '@/lib/supabase/client';
+
+const supabase = createClient();
 
 export interface ApplicationFormData {
   firstName: string;
@@ -33,11 +36,11 @@ export interface ApplicationResponse {
 }
 
 /**
- * Service to handle job applications on the landing page
+ * Service to handle job applications using Supabase
  */
 export const ApplicationService = {
   /**
-   * Submit a job application
+   * Submit a job application to Supabase
    * @param formData Application form data
    * @returns Promise with application data
    */
@@ -45,38 +48,71 @@ export const ApplicationService = {
     formData: ApplicationFormData,
   ): Promise<ApplicationResponse> {
     try {
-      // Prepare the application data
+      // Prepare the application data for Supabase
       const applicationData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
         email: formData.email,
-        phoneNumber: formData.phoneNumber,
-        currentLocation: formData.currentLocation,
-        yearsOfExperience: parseYearsOfExperience(formData.yearsOfExperience),
-        highestEducation: formData.highestEducation,
-        coverLetter: formData.coverLetter,
-        positionId: formData.positionId,
+        phone_number: formData.phoneNumber,
+        current_location: formData.currentLocation,
+        years_of_experience: parseYearsOfExperience(formData.yearsOfExperience),
+        highest_education: formData.highestEducation,
+        cover_letter: formData.coverLetter,
+        position_id: formData.positionId,
+        status: 'submitted',
       };
       
-      // Submit the application
-      const response = await api.post('/applications', applicationData);
-      
-      if (!response.data) {
-        throw new Error('Invalid response from application submission');
+      // Submit the application to Supabase
+      const { data, error } = await supabase
+        .from('job_applications')
+        .insert(applicationData)
+        .select(`
+          *,
+          job_offerings (
+            id,
+            title
+          )
+        `)
+        .single();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message || 'Failed to submit application');
       }
 
-      return response.data;
+      if (!data) {
+        throw new Error('No data returned from application submission');
+      }
+
+      // Transform the response to match the expected format
+      return {
+        id: data.id,
+        firstName: data.first_name,
+        lastName: data.last_name,
+        email: data.email,
+        phoneNumber: data.phone_number,
+        currentLocation: data.current_location,
+        yearsOfExperience: data.years_of_experience,
+        highestEducation: data.highest_education,
+        coverLetter: data.cover_letter,
+        positionId: data.position_id,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+        position: data.job_offerings ? {
+          id: data.job_offerings.id,
+          title: data.job_offerings.title,
+        } : undefined,
+      };
     } catch (error: any) {
       console.error('Error submitting application:', error);
 
       // Handle specific error cases
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
+      if (error.message.includes('duplicate key value')) {
+        throw new Error('You have already applied for this position with this email address.');
       }
 
-      // Handle network errors
-      if (error.message.includes('Network Error')) {
-        throw new Error('Unable to connect to the server. Please check your internet connection.');
+      if (error.message.includes('violates foreign key constraint')) {
+        throw new Error('The selected position is no longer available.');
       }
 
       // Handle other errors
@@ -85,47 +121,24 @@ export const ApplicationService = {
   },
   
   /**
-   * Get available job positions
+   * Get available job positions from Supabase
    * @returns Promise with list of positions
    */
   async getPositions(): Promise<{ id: string; title: string; department: string }[]> {
     try {
-      const response = await api.get('/job-offerings');
-      
-      if (!response.data) {
-        throw new Error('Invalid response from server');
-      }
-
-      // Extract and transform job offerings into position format
-      let jobOfferings = [];
-      
-      // Handle potential payload wrapper
-      if (response.data.payload && Array.isArray(response.data.payload)) {
-        jobOfferings = response.data.payload;
-      } else if (Array.isArray(response.data)) {
-        jobOfferings = response.data;
-      } else if (response.data.data && Array.isArray(response.data.data)) {
-        jobOfferings = response.data.data;
-      } else {
-        throw new Error('Invalid response format');
-      }
+      const jobOfferings = await jobOfferingsApi.getJobOfferings();
       
       // Map to the expected position format
       return jobOfferings.map((job: any) => ({
         id: job.id,
         title: job.title,
-        department: job.department
+        department: 'General' // Default department since it's not in our schema
       }));
     } catch (error: any) {
       console.error('Error fetching positions:', error);
 
-      // Handle specific error cases
-      if (error.response?.data?.message) {
-        throw new Error(error.response.data.message);
-      }
-
       // Handle network errors
-      if (error.message.includes('Network Error')) {
+      if (error.message.includes('fetch')) {
         throw new Error('Unable to connect to the server. Please check your internet connection.');
       }
 

@@ -1,5 +1,4 @@
-import { api } from '@/lib/api-client';
-import { AxiosError } from 'axios';
+import { contactApi } from '@/lib/api';
 
 export interface ContactFormData {
   firstName: string;
@@ -11,13 +10,12 @@ export interface ContactFormData {
 
 export interface ContactMessage {
   id: string;
-  firstName: string;
-  lastName: string;
+  name: string;
   email: string;
-  subject: string;
+  subject: string | null;
   message: string;
-  createdAt: string;
-  updatedAt: string;
+  is_read: boolean;
+  created_at: string;
 }
 
 /**
@@ -25,16 +23,22 @@ export interface ContactMessage {
  */
 export const ContactService = {
   /**
-   * Submit a contact form to the backend API
+   * Submit a contact form to Supabase
    * @param data The contact form data
    * @returns The created contact message
    */
   async submitContactForm(data: ContactFormData): Promise<ContactMessage> {
     try {
-      const response = await api.post('/contact', data);
-      
-      // Handle potential payload wrapper
-      return response.data.payload || response.data;
+      // Transform the form data to match the database schema
+      const contactData = {
+        name: `${data.firstName} ${data.lastName}`,
+        email: data.email,
+        subject: data.subject,
+        message: data.message,
+      };
+
+      const result = await contactApi.submitContactMessage(contactData);
+      return result;
     } catch (error) {
       console.error('Error submitting contact form:', error);
       throw error;
@@ -42,24 +46,15 @@ export const ContactService = {
   },
   
   /**
-   * Get all contact messages
+   * Get all contact messages from Supabase
    * @returns List of contact messages
    */
   async getContactMessages(): Promise<ContactMessage[]> {
     try {
-      const response = await api.get('/contact');
-      
-      // Handle potential payload wrapper
-      let data: ContactMessage[] = [];
-      if (response.data.payload && Array.isArray(response.data.payload)) {
-        data = response.data.payload;
-      } else if (Array.isArray(response.data)) {
-        data = response.data;
-      } else if (response.data.data && Array.isArray(response.data.data)) {
-        data = response.data.data;
-      }
-      
-      return data;
+      // This would require admin access in the future
+      // For now, return empty array as this is not needed for public users
+      console.warn('getContactMessages called - this requires admin access');
+      return [];
     } catch (error) {
       console.error('Error fetching contact messages:', error);
       return [];
@@ -67,16 +62,16 @@ export const ContactService = {
   },
   
   /**
-   * Get a single contact message by ID
+   * Get a single contact message by ID from Supabase
    * @param id Contact message ID
    * @returns Contact message data
    */
   async getContactMessage(id: string): Promise<ContactMessage | null> {
     try {
-      const response = await api.get(`/contact/${id}`);
-      
-      // Handle potential payload wrapper
-      return response.data.payload || response.data;
+      // This would require admin access in the future
+      // For now, return null as this is not needed for public users
+      console.warn('getContactMessage called - this requires admin access');
+      return null;
     } catch (error) {
       console.error(`Error fetching contact message with ID ${id}:`, error);
       return null;

@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-
-// Get the backend URL from environment variable or use default
-const BACKEND_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3200/api';
+import { contactApi } from '@/lib/api';
 
 // Validation functions
 const validateEmail = (email: string): boolean => {
@@ -54,76 +52,40 @@ export async function POST(request: Request) {
     console.log('Contact form submission received:', body);
     
     try {
-      console.log(`Forwarding contact form to backend: ${BACKEND_URL}/contact`);
+      // Submit contact message using Supabase
+      const contactData = {
+        name: `${firstName} ${lastName}`,
+        email,
+        subject,
+        message,
+      };
       
-      const response = await fetch(`${BACKEND_URL}/contact`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
+      console.log('Submitting contact message to Supabase:', contactData);
       
-      // Always get the response body for proper error handling
-      const responseText = await response.text();
-      let data;
+      const result = await contactApi.submitContactMessage(contactData);
       
-      try {
-        // Try to parse as JSON if possible
-        data = JSON.parse(responseText);
-      } catch (e) {
-        // If not JSON, use the raw text
-        data = { message: responseText };
-      }
+      console.log('Supabase response:', result);
       
-      if (!response.ok) {
-        console.error(`Backend error: ${response.status}`, data);
-        
-        // Log more details about the error
-        console.error('Backend error details:', {
-          status: response.status,
-          body: responseText,
-          url: `${BACKEND_URL}/contact`,
-          data: body
-        });
-        
-        // Return the actual error to the client
-        return NextResponse.json(
-          { 
-            success: false, 
-            message: 'Server error processing your request',
-            error: data.message || 'Unknown error'
-          },
-          { status: response.status }
-        );
-      }
-      
-      console.log('Backend response:', data);
-      
-      // Return the backend response
+      // Return success response
       return NextResponse.json(
-        { success: true, message: 'Contact form submitted successfully', data },
+        { 
+          success: true, 
+          message: 'Contact form submitted successfully', 
+          data: result 
+        },
         { status: 200 }
       );
-    } catch (backendError) {
-      console.error('Cannot connect to backend:', backendError);
+    } catch (supabaseError) {
+      console.error('Supabase error:', supabaseError);
       
-      // Log more details about the connection error
-      console.error('Backend connection error details:', {
-        error: backendError,
-        url: `${BACKEND_URL}/contact`,
-        data: body
-      });
-      
-      // Return a proper error message instead of silently succeeding
+      // Return a proper error message
       return NextResponse.json(
         { 
           success: false, 
-          message: 'Could not connect to our server. Please try again later.',
-          error: backendError instanceof Error ? backendError.message : 'Unknown error'
+          message: 'Failed to submit your message. Please try again.',
+          error: supabaseError instanceof Error ? supabaseError.message : 'Unknown error'
         },
-        { status: 503 }
+        { status: 500 }
       );
     }
   } catch (error) {

@@ -1,4 +1,4 @@
-import { api } from '@/lib/api-client';
+import { newsApi, News as SupabaseNews } from '@/lib/api';
 
 // Types for news articles
 export interface News {
@@ -26,20 +26,23 @@ export const NewsService = {
    */
   async getNews(): Promise<News[]> {
     try {
-      const response = await api.get('/news');
+      const data = await newsApi.getNews();
       
-      // Handle the payload wrapper from the API
-      let data: News[] = [];
-      if (response.data.payload && response.data.payload.news) {
-        data = response.data.payload.news;
-      } else if (Array.isArray(response.data)) {
-        data = response.data;
-      } else if (response.data.data && Array.isArray(response.data.data)) {
-        data = response.data.data;
-      }
-      
-      // Filter to only published news
-      return data.filter(article => article.isPublished);
+      // Transform Supabase data to match the expected interface
+      return data.map((article: SupabaseNews) => ({
+        id: article.id,
+        title: article.title,
+        slug: article.slug,
+        summary: article.summary || undefined,
+        content: article.content,
+        featuredImage: article.featured_image || undefined,
+        isPublished: article.is_published,
+        publishedAt: article.published_at || undefined,
+        categoryId: article.category_id || undefined,
+        author: article.author || undefined,
+        createdAt: article.created_at,
+        updatedAt: article.updated_at,
+      }));
     } catch (error) {
       console.error('Error fetching news:', error);
       return [];
@@ -53,17 +56,27 @@ export const NewsService = {
    */
   async getNewsBySlug(slug: string): Promise<News | null> {
     try {
-      const response = await api.get(`/news/slug/${slug}`);
+      const data = await newsApi.getNewsBySlug(slug);
       
-      // Handle the payload wrapper from the API
-      let data: News;
-      if (response.data.payload) {
-        data = response.data.payload;
-      } else {
-        data = response.data;
+      if (!data) {
+        return null;
       }
       
-      return data;
+      // Transform Supabase data to match the expected interface
+      return {
+        id: data.id,
+        title: data.title,
+        slug: data.slug,
+        summary: data.summary || undefined,
+        content: data.content,
+        featuredImage: data.featured_image || undefined,
+        isPublished: data.is_published,
+        publishedAt: data.published_at || undefined,
+        categoryId: data.category_id || undefined,
+        author: data.author || undefined,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
     } catch (error) {
       console.error(`Error fetching news with slug ${slug}:`, error);
       return null;
@@ -77,17 +90,27 @@ export const NewsService = {
    */
   async getNewsById(id: string): Promise<News | null> {
     try {
-      const response = await api.get(`/news/${id}`);
+      const data = await newsApi.getNewsById(id);
       
-      // Handle the payload wrapper from the API
-      let data: News;
-      if (response.data.payload) {
-        data = response.data.payload;
-      } else {
-        data = response.data;
+      if (!data) {
+        return null;
       }
       
-      return data;
+      // Transform Supabase data to match the expected interface
+      return {
+        id: data.id,
+        title: data.title,
+        slug: data.slug,
+        summary: data.summary || undefined,
+        content: data.content,
+        featuredImage: data.featured_image || undefined,
+        isPublished: data.is_published,
+        publishedAt: data.published_at || undefined,
+        categoryId: data.category_id || undefined,
+        author: data.author || undefined,
+        createdAt: data.created_at,
+        updatedAt: data.updated_at,
+      };
     } catch (error) {
       console.error(`Error fetching news with ID ${id}:`, error);
       return null;
