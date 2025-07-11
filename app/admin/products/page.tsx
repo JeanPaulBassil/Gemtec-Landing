@@ -32,17 +32,16 @@ interface Product {
   id: string;
   name: string;
   description: string | null;
-  price: number | null;
-  category_id: string | null;
   specifications: string | null;
-  features: string | null;
+  image_urls: string[];
+  category_id: string | null;
   is_active: boolean;
   created_at: string;
   updated_at: string;
   product_categories?: {
     id: string;
     name: string;
-  };
+  } | null;
 }
 
 interface ProductCategory {
@@ -54,22 +53,22 @@ interface ProductCategory {
 interface ProductFormData {
   name: string;
   description: string;
-  price: string;
-  category_id: string;
   specifications: string;
-  features: string;
+  image_urls: string;
+  category_id: string;
   is_active: boolean;
 }
 
 const initialFormData: ProductFormData = {
   name: '',
   description: '',
-  price: '',
-  category_id: '',
   specifications: '',
-  features: '',
+  image_urls: '',
+  category_id: '',
   is_active: true,
 };
+
+const SUPABASE_BUCKET = "product-images";
 
 export default function ProductsAdmin() {
   const [products, setProducts] = useState<Product[]>([]);
@@ -85,6 +84,8 @@ export default function ProductsAdmin() {
   const [formErrors, setFormErrors] = useState<Partial<ProductFormData>>({});
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
+  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [uploading, setUploading] = useState(false);
   
   const { toast } = useToast();
   const supabase = createClient();
@@ -102,7 +103,7 @@ export default function ProductsAdmin() {
       setLoading(true);
       setError(null);
       
-      // Fetch products with categories
+      // Fetch products with category information
       const { data: productsData, error: productsError } = await supabase
         .from('products')
         .select(`
@@ -116,7 +117,7 @@ export default function ProductsAdmin() {
 
       if (productsError) throw productsError;
 
-      // Fetch categories
+      // Fetch categories for the form
       const { data: categoriesData, error: categoriesError } = await supabase
         .from('product_categories')
         .select('*')
@@ -128,7 +129,7 @@ export default function ProductsAdmin() {
       setCategories(categoriesData || []);
     } catch (err) {
       console.error('Error fetching data:', err);
-      setError('Failed to load products and categories');
+      setError('Failed to load data');
     } finally {
       setLoading(false);
     }
@@ -167,12 +168,42 @@ export default function ProductsAdmin() {
       errors.description = 'Description is required';
     }
 
-    if (formData.price && isNaN(Number(formData.price))) {
-      errors.price = 'Price must be a valid number';
-    }
-
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  // Helper to upload images to Supabase Storage
+  const uploadImages = async (files: File[]): Promise<string[]> => {
+    setUploading(true);
+    const urls: string[] = [];
+    for (const file of files) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
+      const { data, error } = await supabase.storage.from(SUPABASE_BUCKET).upload(fileName, file, {
+        cacheControl: '3600',
+        upsert: false,
+      });
+      if (error) {
+        toast({
+          title: "Upload Error",
+          description: error.message,
+          variant: "destructive",
+        });
+        continue;
+      }
+      const { data: publicUrlData } = supabase.storage.from(SUPABASE_BUCKET).getPublicUrl(fileName);
+      if (publicUrlData?.publicUrl) {
+        urls.push(publicUrlData.publicUrl);
+      }
+    }
+    setUploading(false);
+    return urls;
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImageFiles(Array.from(e.target.files));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -182,14 +213,19 @@ export default function ProductsAdmin() {
 
     try {
       setActionLoading(isEditMode ? 'update' : 'create');
+      let imageUrlsArray: string[] = [];
+      if (imageFiles.length > 0) {
+        imageUrlsArray = await uploadImages(imageFiles);
+      } else if (isEditMode && selectedProduct) {
+        imageUrlsArray = selectedProduct.image_urls;
+      }
 
       const productData = {
         name: formData.name.trim(),
         description: formData.description.trim(),
-        price: formData.price ? Number(formData.price) : null,
-        category_id: formData.category_id || null,
         specifications: formData.specifications.trim() || null,
-        features: formData.features.trim() || null,
+        image_urls: imageUrlsArray,
+        category_id: formData.category_id || null,
         is_active: formData.is_active,
       };
 
@@ -226,6 +262,7 @@ export default function ProductsAdmin() {
       setIsEditMode(false);
       setSelectedProduct(null);
       setShowDialog(false);
+      setImageFiles([]);
       
       // Refresh data
       fetchData();
@@ -238,6 +275,7 @@ export default function ProductsAdmin() {
       });
     } finally {
       setActionLoading(null);
+      setUploading(false);
     }
   };
 
@@ -246,12 +284,12 @@ export default function ProductsAdmin() {
     setFormData({
       name: product.name,
       description: product.description || '',
-      price: product.price?.toString() || '',
-      category_id: product.category_id || '',
       specifications: product.specifications || '',
-      features: product.features || '',
+      image_urls: '', // not used anymore
+      category_id: product.category_id || '',
       is_active: product.is_active,
     });
+    setImageFiles([]);
     setIsEditMode(true);
     setShowDialog(true);
   };
@@ -392,6 +430,7 @@ export default function ProductsAdmin() {
                   setFormErrors({});
                   setIsEditMode(false);
                   setSelectedProduct(null);
+                  setImageFiles([]);
                 }}
               >
                 <Plus className="h-4 w-4 mr-2" />
@@ -419,38 +458,23 @@ export default function ProductsAdmin() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="price">Price</Label>
-                    <Input
-                      id="price"
-                      type="number"
-                      step="0.01"
-                      value={formData.price}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, price: e.target.value })}
-                      placeholder="Enter price"
-                    />
-                    {formErrors.price && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.price}</p>
-                    )}
+                    <Label htmlFor="category">Category</Label>
+                    <Select 
+                      value={formData.category_id} 
+                      onValueChange={(value: string) => setFormData({ ...formData, category_id: value })}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {categories.map((category) => (
+                          <SelectItem key={category.id} value={category.id}>
+                            {category.name}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                   </div>
-                </div>
-
-                <div>
-                  <Label htmlFor="category">Category</Label>
-                  <Select 
-                    value={formData.category_id} 
-                    onValueChange={(value: string) => setFormData({ ...formData, category_id: value })}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map((category) => (
-                        <SelectItem key={category.id} value={category.id}>
-                          {category.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
                 </div>
 
                 <div>
@@ -479,14 +503,38 @@ export default function ProductsAdmin() {
                 </div>
 
                 <div>
-                  <Label htmlFor="features">Features</Label>
-                  <Textarea
-                    id="features"
-                    value={formData.features}
-                    onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setFormData({ ...formData, features: e.target.value })}
-                    placeholder="Enter product features"
-                    rows={3}
+                  <Label htmlFor="image_upload">Product Images</Label>
+                  <Input
+                    id="image_upload"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={handleImageChange}
+                    disabled={uploading}
                   />
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {/* Show previews for new uploads */}
+                    {imageFiles.map((file, idx) => (
+                      <img
+                        key={idx}
+                        src={URL.createObjectURL(file)}
+                        alt="Preview"
+                        className="w-20 h-20 object-cover rounded border"
+                      />
+                    ))}
+                    {/* Show previews for existing images when editing */}
+                    {isEditMode && imageFiles.length === 0 && selectedProduct?.image_urls.map((url, idx) => (
+                      <img
+                        key={idx}
+                        src={url}
+                        alt="Product"
+                        className="w-20 h-20 object-cover rounded border"
+                      />
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-500 mt-1">
+                    Upload one or more images. Max file size: 5MB each.
+                  </p>
                 </div>
 
                 <div className="flex items-center space-x-2">
@@ -619,7 +667,7 @@ export default function ProductsAdmin() {
                     <TableHead>Status</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
-                    <TableHead>Price</TableHead>
+                    <TableHead>Images</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -637,7 +685,11 @@ export default function ProductsAdmin() {
                         {product.product_categories?.name || 'No category'}
                       </TableCell>
                       <TableCell>
-                        {product.price ? `$${product.price.toFixed(2)}` : 'N/A'}
+                        <div className="flex items-center space-x-1">
+                          <span className="text-sm text-gray-600">
+                            {product.image_urls.length} image{product.image_urls.length !== 1 ? 's' : ''}
+                          </span>
+                        </div>
                       </TableCell>
                       <TableCell>
                         {formatDate(product.created_at)}

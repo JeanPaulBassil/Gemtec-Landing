@@ -18,7 +18,8 @@ import {
   LogOut,
   Menu,
   Bell,
-  Search
+  Search,
+  Tag
 } from "lucide-react";
 import { getCurrentUser, signOut } from "@/lib/auth";
 import type { AuthUser } from "@/lib/auth";
@@ -26,6 +27,7 @@ import type { AuthUser } from "@/lib/auth";
 const navigation = [
   { name: 'Dashboard', href: '/admin', icon: LayoutDashboard },
   { name: 'Products', href: '/admin/products', icon: Package },
+  { name: 'Categories', href: '/admin/categories', icon: Tag },
   { name: 'Projects', href: '/admin/projects', icon: FolderOpen },
   { name: 'Contact Messages', href: '/admin/contacts', icon: MessageSquare },
   { name: 'Quote Requests', href: '/admin/quotes', icon: FileText },

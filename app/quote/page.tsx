@@ -10,6 +10,7 @@ import { Tooltip } from "@/components/ui/tooltip"
 import { DropdownMenu, DropdownMenuItem } from "@/components/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
 import { Label } from "@/components/ui/label"
+import { createClient } from "@/lib/supabase/client";
 
 export default function QuotePage() {
   const [formData, setFormData] = useState({
@@ -89,41 +90,21 @@ export default function QuotePage() {
     }
 
     try {
-      const apiData = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        companyName: formData.company || 'Not specified',
-        phoneNumber: formData.phone || 'Not specified',
-        productCategory: formData.productCategory || 'Not specified',
-        productType: formData.projectType || 'Not specified',
-        description: formData.projectDetails,
-        timeline: formData.timeline || 'Not specified'
-      };
-
-      console.log('Sending quote request:', apiData);
-
-      const response = await fetch('/api/quotes', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-        },
-        body: JSON.stringify(apiData),
-      });
-
-      console.log('Response status:', response.status);
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        console.error('Error response:', errorData);
-        throw new Error(errorData.error || 'Failed to submit quote request');
+      const supabase = createClient();
+      const { error } = await supabase.from('quote_requests').insert([
+        {
+          name: formData.firstName + ' ' + formData.lastName,
+          email: formData.email,
+          company: formData.company || null,
+          phone: formData.phone || null,
+          project_description: formData.projectDetails,
+          budget_range: null, // Not collected in form
+          timeline: formData.timeline || null,
+        }
+      ]);
+      if (error) {
+        throw new Error(error.message);
       }
-
-      const responseData = await response.json();
-      console.log('Success response:', responseData);
-
-      // Reset form
       setFormData({
         firstName: '',
         lastName: '',
@@ -135,10 +116,8 @@ export default function QuotePage() {
         projectDetails: '',
         timeline: ''
       });
-      
       setSubmissionStatus('success');
     } catch (error) {
-      console.error('Error submitting quote:', error);
       setSubmissionStatus('error');
       setErrorMessage(
         error instanceof Error 

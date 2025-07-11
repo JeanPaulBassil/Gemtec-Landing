@@ -1,121 +1,164 @@
+import { notFound } from "next/navigation"
 import Image from "next/image"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ScrollReveal, FadeInStagger, HoverScale } from "@/components/ui/animations"
-import { Check, Download, FileText, ArrowRight } from "lucide-react"
+import { Check, Download, FileText, ArrowRight, Package, Tag, Calendar, Eye } from "lucide-react"
+import { createClient } from "@/lib/supabase/server"
+import Link from "next/link"
 
-const product = {
-  name: "AirFlow Pro Series - Commercial Air Outlet Grille",
-  description:
-    "High-performance air outlet grille designed for optimal air distribution in commercial spaces. Features adjustable vanes and precision engineering for maximum efficiency.",
-  category: "Air Outlet Grilles & Dampers",
-  images: [
-    {
-      src: "/placeholder.svg",
-      alt: "AirFlow Pro Series - Front View",
-    },
-    {
-      src: "/placeholder.svg",
-      alt: "AirFlow Pro Series - Side View",
-    },
-    {
-      src: "/placeholder.svg",
-      alt: "AirFlow Pro Series - Installation View",
-    },
-    {
-      src: "/placeholder.svg",
-      alt: "AirFlow Pro Series - Detail View",
-    },
-  ],
-  features: [
-    "Adjustable double deflection vanes",
-    "Heavy-duty aluminum construction",
-    "Powder-coated finish",
-    "Custom sizes available",
-    "Easy installation system",
-    "Aerodynamic profile for reduced noise",
-  ],
-  specifications: [
-    {
-      category: "Technical Specifications",
-      items: [
-        { label: "Material", value: "Extruded Aluminum" },
-        { label: "Standard Sizes", value: "100mm to 1000mm" },
-        { label: "Finish", value: "Powder Coated RAL 9010" },
-        { label: "Frame Type", value: "Type-1 (Standard)" },
-        { label: "Vane Spacing", value: "20mm" },
-      ],
-    },
-    {
-      category: "Performance Data",
-      items: [
-        { label: "Air Flow Rate", value: "Up to 500 m³/h" },
-        { label: "Pressure Drop", value: "10-30 Pa" },
-        { label: "Free Area", value: "82%" },
-        { label: "Noise Level", value: "<25 dB(A)" },
-      ],
-    },
-  ],
-  applications: [
-    "Office Buildings",
-    "Shopping Centers",
-    "Hotels",
-    "Hospitals",
-    "Educational Institutions",
-    "Retail Spaces",
-  ],
-  documents: [
-    {
-      name: "Technical Data Sheet",
-      type: "PDF",
-      size: "2.4 MB",
-      icon: FileText,
-    },
-    {
-      name: "Installation Guide",
-      type: "PDF",
-      size: "1.8 MB",
-      icon: FileText,
-    },
-    {
-      name: "CAD Drawing",
-      type: "DWG",
-      size: "3.1 MB",
-      icon: FileText,
-    },
-  ],
+interface Product {
+  id: string;
+  name: string;
+  description: string | null;
+  specifications: string | null;
+  image_urls: string[];
+  category_id: string | null;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+  product_categories?: {
+    id: string;
+    name: string;
+  } | null;
 }
 
-const relatedProducts = [
-  {
-    name: "VentGuard Damper System",
-    description: "Multi-blade damper system for precise airflow control.",
-    image: "/placeholder.svg",
-    category: "Air Outlet Grilles & Dampers",
-  },
-  {
-    name: "AeroFlex Diffuser",
-    description: "Adjustable ceiling diffuser with modern design.",
-    image: "/placeholder.svg",
-    category: "Air Outlet Grilles & Dampers",
-  },
-]
+interface ProductPageProps {
+  params: {
+    slug: string;
+  };
+}
 
-export default function ProductPage() {
+async function getProduct(slug: string): Promise<Product | null> {
+  const supabase = await createClient();
+  
+  // First get all products and find the one with matching slug
+  const { data: products, error } = await supabase
+    .from('products')
+    .select(`
+      *,
+      product_categories (
+        id,
+        name
+      )
+    `)
+    .eq('is_active', true);
+
+  if (error) {
+    console.error('Error fetching product:', error);
+    return null;
+  }
+
+  // Find product by slug (generated from name)
+  const product = products?.find((p: any) => 
+    p.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '') === slug
+  );
+
+  return product || null;
+}
+
+async function getRelatedProducts(categoryId: string | null, currentProductId: string): Promise<Product[]> {
+  if (!categoryId) return [];
+  
+  const supabase = await createClient();
+  
+  const { data: products, error } = await supabase
+    .from('products')
+    .select(`
+      *,
+      product_categories (
+        id,
+        name
+      )
+    `)
+    .eq('category_id', categoryId)
+    .eq('is_active', true)
+    .neq('id', currentProductId)
+    .limit(4);
+
+  if (error) {
+    console.error('Error fetching related products:', error);
+    return [];
+  }
+
+  return products || [];
+}
+
+export default async function ProductPage({ params }: ProductPageProps) {
+  const product = await getProduct(params.slug);
+  
+  if (!product) {
+    notFound();
+  }
+
+  const relatedProducts = await getRelatedProducts(product.category_id, product.id);
+
+  // Parse specifications
+  let specifications = {};
+  try {
+    if (product.specifications) {
+      specifications = JSON.parse(product.specifications);
+    }
+  } catch (error) {
+    console.error('Error parsing specifications:', error);
+  }
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+    });
+  };
+
   return (
     <>
       <section className="relative py-24 bg-gradient-to-r from-blue-950 to-blue-900">
         <div className="container relative">
-          <div className="max-w-3xl mx-auto text-center">
-            <Badge variant="secondary" className="mb-6">
-              {product.category}
-            </Badge>
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white">
+          <div className="max-w-4xl mx-auto">
+            <div className="flex items-center gap-2 mb-6">
+              <Link href="/products" className="text-blue-200 hover:text-white transition-colors">
+                Products
+              </Link>
+              <span className="text-blue-300">/</span>
+              {product.product_categories && (
+                <>
+                  <span className="text-blue-200">{product.product_categories.name}</span>
+                  <span className="text-blue-300">/</span>
+                </>
+              )}
+              <span className="text-white">{product.name}</span>
+            </div>
+            
+            {product.product_categories && (
+              <Badge variant="secondary" className="mb-6">
+                <Tag className="h-3 w-3 mr-1" />
+                {product.product_categories.name}
+              </Badge>
+            )}
+            
+            <h1 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl lg:text-6xl/none text-white mb-6">
               {product.name}
             </h1>
-            <p className="mt-6 text-lg text-gray-300">{product.description}</p>
+            
+            {product.description && (
+              <p className="text-lg text-gray-300 max-w-3xl leading-relaxed">
+                {product.description}
+              </p>
+            )}
+            
+            <div className="flex items-center gap-4 mt-8 text-sm text-blue-200">
+              <div className="flex items-center gap-1">
+                <Calendar className="h-4 w-4" />
+                <span>Added {formatDate(product.created_at)}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Eye className="h-4 w-4" />
+                <span>{product.image_urls.length} image{product.image_urls.length !== 1 ? 's' : ''}</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -123,157 +166,150 @@ export default function ProductPage() {
       <section className="py-24">
         <div className="container">
           <div className="grid lg:grid-cols-2 gap-12">
+            {/* Images */}
             <div className="space-y-6">
-              <div className="relative aspect-square rounded-lg overflow-hidden">
-                <Image
-                  src={product.images[0].src || "/placeholder.svg"}
-                  alt={product.images[0].alt}
-                  fill
-                  className="object-cover"
-                />
-              </div>
-              <div className="grid grid-cols-3 gap-4">
-                {product.images.slice(1).map((image, index) => (
-                  <div key={index} className="relative aspect-square rounded-lg overflow-hidden">
-                    <Image src={image.src || "/placeholder.svg"} alt={image.alt} fill className="object-cover" />
+              {product.image_urls.length > 0 ? (
+                <>
+                  <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                    <Image
+                      src={product.image_urls[0]}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                    />
                   </div>
-                ))}
-              </div>
+                  {product.image_urls.length > 1 && (
+                    <div className="grid grid-cols-3 gap-4">
+                      {product.image_urls.slice(1, 4).map((imageUrl, index) => (
+                        <div key={index} className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                          <Image 
+                            src={imageUrl} 
+                            alt={`${product.name} - Image ${index + 2}`} 
+                            fill 
+                            className="object-cover" 
+                          />
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100 flex items-center justify-center">
+                  <Package className="h-16 w-16 text-gray-400" />
+                </div>
+              )}
             </div>
 
+            {/* Product Details */}
             <div className="space-y-8">
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold">Key Features</h2>
-                <ul className="grid gap-2">
-                  {product.features.map((feature, index) => (
-                    <li key={index} className="flex items-center gap-2">
-                      <Check className="h-5 w-5 text-primary shrink-0" />
-                      <span className="text-muted-foreground">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
+              <div>
+                <h2 className="text-2xl font-bold mb-4">Product Details</h2>
+                <p className="text-gray-600 leading-relaxed">
+                  {product.description || "No detailed description available for this product."}
+                </p>
               </div>
 
-              <div className="space-y-4">
-                <h2 className="text-2xl font-bold">Applications</h2>
-                <div className="flex flex-wrap gap-2">
-                  {product.applications.map((application, index) => (
-                    <Badge key={index} variant="outline">
-                      {application}
-                    </Badge>
-                  ))}
+              {/* Specifications */}
+              {Object.keys(specifications).length > 0 && (
+                <div>
+                  <h3 className="text-xl font-semibold mb-4">Specifications</h3>
+                  <div className="bg-gray-50 rounded-lg p-6">
+                    <dl className="grid grid-cols-1 gap-4">
+                      {Object.entries(specifications).map(([key, value]) => (
+                        <div key={key} className="flex justify-between border-b border-gray-200 pb-2">
+                          <dt className="font-medium text-gray-900 capitalize">
+                            {key.replace(/([A-Z])/g, ' $1').trim()}:
+                          </dt>
+                          <dd className="text-gray-600 text-right ml-4">{String(value)}</dd>
+                        </div>
+                      ))}
+                    </dl>
+                  </div>
                 </div>
-              </div>
+              )}
 
+              {/* Actions */}
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button size="lg" className="btn-secondary">
-                  Request a Quote
-                </Button>
-                <Button size="lg" variant="outline">
-                  Download Specifications
-                </Button>
+                <Link href="/contact" className="flex-1">
+                  <Button className="w-full">
+                    Request Quote
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                </Link>
+                <Link href="/products" className="flex-1">
+                  <Button variant="outline" className="w-full">
+                    View All Products
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="py-24 bg-accent">
-        <div className="container">
-          <Tabs defaultValue="specifications" className="space-y-8">
-            <TabsList className="w-full justify-start">
-              <TabsTrigger value="specifications">Specifications</TabsTrigger>
-              <TabsTrigger value="documents">Documents</TabsTrigger>
-            </TabsList>
-            <TabsContent value="specifications" className="space-y-8">
-              <div className="grid md:grid-cols-2 gap-8">
-                {product.specifications.map((spec, index) => (
-                  <Card key={index}>
-                    <CardHeader>
-                      <CardTitle>{spec.category}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="space-y-4">
-                        {spec.items.map((item, itemIndex) => (
-                          <div key={itemIndex} className="flex justify-between">
-                            <span className="text-muted-foreground">{item.label}</span>
-                            <span className="font-medium">{item.value}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+      {/* Related Products */}
+      {relatedProducts.length > 0 && (
+        <section className="py-24 bg-gray-50">
+          <div className="container">
+            <ScrollReveal>
+              <div className="text-center mb-16">
+                <h2 className="text-3xl font-bold tracking-tight">Related Products</h2>
+                <p className="mt-4 text-lg text-gray-600">
+                  You may also be interested in these products
+                </p>
               </div>
-            </TabsContent>
-            <TabsContent value="documents">
-              <div className="grid md:grid-cols-3 gap-6">
-                {product.documents.map((doc, index) => (
-                  <Card key={index} className="card-hover">
-                    <CardHeader>
-                      <doc.icon className="h-8 w-8 text-primary mb-2" />
-                      <CardTitle className="text-lg">{doc.name}</CardTitle>
-                      <CardDescription>
-                        {doc.type} • {doc.size}
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Button variant="ghost" className="w-full">
-                        <Download className="mr-2 h-4 w-4" />
-                        Download
-                      </Button>
-                    </CardContent>
-                  </Card>
-                ))}
+            </ScrollReveal>
+
+            <FadeInStagger>
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {relatedProducts.map((relatedProduct) => {
+                  const relatedSlug = relatedProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+                  return (
+                    <HoverScale key={relatedProduct.id}>
+                      <Card className="h-full overflow-hidden hover:shadow-lg transition-shadow duration-300">
+                        <div className="relative aspect-video bg-gray-100">
+                          {relatedProduct.image_urls[0] ? (
+                            <Image
+                              src={relatedProduct.image_urls[0]}
+                              alt={relatedProduct.name}
+                              fill
+                              className="object-cover"
+                            />
+                          ) : (
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <Package className="h-8 w-8 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        <CardHeader>
+                          {relatedProduct.product_categories && (
+                            <Badge variant="secondary" className="w-fit mb-2">
+                              {relatedProduct.product_categories.name}
+                            </Badge>
+                          )}
+                          <CardTitle className="line-clamp-2">{relatedProduct.name}</CardTitle>
+                          <CardDescription className="line-clamp-3">
+                            {relatedProduct.description || "No description available"}
+                          </CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                          <Link href={`/products/${relatedSlug}`}>
+                            <Button variant="ghost" className="p-0 h-auto font-semibold">
+                              Learn More
+                              <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                          </Link>
+                        </CardContent>
+                      </Card>
+                    </HoverScale>
+                  );
+                })}
               </div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
-      <section className="py-24">
-        <div className="container">
-          <ScrollReveal>
-            <div className="text-center mb-16">
-              <span className="text-secondary font-semibold">Related Products</span>
-              <h2 className="text-3xl font-bold tracking-tight mt-2">You May Also Like</h2>
-            </div>
-          </ScrollReveal>
-
-          <FadeInStagger>
-            <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-              {relatedProducts.map((product) => (
-                <HoverScale key={product.name}>
-                  <Card className="card-hover">
-                    <div className="relative aspect-video">
-                      <Image
-                        src={product.image || "/placeholder.svg"}
-                        alt={product.name}
-                        fill
-                        className="object-cover rounded-t-lg"
-                      />
-                    </div>
-                    <CardHeader>
-                      <Badge variant="secondary" className="w-fit mb-2">
-                        {product.category}
-                      </Badge>
-                      <CardTitle className="line-clamp-2">{product.name}</CardTitle>
-                      <CardDescription className="line-clamp-3">{product.description}</CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <Button variant="ghost" className="p-0 h-auto font-semibold">
-                        Learn More
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                    </CardContent>
-                  </Card>
-                </HoverScale>
-              ))}
-            </div>
-          </FadeInStagger>
-        </div>
-      </section>
+            </FadeInStagger>
+          </div>
+        </section>
+      )}
     </>
-  )
+  );
 }
 

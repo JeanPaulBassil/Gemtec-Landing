@@ -15,13 +15,11 @@ import {
   Plus, 
   Edit, 
   Trash2, 
-  Eye,
-  AlertCircle,
-  CheckCircle,
   RefreshCw,
-  MapPin,
-  Calendar,
-  Package
+  Package,
+  AlertCircle,
+  Upload,
+  X
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
@@ -30,13 +28,10 @@ interface Project {
   id: string;
   title: string;
   description: string | null;
+  photo_url: string | null;
+  items_supplied: string[];
   location: string | null;
-  client: string | null;
-  status: 'planning' | 'in_progress' | 'completed' | 'on_hold';
-  start_date: string | null;
-  end_date: string | null;
-  budget: number | null;
-  is_featured: boolean;
+  brands: string[];
   created_at: string;
   updated_at: string;
 }
@@ -45,24 +40,18 @@ interface ProjectFormData {
   title: string;
   description: string;
   location: string;
-  client: string;
-  status: string;
-  start_date: string;
-  end_date: string;
-  budget: string;
-  is_featured: boolean;
+  items_supplied: string;
+  brands: string;
+  photo_url: string;
 }
 
 const initialFormData: ProjectFormData = {
   title: '',
   description: '',
   location: '',
-  client: '',
-  status: 'planning',
-  start_date: '',
-  end_date: '',
-  budget: '',
-  is_featured: false,
+  items_supplied: '',
+  brands: '',
+  photo_url: '',
 };
 
 export default function ProjectsAdmin() {
@@ -71,23 +60,17 @@ export default function ProjectsAdmin() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filterStatus, setFilterStatus] = useState<string>('all');
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState<ProjectFormData>(initialFormData);
   const [formErrors, setFormErrors] = useState<Partial<ProjectFormData>>({});
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [showDialog, setShowDialog] = useState(false);
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [uploading, setUploading] = useState(false);
   
   const { toast } = useToast();
   const supabase = createClient();
-
-  const statusOptions = [
-    { value: 'planning', label: 'Planning' },
-    { value: 'in_progress', label: 'In Progress' },
-    { value: 'completed', label: 'Completed' },
-    { value: 'on_hold', label: 'On Hold' },
-  ];
 
   useEffect(() => {
     fetchProjects();
@@ -95,7 +78,7 @@ export default function ProjectsAdmin() {
 
   useEffect(() => {
     filterProjects();
-  }, [projects, searchQuery, filterStatus]);
+  }, [projects, searchQuery]);
 
   const fetchProjects = async () => {
     try {
@@ -126,14 +109,8 @@ export default function ProjectsAdmin() {
       filtered = filtered.filter(project => 
         project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         project.description?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        project.client?.toLowerCase().includes(searchQuery.toLowerCase())
+        project.location?.toLowerCase().includes(searchQuery.toLowerCase())
       );
-    }
-
-    // Apply status filter
-    if (filterStatus !== 'all') {
-      filtered = filtered.filter(project => project.status === filterStatus);
     }
 
     setFilteredProjects(filtered);
@@ -150,12 +127,110 @@ export default function ProjectsAdmin() {
       errors.description = 'Description is required';
     }
 
-    if (formData.budget && isNaN(Number(formData.budget))) {
-      errors.budget = 'Budget must be a valid number';
-    }
-
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    });
+  };
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Error",
+          description: "Please select an image file",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "Error",
+          description: "File size must be less than 5MB",
+          variant: "destructive",
+        });
+        return;
+      }
+      
+      setSelectedFile(file);
+    }
+  };
+
+  const uploadImage = async (file: File): Promise<string | null> => {
+    try {
+      setUploading(true);
+      
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `project-images/${fileName}`;
+
+      // Try different bucket names in case the default doesn't exist
+      const bucketNames = ['images', 'project-images', 'uploads', 'public'];
+      let uploadError: any = null;
+      let successfulBucket = null;
+
+      for (const bucketName of bucketNames) {
+        try {
+          const { error } = await supabase.storage
+            .from(bucketName)
+            .upload(filePath, file);
+
+          if (!error) {
+            successfulBucket = bucketName;
+            break;
+          } else {
+            uploadError = error;
+          }
+        } catch (err) {
+          uploadError = err;
+          continue;
+        }
+      }
+
+      if (!successfulBucket) {
+        console.error('Storage upload error:', uploadError);
+        throw new Error(`Failed to upload to any storage bucket. Please check your Supabase storage configuration. Error: ${uploadError?.message || 'Unknown error'}`);
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(successfulBucket)
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Error uploading image:', error);
+      
+      // Provide more specific error messages
+      let errorMessage = 'Failed to upload image';
+      if (error instanceof Error) {
+        if (error.message.includes('bucket')) {
+          errorMessage = 'Storage bucket not found. Please create a storage bucket in your Supabase dashboard.';
+        } else if (error.message.includes('permission')) {
+          errorMessage = 'Permission denied. Please check your storage policies.';
+        } else {
+          errorMessage = error.message;
+        }
+      }
+      
+      toast({
+        title: "Upload Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -166,16 +241,32 @@ export default function ProjectsAdmin() {
     try {
       setActionLoading(isEditMode ? 'update' : 'create');
 
+      let photoUrl: string | null = formData.photo_url;
+
+      // Upload new image if selected
+      if (selectedFile) {
+        const uploadedUrl = await uploadImage(selectedFile);
+        if (uploadedUrl) {
+          photoUrl = uploadedUrl;
+        } else {
+          // If upload fails, ask user if they want to continue without image
+          const shouldContinue = confirm('Failed to upload image. Would you like to continue without an image?');
+          if (!shouldContinue) {
+            setActionLoading(null);
+            return;
+          }
+          // Keep the existing photo_url if editing, or null if creating new
+          photoUrl = isEditMode ? (formData.photo_url || null) : null;
+        }
+      }
+
       const projectData = {
         title: formData.title.trim(),
         description: formData.description.trim(),
         location: formData.location.trim() || null,
-        client: formData.client.trim() || null,
-        status: formData.status as 'planning' | 'in_progress' | 'completed' | 'on_hold',
-        start_date: formData.start_date || null,
-        end_date: formData.end_date || null,
-        budget: formData.budget ? Number(formData.budget) : null,
-        is_featured: formData.is_featured,
+        items_supplied: formData.items_supplied.trim() ? formData.items_supplied.split(',').map(item => item.trim()) : [],
+        brands: formData.brands.trim() ? formData.brands.split(',').map(brand => brand.trim()) : [],
+        photo_url: photoUrl || null,
       };
 
       if (isEditMode && selectedProject) {
@@ -208,6 +299,7 @@ export default function ProjectsAdmin() {
       // Reset form and close dialog
       setFormData(initialFormData);
       setFormErrors({});
+      setSelectedFile(null);
       setIsEditMode(false);
       setSelectedProject(null);
       setShowDialog(false);
@@ -232,13 +324,11 @@ export default function ProjectsAdmin() {
       title: project.title,
       description: project.description || '',
       location: project.location || '',
-      client: project.client || '',
-      status: project.status,
-      start_date: project.start_date ? project.start_date.split('T')[0] : '',
-      end_date: project.end_date ? project.end_date.split('T')[0] : '',
-      budget: project.budget?.toString() || '',
-      is_featured: project.is_featured,
+      items_supplied: project.items_supplied.join(', '),
+      brands: project.brands.join(', '),
+      photo_url: project.photo_url || '',
     });
+    setSelectedFile(null);
     setIsEditMode(true);
     setShowDialog(true);
   };
@@ -276,32 +366,6 @@ export default function ProjectsAdmin() {
       setActionLoading(null);
     }
   };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  };
-
-  const getStatusBadge = (status: string) => {
-    const colors = {
-      planning: 'bg-blue-100 text-blue-800',
-      in_progress: 'bg-yellow-100 text-yellow-800',
-      completed: 'bg-green-100 text-green-800',
-      on_hold: 'bg-red-100 text-red-800',
-    };
-
-    return (
-      <span className={`inline-flex items-center rounded-full px-2 py-1 text-xs font-medium ${colors[status as keyof typeof colors]}`}>
-        {statusOptions.find(opt => opt.value === status)?.label}
-      </span>
-    );
-  };
-
-  const completedCount = projects.filter(p => p.status === 'completed').length;
-  const activeCount = projects.filter(p => p.status === 'in_progress').length;
 
   if (loading) {
     return (
@@ -378,18 +442,6 @@ export default function ProjectsAdmin() {
                     )}
                   </div>
                   <div>
-                    <Label htmlFor="client">Client</Label>
-                    <Input
-                      id="client"
-                      value={formData.client}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, client: e.target.value })}
-                      placeholder="Enter client name"
-                    />
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div>
                     <Label htmlFor="location">Location</Label>
                     <Input
                       id="location"
@@ -398,57 +450,95 @@ export default function ProjectsAdmin() {
                       placeholder="Enter project location"
                     />
                   </div>
-                  <div>
-                    <Label htmlFor="budget">Budget</Label>
-                    <Input
-                      id="budget"
-                      type="number"
-                      step="0.01"
-                      value={formData.budget}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, budget: e.target.value })}
-                      placeholder="Enter budget"
-                    />
-                    {formErrors.budget && (
-                      <p className="text-red-500 text-sm mt-1">{formErrors.budget}</p>
-                    )}
-                  </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label htmlFor="start_date">Start Date</Label>
+                    <Label htmlFor="items_supplied">Items Supplied</Label>
                     <Input
-                      id="start_date"
-                      type="date"
-                      value={formData.start_date}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, start_date: e.target.value })}
+                      id="items_supplied"
+                      value={formData.items_supplied}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, items_supplied: e.target.value })}
+                      placeholder="Enter items supplied (comma separated)"
                     />
                   </div>
                   <div>
-                    <Label htmlFor="end_date">End Date</Label>
+                    <Label htmlFor="brands">Brands</Label>
                     <Input
-                      id="end_date"
-                      type="date"
-                      value={formData.end_date}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, end_date: e.target.value })}
+                      id="brands"
+                      value={formData.brands}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFormData({ ...formData, brands: e.target.value })}
+                      placeholder="Enter brands (comma separated)"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="status">Status</Label>
-                  <select
-                    id="status"
-                    value={formData.status}
-                    onChange={(e: React.ChangeEvent<HTMLSelectElement>) => setFormData({ ...formData, status: e.target.value })}
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                  >
-                    {statusOptions.map(option => (
-                      <option key={option.value} value={option.value}>
-                        {option.label}
-                      </option>
-                    ))}
-                  </select>
+                  <Label htmlFor="photo">Project Image</Label>
+                  <div className="space-y-2">
+                    {selectedFile ? (
+                      <div className="flex items-center space-x-2 p-2 border rounded-md bg-gray-50">
+                        <img 
+                          src={URL.createObjectURL(selectedFile)} 
+                          alt="Preview" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">{selectedFile.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {(selectedFile.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedFile(null)}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : formData.photo_url ? (
+                      <div className="flex items-center space-x-2 p-2 border rounded-md bg-gray-50">
+                        <img 
+                          src={formData.photo_url} 
+                          alt="Current" 
+                          className="w-16 h-16 object-cover rounded"
+                        />
+                        <div className="flex-1">
+                          <p className="text-sm font-medium">Current image</p>
+                          <p className="text-xs text-gray-500">Click upload to replace</p>
+                        </div>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setFormData({ ...formData, photo_url: '' })}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    ) : null}
+                    
+                    <div className="flex items-center justify-center w-full">
+                      <label htmlFor="file-upload" className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100">
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <Upload className="w-8 h-8 mb-2 text-gray-400" />
+                          <p className="mb-2 text-sm text-gray-500">
+                            <span className="font-semibold">Click to upload</span> or drag and drop
+                          </p>
+                          <p className="text-xs text-gray-500">PNG, JPG, GIF up to 5MB</p>
+                        </div>
+                        <input 
+                          id="file-upload" 
+                          type="file" 
+                          className="hidden" 
+                          accept="image/*"
+                          onChange={handleFileSelect}
+                        />
+                      </label>
+                    </div>
+                  </div>
                 </div>
 
                 <div>
@@ -465,15 +555,6 @@ export default function ProjectsAdmin() {
                   )}
                 </div>
 
-                <div className="flex items-center space-x-2">
-                  <Switch
-                    id="is_featured"
-                    checked={formData.is_featured}
-                    onCheckedChange={(checked: boolean) => setFormData({ ...formData, is_featured: checked })}
-                  />
-                  <Label htmlFor="is_featured">Featured Project</Label>
-                </div>
-
                 <div className="flex justify-end space-x-2">
                   <Button
                     type="button"
@@ -484,12 +565,12 @@ export default function ProjectsAdmin() {
                   </Button>
                   <Button
                     type="submit"
-                    disabled={actionLoading === 'create' || actionLoading === 'update'}
+                    disabled={actionLoading === 'create' || actionLoading === 'update' || uploading}
                   >
-                    {actionLoading === 'create' || actionLoading === 'update' ? (
+                    {actionLoading === 'create' || actionLoading === 'update' || uploading ? (
                       <RefreshCw className="h-4 w-4 mr-2 animate-spin" />
                     ) : null}
-                    {isEditMode ? 'Update' : 'Create'} Project
+                    {uploading ? 'Uploading...' : isEditMode ? 'Update' : 'Create'} Project
                   </Button>
                 </div>
               </form>
@@ -499,7 +580,7 @@ export default function ProjectsAdmin() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Projects</CardTitle>
@@ -512,31 +593,11 @@ export default function ProjectsAdmin() {
 
         <Card>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active</CardTitle>
+            <CardTitle className="text-sm font-medium">Projects with Photos</CardTitle>
             <Package className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-yellow-600">{activeCount}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Completed</CardTitle>
-            <CheckCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-green-600">{completedCount}</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Featured</CardTitle>
-            <AlertCircle className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">{projects.filter(p => p.is_featured).length}</div>
+            <div className="text-2xl font-bold text-blue-600">{projects.filter(p => p.photo_url).length}</div>
           </CardContent>
         </Card>
       </div>
@@ -559,25 +620,6 @@ export default function ProjectsAdmin() {
                 />
               </div>
             </div>
-            <div className="flex gap-2">
-              <Button
-                variant={filterStatus === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterStatus('all')}
-              >
-                All
-              </Button>
-              {statusOptions.map(option => (
-                <Button
-                  key={option.value}
-                  variant={filterStatus === option.value ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => setFilterStatus(option.value)}
-                >
-                  {option.label}
-                </Button>
-              ))}
-            </div>
           </div>
         </CardContent>
       </Card>
@@ -598,11 +640,11 @@ export default function ProjectsAdmin() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Image</TableHead>
                     <TableHead>Title</TableHead>
-                    <TableHead>Client</TableHead>
                     <TableHead>Location</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead>Budget</TableHead>
+                    <TableHead>Items Supplied</TableHead>
+                    <TableHead>Brands</TableHead>
                     <TableHead>Created</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -610,19 +652,28 @@ export default function ProjectsAdmin() {
                 <TableBody>
                   {filteredProjects.map((project) => (
                     <TableRow key={project.id}>
-                      <TableCell className="font-medium">
-                        {project.title}
-                        {project.is_featured && (
-                          <span className="ml-2 text-yellow-500">⭐</span>
+                      <TableCell>
+                        {project.photo_url ? (
+                          <img 
+                            src={project.photo_url} 
+                            alt={project.title}
+                            className="w-12 h-12 object-cover rounded"
+                          />
+                        ) : (
+                          <div className="w-12 h-12 bg-gray-200 rounded flex items-center justify-center">
+                            <Package className="h-6 w-6 text-gray-400" />
+                          </div>
                         )}
                       </TableCell>
-                      <TableCell>{project.client || 'N/A'}</TableCell>
+                      <TableCell className="font-medium">
+                        {project.title}
+                      </TableCell>
                       <TableCell>{project.location || 'N/A'}</TableCell>
                       <TableCell>
-                        {getStatusBadge(project.status)}
+                        {project.items_supplied.length > 0 ? project.items_supplied.join(', ') : 'N/A'}
                       </TableCell>
                       <TableCell>
-                        {project.budget ? `$${project.budget.toFixed(2)}` : 'N/A'}
+                        {project.brands.length > 0 ? project.brands.join(', ') : 'N/A'}
                       </TableCell>
                       <TableCell>
                         {formatDate(project.created_at)}

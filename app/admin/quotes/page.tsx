@@ -163,7 +163,7 @@ export default function QuotesAdmin() {
 
       toast({
         title: "Success",
-        description: "Quote request deleted",
+        description: "Quote request deleted successfully",
       });
     } catch (err) {
       console.error('Error deleting quote:', err);
@@ -172,6 +172,9 @@ export default function QuotesAdmin() {
         description: "Failed to delete quote request",
         variant: "destructive",
       });
+      
+      // Refresh the quotes to show the actual state
+      fetchQuotes();
     } finally {
       setActionLoading(null);
     }
@@ -423,11 +426,6 @@ export default function QuotesAdmin() {
                                       <label className="text-sm font-medium text-gray-700">Timeline</label>
                                       <p className="mt-1">{selectedQuote.timeline || 'Not specified'}</p>
                                     </div>
-                                  </div>
-                                  
-                                  <div>
-                                    <label className="text-sm font-medium text-gray-700">Budget Range</label>
-                                    <p className="mt-1">{selectedQuote.budget_range || 'Not specified'}</p>
                                   </div>
                                   
                                   <div>

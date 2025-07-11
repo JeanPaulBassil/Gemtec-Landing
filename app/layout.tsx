@@ -5,6 +5,8 @@ import Header from "@/components/header"
 import Footer from "@/components/footer"
 import type React from "react" // Import React
 import { WhatsAppButton } from "@/components/whatsapp-button"
+import { usePathname } from "next/navigation"
+import ClientLayoutShell from "@/components/client-layout-shell";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" })
 
@@ -23,19 +25,10 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${inter.variable} font-sans`}>
         <div id="portal-root" />
-        <div className="flex min-h-screen flex-col">
-          <Header />
-          <main>
-            {children}
-          </main>
-          <Footer />
-          <WhatsAppButton />
-        </div>
+        <ClientLayoutShell>
+          {children}
+        </ClientLayoutShell>
       </body>
     </html>
   )
 }
-
-
-
-import './globals.css'
