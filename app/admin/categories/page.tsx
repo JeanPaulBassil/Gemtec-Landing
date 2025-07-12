@@ -185,17 +185,34 @@ export default function CategoriesAdmin() {
 
         if (error) throw error;
 
+        // Update local state instead of refetching
+        const updatedCategory = { ...selectedCategory, ...categoryData };
+        setCategories(prev => prev.map(c => c.id === selectedCategory.id ? updatedCategory : c));
+
         toast({
           title: "Success",
           description: "Category updated successfully",
         });
       } else {
         // Create new category
-        const { error } = await supabase
+        const { data: newCategory, error } = await supabase
           .from('product_categories')
-          .insert([categoryData]);
+          .insert([categoryData])
+          .select(`
+            *,
+            parent_category:parent_id (
+              id,
+              name
+            )
+          `)
+          .single();
 
         if (error) throw error;
+
+        // Add to local state instead of refetching
+        if (newCategory) {
+          setCategories(prev => [newCategory as ProductCategory, ...prev]);
+        }
 
         toast({
           title: "Success",
@@ -203,13 +220,12 @@ export default function CategoriesAdmin() {
         });
       }
 
-      // Reset form and refresh data
+      // Reset form and close dialog
       setFormData(initialFormData);
       setFormErrors({});
       setShowDialog(false);
       setIsEditMode(false);
       setSelectedCategory(null);
-      fetchCategories();
     } catch (err) {
       console.error('Error saving category:', err);
       toast({
@@ -259,6 +275,12 @@ export default function CategoriesAdmin() {
       return;
     }
 
+    // Store original categories for potential rollback
+    const originalCategories = categories;
+    
+    // Optimistic update - remove immediately
+    setCategories(prev => prev.filter(c => c.id !== category.id));
+
     try {
       setActionLoading(category.id);
       
@@ -273,10 +295,12 @@ export default function CategoriesAdmin() {
         title: "Success",
         description: "Category deleted successfully",
       });
-
-      fetchCategories();
     } catch (err) {
       console.error('Error deleting category:', err);
+      
+      // Revert optimistic update on error
+      setCategories(originalCategories);
+      
       toast({
         title: "Error",
         description: "Failed to delete category",

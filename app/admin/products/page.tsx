@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { 
   Package, 
   Search, 
@@ -23,10 +24,16 @@ import {
   RefreshCw,
   Tag,
   DollarSign,
-  FileText
+  FileText,
+  Image as ImageIcon,
+  X,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 import { createClient } from "@/lib/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
+import Image from "next/image";
+import { getProductImageUrl } from "@/lib/image-utils";
 
 interface Product {
   id: string;
@@ -86,6 +93,9 @@ export default function ProductsAdmin() {
   const [showDialog, setShowDialog] = useState(false);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [showImageModal, setShowImageModal] = useState(false);
+  const [selectedProductForView, setSelectedProductForView] = useState<Product | null>(null);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   
   const { toast } = useToast();
   const supabase = createClient();
@@ -238,17 +248,34 @@ export default function ProductsAdmin() {
 
         if (error) throw error;
 
+        // Update local state instead of refetching
+        const updatedProduct = { ...selectedProduct, ...productData };
+        setProducts(prev => prev.map(p => p.id === selectedProduct.id ? updatedProduct : p));
+
         toast({
           title: "Success",
           description: "Product updated successfully",
         });
       } else {
         // Create new product
-        const { error } = await supabase
+        const { data: newProduct, error } = await supabase
           .from('products')
-          .insert(productData);
+          .insert(productData)
+          .select(`
+            *,
+            product_categories (
+              id,
+              name
+            )
+          `)
+          .single();
 
         if (error) throw error;
+
+        // Add to local state instead of refetching
+        if (newProduct) {
+          setProducts(prev => [newProduct, ...prev]);
+        }
 
         toast({
           title: "Success",
@@ -263,9 +290,6 @@ export default function ProductsAdmin() {
       setSelectedProduct(null);
       setShowDialog(false);
       setImageFiles([]);
-      
-      // Refresh data
-      fetchData();
     } catch (err) {
       console.error('Error saving product:', err);
       toast({
@@ -299,6 +323,18 @@ export default function ProductsAdmin() {
       return;
     }
 
+    // Store original products for potential rollback
+    const originalProducts = products;
+    
+    // Optimistic update - remove immediately
+    setProducts(prev => prev.filter(p => p.id !== product.id));
+    
+    // Close modal if it's open for this product
+    if (selectedProductForView?.id === product.id) {
+      setShowImageModal(false);
+      setSelectedProductForView(null);
+    }
+
     try {
       setActionLoading(product.id);
       
@@ -313,11 +349,12 @@ export default function ProductsAdmin() {
         title: "Success",
         description: "Product deleted successfully",
       });
-
-      // Refresh data
-      fetchData();
     } catch (err) {
       console.error('Error deleting product:', err);
+      
+      // Revert optimistic update on error
+      setProducts(originalProducts);
+      
       toast({
         title: "Error",
         description: "Failed to delete product",
@@ -329,12 +366,19 @@ export default function ProductsAdmin() {
   };
 
   const toggleProductStatus = async (product: Product) => {
+    const newStatus = !product.is_active;
+    
+    // Optimistic update - update UI immediately
+    setProducts(prev => prev.map(p => 
+      p.id === product.id ? { ...p, is_active: newStatus } : p
+    ));
+
     try {
       setActionLoading(product.id);
       
       const { error } = await supabase
         .from('products')
-        .update({ is_active: !product.is_active })
+        .update({ is_active: newStatus })
         .eq('id', product.id);
 
       if (error) throw error;
@@ -343,11 +387,14 @@ export default function ProductsAdmin() {
         title: "Success",
         description: `Product ${product.is_active ? 'deactivated' : 'activated'} successfully`,
       });
-
-      // Refresh data
-      fetchData();
     } catch (err) {
       console.error('Error toggling product status:', err);
+      
+      // Revert optimistic update on error
+      setProducts(prev => prev.map(p => 
+        p.id === product.id ? { ...p, is_active: !newStatus } : p
+      ));
+      
       toast({
         title: "Error",
         description: "Failed to update product status",
@@ -380,6 +427,58 @@ export default function ProductsAdmin() {
     );
   };
 
+  const handleViewProduct = (product: Product) => {
+    setSelectedProductForView(product);
+    setCurrentImageIndex(0);
+    setShowImageModal(true);
+  };
+
+  const handleNextImage = () => {
+    if (selectedProductForView && selectedProductForView.image_urls.length > 0) {
+      setCurrentImageIndex((prev) => 
+        prev < selectedProductForView.image_urls.length - 1 ? prev + 1 : 0
+      );
+    }
+  };
+
+  const handlePrevImage = () => {
+    if (selectedProductForView && selectedProductForView.image_urls.length > 0) {
+      setCurrentImageIndex((prev) => 
+        prev > 0 ? prev - 1 : selectedProductForView.image_urls.length - 1
+      );
+    }
+  };
+
+  // Add keyboard navigation for image modal
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!showImageModal) return;
+      
+      switch (e.key) {
+        case 'ArrowLeft':
+          e.preventDefault();
+          handlePrevImage();
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          handleNextImage();
+          break;
+        case 'Escape':
+          e.preventDefault();
+          setShowImageModal(false);
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showImageModal, selectedProductForView]);
+
+  const getProductImagePreview = (product: Product) => {
+    const imageUrl = getProductImageUrl(product, 0);
+    return imageUrl || '/placeholder.svg';
+  };
+
   const activeCount = products.filter(p => p.is_active).length;
 
   if (loading) {
@@ -403,7 +502,8 @@ export default function ProductsAdmin() {
   }
 
   return (
-    <div className="space-y-6">
+    <TooltipProvider>
+      <div className="space-y-6">
       {/* Header */}
       <div className="flex justify-between items-center">
         <div>
@@ -413,30 +513,44 @@ export default function ProductsAdmin() {
           </p>
         </div>
         <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={fetchData}
-            disabled={loading}
-          >
-            <RefreshCw className="h-4 w-4 mr-2" />
-            Refresh
-          </Button>
-          <Dialog open={showDialog} onOpenChange={setShowDialog}>
-            <DialogTrigger asChild>
+          <Tooltip>
+            <TooltipTrigger asChild>
               <Button
-                onClick={() => {
-                  setFormData(initialFormData);
-                  setFormErrors({});
-                  setIsEditMode(false);
-                  setSelectedProduct(null);
-                  setImageFiles([]);
-                }}
+                variant="outline"
+                size="sm"
+                onClick={fetchData}
+                disabled={loading}
               >
-                <Plus className="h-4 w-4 mr-2" />
-                Add Product
+                <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
+                Refresh
               </Button>
-            </DialogTrigger>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reload products from database</p>
+            </TooltipContent>
+          </Tooltip>
+          <Dialog open={showDialog} onOpenChange={setShowDialog}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <DialogTrigger asChild>
+                  <Button
+                    onClick={() => {
+                      setFormData(initialFormData);
+                      setFormErrors({});
+                      setIsEditMode(false);
+                      setSelectedProduct(null);
+                      setImageFiles([]);
+                    }}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Product
+                  </Button>
+                </DialogTrigger>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Create a new product</p>
+              </TooltipContent>
+            </Tooltip>
             <DialogContent className="max-w-2xl">
               <DialogHeader>
                 <DialogTitle>
@@ -515,21 +629,28 @@ export default function ProductsAdmin() {
                   <div className="flex flex-wrap gap-2 mt-2">
                     {/* Show previews for new uploads */}
                     {imageFiles.map((file, idx) => (
+                      <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border">
                       <img
-                        key={idx}
                         src={URL.createObjectURL(file)}
                         alt="Preview"
-                        className="w-20 h-20 object-cover rounded border"
+                          className="w-full h-full object-cover"
                       />
+                        <div className="absolute top-0 right-0 bg-green-500 text-white text-xs px-1 rounded-bl">
+                          New
+                        </div>
+                      </div>
                     ))}
                     {/* Show previews for existing images when editing */}
                     {isEditMode && imageFiles.length === 0 && selectedProduct?.image_urls.map((url, idx) => (
-                      <img
-                        key={idx}
+                      <div key={idx} className="relative w-20 h-20 rounded-lg overflow-hidden bg-gray-100 border">
+                        <Image
                         src={url}
                         alt="Product"
-                        className="w-20 h-20 object-cover rounded border"
+                          fill
+                          className="object-cover"
+                          sizes="80px"
                       />
+                      </div>
                     ))}
                   </div>
                   <p className="text-sm text-gray-500 mt-1">
@@ -622,27 +743,48 @@ export default function ProductsAdmin() {
               </div>
             </div>
             <div className="flex gap-2">
-              <Button
-                variant={filterStatus === 'all' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterStatus('all')}
-              >
-                All
-              </Button>
-              <Button
-                variant={filterStatus === 'active' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterStatus('active')}
-              >
-                Active ({activeCount})
-              </Button>
-              <Button
-                variant={filterStatus === 'inactive' ? 'default' : 'outline'}
-                size="sm"
-                onClick={() => setFilterStatus('inactive')}
-              >
-                Inactive ({products.length - activeCount})
-              </Button>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={filterStatus === 'all' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilterStatus('all')}
+                  >
+                    All
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Show all products</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={filterStatus === 'active' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilterStatus('active')}
+                  >
+                    Active ({activeCount})
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Show only active products</p>
+                </TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant={filterStatus === 'inactive' ? 'default' : 'outline'}
+                    size="sm"
+                    onClick={() => setFilterStatus('inactive')}
+                  >
+                    Inactive ({products.length - activeCount})
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Show only inactive products</p>
+                </TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </CardContent>
@@ -664,6 +806,7 @@ export default function ProductsAdmin() {
               <Table>
                 <TableHeader>
                   <TableRow>
+                    <TableHead>Image</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
@@ -674,63 +817,129 @@ export default function ProductsAdmin() {
                 </TableHeader>
                 <TableBody>
                   {filteredProducts.map((product) => (
-                    <TableRow key={product.id}>
+                    <TableRow key={product.id} className="hover:bg-gray-50 transition-colors">
+                      <TableCell>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-gray-100 cursor-pointer hover:scale-105 transition-transform" onClick={() => handleViewProduct(product)}>
+                              <Image
+                                src={getProductImagePreview(product)}
+                                alt={product.name}
+                                fill
+                                className="object-cover"
+                                sizes="48px"
+                              />
+                              {product.image_urls.length > 1 && (
+                                <div className="absolute bottom-0 right-0 bg-black/70 text-white text-xs px-1 rounded-tl">
+                                  {product.image_urls.length}
+                                </div>
+                              )}
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            <p>Click to view all {product.image_urls.length || 1} image{(product.image_urls.length || 1) !== 1 ? 's' : ''}</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      </TableCell>
                       <TableCell>
                         {getStatusBadge(product.is_active)}
                       </TableCell>
                       <TableCell className="font-medium">
+                        <div className="max-w-48 truncate">
                         {product.name}
+                        </div>
                       </TableCell>
                       <TableCell>
+                        <div className="text-sm text-gray-600">
                         {product.product_categories?.name || 'No category'}
+                        </div>
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center space-x-1">
+                          <ImageIcon className="h-4 w-4 text-gray-500" />
                           <span className="text-sm text-gray-600">
-                            {product.image_urls.length} image{product.image_urls.length !== 1 ? 's' : ''}
+                            {product.image_urls.length}
                           </span>
                         </div>
                       </TableCell>
                       <TableCell>
+                        <div className="text-sm text-gray-600">
                         {formatDate(product.created_at)}
+                        </div>
                       </TableCell>
                       <TableCell>
-                        <div className="flex items-center space-x-2">
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleEdit(product)}
-                          >
-                            <Edit className="h-4 w-4" />
-                          </Button>
+                        <div className="flex items-center space-x-1">
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleViewProduct(product)}
+                              >
+                                <Eye className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>View product details and images</p>
+                            </TooltipContent>
+                          </Tooltip>
                           
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => toggleProductStatus(product)}
-                            disabled={actionLoading === product.id}
-                          >
-                            {actionLoading === product.id ? (
-                              <RefreshCw className="h-4 w-4 animate-spin" />
-                            ) : product.is_active ? (
-                              <AlertCircle className="h-4 w-4" />
-                            ) : (
-                              <CheckCircle className="h-4 w-4" />
-                            )}
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleEdit(product)}
+                              >
+                                <Edit className="h-4 w-4" />
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Edit product information</p>
+                            </TooltipContent>
+                          </Tooltip>
                           
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDelete(product)}
-                            disabled={actionLoading === product.id}
-                          >
-                            {actionLoading === product.id ? (
-                              <RefreshCw className="h-4 w-4 animate-spin" />
-                            ) : (
-                              <Trash2 className="h-4 w-4" />
-                            )}
-                          </Button>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => toggleProductStatus(product)}
+                                disabled={actionLoading === product.id}
+                              >
+                                {actionLoading === product.id ? (
+                                  <RefreshCw className="h-4 w-4 animate-spin" />
+                                ) : product.is_active ? (
+                                  <AlertCircle className="h-4 w-4" />
+                                ) : (
+                                  <CheckCircle className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>{product.is_active ? 'Deactivate product' : 'Activate product'}</p>
+                            </TooltipContent>
+                          </Tooltip>
+                          
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => handleDelete(product)}
+                                disabled={actionLoading === product.id}
+                              >
+                                {actionLoading === product.id ? (
+                                  <RefreshCw className="h-4 w-4 animate-spin" />
+                                ) : (
+                                  <Trash2 className="h-4 w-4" />
+                                )}
+                              </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Delete product permanently</p>
+                            </TooltipContent>
+                          </Tooltip>
                         </div>
                       </TableCell>
                     </TableRow>
@@ -741,6 +950,218 @@ export default function ProductsAdmin() {
           )}
         </CardContent>
       </Card>
-    </div>
+
+      {/* Product Image Preview Modal */}
+      <Dialog open={showImageModal} onOpenChange={setShowImageModal}>
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <span className="truncate">{selectedProductForView?.name}</span>
+              <div className="flex items-center space-x-2">
+                <div className="hidden sm:block text-xs text-gray-500">
+                  Use ← → arrows to navigate, ESC to close
+                </div>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setShowImageModal(false)}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Close modal</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedProductForView && (
+            <div className="space-y-6">
+              {/* Product Info */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <h3 className="font-semibold text-lg mb-2">Product Details</h3>
+                    <div className="space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Status:</span>
+                        <span>{getStatusBadge(selectedProductForView.is_active)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Category:</span>
+                        <span className="text-sm">{selectedProductForView.product_categories?.name || 'No category'}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Created:</span>
+                        <span className="text-sm">{formatDate(selectedProductForView.created_at)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-sm text-gray-600">Images:</span>
+                        <span className="text-sm">{selectedProductForView.image_urls.length}</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  {selectedProductForView.description && (
+                    <div>
+                      <h4 className="font-medium mb-2">Description</h4>
+                      <p className="text-sm text-gray-600 leading-relaxed">
+                        {selectedProductForView.description}
+                      </p>
+                    </div>
+                  )}
+                  
+                  {selectedProductForView.specifications && (
+                    <div>
+                      <h4 className="font-medium mb-2">Specifications</h4>
+                      <div className="text-sm text-gray-600 max-h-32 overflow-y-auto">
+                        <pre className="whitespace-pre-wrap font-sans">
+                          {selectedProductForView.specifications}
+                        </pre>
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
+                {/* Image Gallery */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-lg">Images</h3>
+                  
+                  {selectedProductForView.image_urls.length > 0 ? (
+                    <div className="space-y-4">
+                      {/* Main Image */}
+                      <div className="relative aspect-square rounded-lg overflow-hidden bg-gray-100">
+                        <Image
+                          src={selectedProductForView.image_urls[currentImageIndex] || '/placeholder.svg'}
+                          alt={`${selectedProductForView.name} - Image ${currentImageIndex + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                        
+                        {/* Navigation arrows */}
+                        {selectedProductForView.image_urls.length > 1 && (
+                          <>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  className="absolute left-2 top-1/2 -translate-y-1/2 opacity-80 hover:opacity-100"
+                                  onClick={handlePrevImage}
+                                >
+                                  <ChevronLeft className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Previous image (←)</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <Button
+                                  variant="secondary"
+                                  size="sm"
+                                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-80 hover:opacity-100"
+                                  onClick={handleNextImage}
+                                >
+                                  <ChevronRight className="h-4 w-4" />
+                                </Button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>Next image (→)</p>
+                              </TooltipContent>
+                            </Tooltip>
+                            
+                            {/* Image counter */}
+                            <div className="absolute bottom-2 right-2 bg-black/50 text-white px-2 py-1 rounded text-xs">
+                              {currentImageIndex + 1} of {selectedProductForView.image_urls.length}
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      
+                      {/* Thumbnail strip */}
+                      {selectedProductForView.image_urls.length > 1 && (
+                        <div className="flex space-x-2 overflow-x-auto pb-2">
+                          {selectedProductForView.image_urls.map((imageUrl, index) => (
+                            <Tooltip key={index}>
+                              <TooltipTrigger asChild>
+                                <button
+                                  onClick={() => setCurrentImageIndex(index)}
+                                  className={`relative w-16 h-16 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0 border-2 transition-colors ${
+                                    index === currentImageIndex ? 'border-blue-500' : 'border-transparent'
+                                  }`}
+                                >
+                                  <Image
+                                    src={imageUrl}
+                                    alt={`${selectedProductForView.name} - Thumbnail ${index + 1}`}
+                                    fill
+                                    className="object-cover"
+                                    sizes="64px"
+                                  />
+                                </button>
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p>View image {index + 1}</p>
+                              </TooltipContent>
+                            </Tooltip>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="aspect-square rounded-lg bg-gray-100 flex items-center justify-center">
+                      <div className="text-center">
+                        <ImageIcon className="h-16 w-16 text-gray-400 mx-auto mb-2" />
+                        <p className="text-sm text-gray-500">No images available</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {/* Action Buttons */}
+              <div className="flex justify-end space-x-2 pt-4 border-t">
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      onClick={() => {
+                        setShowImageModal(false);
+                        handleEdit(selectedProductForView);
+                      }}
+                    >
+                      <Edit className="h-4 w-4 mr-2" />
+                      Edit Product
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Edit this product's information</p>
+                  </TooltipContent>
+                </Tooltip>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant="outline"
+                      onClick={() => setShowImageModal(false)}
+                    >
+                      Close
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Close preview modal (ESC)</p>
+                  </TooltipContent>
+                </Tooltip>
+              </div>
+            </div>
+          )}
+                 </DialogContent>
+       </Dialog>
+      </div>
+    </TooltipProvider>
   );
 } 

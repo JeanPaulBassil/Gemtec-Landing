@@ -200,17 +200,28 @@ export default function NewsAdmin() {
 
         if (error) throw error;
 
+        // Update local state instead of refetching
+        const updatedArticle = { ...selectedArticle, ...articleData };
+        setArticles(prev => prev.map(a => a.id === selectedArticle.id ? updatedArticle : a));
+
         toast({
           title: "Success",
           description: "News article updated successfully",
         });
       } else {
         // Create new article
-        const { error } = await supabase
+        const { data: newArticle, error } = await supabase
           .from('news_articles')
-          .insert(articleData);
+          .insert(articleData)
+          .select('*')
+          .single();
 
         if (error) throw error;
+
+        // Add to local state instead of refetching
+        if (newArticle) {
+          setArticles(prev => [newArticle, ...prev]);
+        }
 
         toast({
           title: "Success",
@@ -225,9 +236,6 @@ export default function NewsAdmin() {
       setSelectedArticle(null);
       setShowDialog(false);
       setImageFile(null);
-      
-      // Refresh data
-      fetchArticles();
     } catch (err) {
       console.error('Error saving article:', err);
       toast({
@@ -262,6 +270,12 @@ export default function NewsAdmin() {
       return;
     }
 
+    // Store original articles for potential rollback
+    const originalArticles = articles;
+    
+    // Optimistic update - remove immediately
+    setArticles(prev => prev.filter(a => a.id !== article.id));
+
     try {
       setActionLoading(article.id);
       
@@ -276,10 +290,12 @@ export default function NewsAdmin() {
         title: "Success",
         description: "News article deleted successfully",
       });
-
-      fetchArticles();
     } catch (err) {
       console.error('Error deleting article:', err);
+      
+      // Revert optimistic update on error
+      setArticles(originalArticles);
+      
       toast({
         title: "Error",
         description: "Failed to delete news article",
@@ -291,14 +307,22 @@ export default function NewsAdmin() {
   };
 
   const toggleArticleStatus = async (article: NewsArticle) => {
+    const newStatus = !article.is_published;
+    const newPublishedAt = newStatus ? new Date().toISOString() : null;
+    
+    // Optimistic update - update UI immediately
+    setArticles(prev => prev.map(a => 
+      a.id === article.id ? { ...a, is_published: newStatus, published_at: newPublishedAt } : a
+    ));
+
     try {
       setActionLoading(article.id);
       
       const { error } = await supabase
         .from('news_articles')
         .update({ 
-          is_published: !article.is_published,
-          published_at: !article.is_published ? new Date().toISOString() : null
+          is_published: newStatus,
+          published_at: newPublishedAt
         })
         .eq('id', article.id);
 
@@ -308,10 +332,14 @@ export default function NewsAdmin() {
         title: "Success",
         description: `News article ${article.is_published ? 'unpublished' : 'published'} successfully`,
       });
-
-      fetchArticles();
     } catch (err) {
       console.error('Error toggling article status:', err);
+      
+      // Revert optimistic update on error
+      setArticles(prev => prev.map(a => 
+        a.id === article.id ? { ...a, is_published: !newStatus, published_at: article.published_at } : a
+      ));
+      
       toast({
         title: "Error",
         description: "Failed to update news article status",

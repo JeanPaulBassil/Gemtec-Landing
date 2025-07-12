@@ -172,9 +172,6 @@ export default function QuotesAdmin() {
         description: "Failed to delete quote request",
         variant: "destructive",
       });
-      
-      // Refresh the quotes to show the actual state
-      fetchQuotes();
     } finally {
       setActionLoading(null);
     }

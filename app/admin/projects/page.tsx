@@ -278,17 +278,28 @@ export default function ProjectsAdmin() {
 
         if (error) throw error;
 
+        // Update local state instead of refetching
+        const updatedProject = { ...selectedProject, ...projectData };
+        setProjects(prev => prev.map(p => p.id === selectedProject.id ? updatedProject : p));
+
         toast({
           title: "Success",
           description: "Project updated successfully",
         });
       } else {
         // Create new project
-        const { error } = await supabase
+        const { data: newProject, error } = await supabase
           .from('projects')
-          .insert(projectData);
+          .insert(projectData)
+          .select('*')
+          .single();
 
         if (error) throw error;
+
+        // Add to local state instead of refetching
+        if (newProject) {
+          setProjects(prev => [newProject, ...prev]);
+        }
 
         toast({
           title: "Success",
@@ -303,9 +314,6 @@ export default function ProjectsAdmin() {
       setIsEditMode(false);
       setSelectedProject(null);
       setShowDialog(false);
-      
-      // Refresh data
-      fetchProjects();
     } catch (err) {
       console.error('Error saving project:', err);
       toast({
@@ -338,6 +346,12 @@ export default function ProjectsAdmin() {
       return;
     }
 
+    // Store original projects for potential rollback
+    const originalProjects = projects;
+    
+    // Optimistic update - remove immediately
+    setProjects(prev => prev.filter(p => p.id !== project.id));
+
     try {
       setActionLoading(project.id);
       
@@ -352,11 +366,12 @@ export default function ProjectsAdmin() {
         title: "Success",
         description: "Project deleted successfully",
       });
-
-      // Refresh data
-      fetchProjects();
     } catch (err) {
       console.error('Error deleting project:', err);
+      
+      // Revert optimistic update on error
+      setProjects(originalProjects);
+      
       toast({
         title: "Error",
         description: "Failed to delete project",

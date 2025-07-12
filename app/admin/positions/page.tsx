@@ -179,16 +179,27 @@ export default function PositionsAdmin() {
 
         if (error) throw error;
 
+        // Update local state instead of refetching
+        const updatedPosition = { ...selectedPosition, ...positionData };
+        setPositions(prev => prev.map(p => p.id === selectedPosition.id ? updatedPosition : p));
+
         toast({
           title: "Success",
           description: "Job position updated successfully",
         });
       } else {
-        const { error } = await supabase
+        const { data: newPosition, error } = await supabase
           .from('job_offerings')
-          .insert(positionData);
+          .insert(positionData)
+          .select('*')
+          .single();
 
         if (error) throw error;
+
+        // Add to local state instead of refetching
+        if (newPosition) {
+          setPositions(prev => [newPosition, ...prev]);
+        }
 
         toast({
           title: "Success",
@@ -196,15 +207,12 @@ export default function PositionsAdmin() {
         });
       }
 
-      // Reset form and refresh data
+      // Reset form and close dialog
       setFormData(initialFormData);
       setFormErrors({});
       setIsEditMode(false);
       setSelectedPosition(null);
       setShowDialog(false);
-      
-      // Refresh data
-      fetchPositions();
     } catch (err) {
       console.error('Error saving position:', err);
       toast({
@@ -238,6 +246,12 @@ export default function PositionsAdmin() {
       return;
     }
 
+    // Store original positions for potential rollback
+    const originalPositions = positions;
+    
+    // Optimistic update - remove immediately
+    setPositions(prev => prev.filter(p => p.id !== position.id));
+
     try {
       setActionLoading(position.id);
       
@@ -252,11 +266,12 @@ export default function PositionsAdmin() {
         title: "Success",
         description: "Job position deleted successfully",
       });
-
-      // Refresh data
-      fetchPositions();
     } catch (err) {
       console.error('Error deleting position:', err);
+      
+      // Revert optimistic update on error
+      setPositions(originalPositions);
+      
       toast({
         title: "Error",
         description: "Failed to delete job position",
@@ -268,12 +283,19 @@ export default function PositionsAdmin() {
   };
 
   const togglePositionStatus = async (position: JobPosition) => {
+    const newStatus = !position.is_active;
+    
+    // Optimistic update - update UI immediately
+    setPositions(prev => prev.map(p => 
+      p.id === position.id ? { ...p, is_active: newStatus } : p
+    ));
+
     try {
       setActionLoading(position.id);
       
       const { error } = await supabase
         .from('job_offerings')
-        .update({ is_active: !position.is_active })
+        .update({ is_active: newStatus })
         .eq('id', position.id);
 
       if (error) throw error;
@@ -282,11 +304,14 @@ export default function PositionsAdmin() {
         title: "Success",
         description: `Job position ${position.is_active ? 'deactivated' : 'activated'} successfully`,
       });
-
-      // Refresh data
-      fetchPositions();
     } catch (err) {
       console.error('Error toggling position status:', err);
+      
+      // Revert optimistic update on error
+      setPositions(prev => prev.map(p => 
+        p.id === position.id ? { ...p, is_active: !newStatus } : p
+      ));
+      
       toast({
         title: "Error",
         description: "Failed to update job position status",
