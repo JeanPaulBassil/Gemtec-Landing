@@ -46,8 +46,46 @@ export default function ContactsAdmin() {
   const { toast } = useToast();
   const supabase = createClient();
 
+  // Debug function to check user authentication and role
+  const debugUserAuth = async () => {
+    try {
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      console.log('=== AUTH DEBUG ===');
+      console.log('Session error:', sessionError);
+      console.log('Session:', session);
+      
+      if (session) {
+        console.log('User ID:', session.user.id);
+        console.log('User email:', session.user.email);
+        
+        // Check user profile
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .single();
+          
+        console.log('Profile error:', profileError);
+        console.log('Profile:', profile);
+        
+        // Test if we can read contact messages
+        const { data: contacts, error: contactsError } = await supabase
+          .from('contact_messages')
+          .select('count(*)')
+          .single();
+          
+        console.log('Contacts read test error:', contactsError);
+        console.log('Contacts count:', contacts);
+      }
+      console.log('=== END AUTH DEBUG ===');
+    } catch (error) {
+      console.error('Debug auth error:', error);
+    }
+  };
+
   useEffect(() => {
     fetchContacts();
+    debugUserAuth(); // Add debug call
   }, []);
 
   useEffect(() => {
@@ -142,15 +180,35 @@ export default function ContactsAdmin() {
     try {
       setActionLoading(id);
       
+      // Get current session for debugging
+      const { data: { session }, error: sessionError } = await supabase.auth.getSession();
+      if (sessionError) {
+        console.error('Session error:', sessionError);
+        throw new Error('Authentication session error');
+      }
+      
+      if (!session) {
+        console.error('No session found');
+        throw new Error('No authentication session found');
+      }
+      
+      console.log('Attempting to delete contact message with ID:', id);
+      console.log('User ID:', session.user.id);
+      
       const { error } = await supabase
         .from('contact_messages')
         .delete()
         .eq('id', id);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase delete error:', error);
+        throw error;
+      }
 
-      // Update local state
-      setContacts(contacts.filter(contact => contact.id !== id));
+      console.log('Delete successful, updating local state');
+      
+      // Update local state - optimistic update
+      setContacts(prev => prev.filter(contact => contact.id !== id));
 
       if (selectedContact?.id === id) {
         setSelectedContact(null);
@@ -158,13 +216,17 @@ export default function ContactsAdmin() {
 
       toast({
         title: "Success",
-        description: "Contact message deleted",
+        description: "Contact message deleted successfully",
       });
     } catch (err) {
       console.error('Error deleting contact:', err);
+      
+      // Rollback optimistic update on error
+      await fetchContacts();
+      
       toast({
-        title: "Error",
-        description: "Failed to delete contact message",
+        title: "Error", 
+        description: err instanceof Error ? err.message : "Failed to delete contact message",
         variant: "destructive",
       });
     } finally {
