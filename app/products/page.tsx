@@ -198,26 +198,26 @@ function CategoryFilter({ categories, onCategorySelect }: {
               {category.name}
             </Button>
             
-            {/* Show subcategories if any */}
-            {categories.filter(c => c.parent_id === category.id).map((subcategory) => (
+            {/* Show subcategories if they exist */}
+            {categories.filter(c => c.parent_id === category.id).map((subCategory) => (
               <Button
-                key={subcategory.id}
-                variant={selectedCategory === subcategory.id ? "default" : "ghost"}
-                className="w-full justify-start ml-4 text-sm"
-                onClick={() => handleCategoryClick(subcategory.id)}
+                key={subCategory.id}
+                variant={selectedCategory === subCategory.id ? "default" : "ghost"}
+                className="w-full justify-start ml-6"
+                onClick={() => handleCategoryClick(subCategory.id)}
               >
-                <ChevronRight className="h-3 w-3 mr-1" />
-                {subcategory.name}
+                <ChevronRight className="h-3 w-3 mr-2" />
+                {subCategory.name}
               </Button>
             ))}
           </div>
         ))}
       </CardContent>
     </Card>
-  );
+  )
 }
 
-export default function ProductsPage() {
+function ProductsPageContent() {
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<ProductCategory[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -417,24 +417,10 @@ export default function ProductsPage() {
                   </p>
                 </div>
               ) : (
-                <div className="space-y-8">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      {selectedCategory 
-                        ? categories.find(c => c.id === selectedCategory)?.name 
-                        : 'All Products'
-                      }
-                    </h2>
-                    <p className="text-gray-500">
-                      {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
-                    </p>
-                  </div>
-                  
-                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                    {filteredProducts.map((product) => (
-                      <ProductCard key={product.id} product={product} />
-                    ))}
-                  </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {filteredProducts.map((product) => (
+                    <ProductCard key={product.id} product={product} />
+                  ))}
                 </div>
               )}
             </div>
@@ -442,6 +428,18 @@ export default function ProductsPage() {
         </div>
       </section>
     </>
-  )
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
+      </div>
+    }>
+      <ProductsPageContent />
+    </Suspense>
+  );
 }
 
